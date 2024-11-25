@@ -355,7 +355,7 @@ body.vjs-full-window {
 .vjs-no-js a,
 .vjs-no-js a:visited {
   color: #66A8CC; }
-
+#myHLS{max-width:100%}
 .video-js .vjs-big-play-button {
   font-size: 3em;
   line-height: 1.5em;
@@ -363,8 +363,8 @@ body.vjs-full-window {
   width: 3em;
   display: block;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 45%;
+  left: 40%;
   padding: 0;
   cursor: pointer;
   opacity: 1;
