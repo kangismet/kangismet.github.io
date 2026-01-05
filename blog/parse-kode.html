@@ -1,0 +1,162 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link as='font' crossorigin='' href='https://cdn.jsdelivr.net/gh/kangismet/kangismet.github.io@d643629/semarkoding/inter.woff2' rel='preload' type='font/woff2'/>
+<style>
+*{-webkit-box-sizing:border-box;
+-moz-box-sizing:border-box;
+box-sizing:border-box;
+margin:0;
+padding:0;
+text-align:left}
+body{
+padding:0;
+font:normal normal 14px/normal "Inter",Roboto,Tahoma,Verdana,Arial,Sans-Serif;
+color:#333
+}
+@font-face{font-family:Inter;font-style:normal;font-weight:100 900;font-display:swap;src:url(https://cdn.jsdelivr.net/gh/kangismet/kangismet.github.io@d643629/semarkoding/inter.woff2) format("woff2")}
+p{
+margin:0 0 20px;
+}
+p+p{
+text-align:center
+}
+p+p+p{
+text-align:inherit;
+margin:0
+}
+label{
+display:block;
+float:left;
+clear:both;
+cursor:pointer
+}
+textarea,code{
+font:inherit;font-family:"Courier New",Courier,"Nimbus Mono L",Monospace
+}
+code{
+color:#bf1f89
+}
+textarea{
+display:block;
+border:none;
+width:100%;
+height:200px;
+background-color:#fff;
+padding:10px 12px;
+color:#333;
+resize:vertical
+}
+textarea:focus{
+color:#222;
+outline:none;
+border: 1px solid #dcdcdc
+}
+button,button[disabled]:active{
+border:none;
+border-radius:0.5rem;
+font:inherit;
+color:white;
+font-weight:400;
+padding:8px 25px;
+text-align:center;
+cursor:pointer
+}
+
+.btn {
+    border-radius: 0.5rem;
+    color: #001e42;
+    font-weight: 600;
+    transition: all .15s ease-in-out;
+    gap: 1rem;
+    padding: 8px 25px;
+    text-decoration: none;
+}
+.biru {
+    background: #74c0fc;
+    border: 2px solid #146ebe;
+    box-shadow: 0 0.3rem 0 #146ebe;
+}
+.biru {
+    background:#74c0fc;
+    border: 2px solid #146ebe;
+    box-shadow: 0 .3rem 0 #146ebe;
+}
+.biru:hover{
+    background:#60a9e3;color:#fff;
+}
+.ungu {
+    background:#e599f7;
+    border: 2px solid #9c36b5;
+    box-shadow: 0 .3rem 0 #9c36b5;
+}
+.ungu:hover{
+    background:#c572d8;color:#fff;
+}
+.merah {
+    background:#ff8787;
+    border: 2px solid #e03131;
+    box-shadow: 0 .3rem 0 #e03131;
+}
+.merah:hover{
+    background:#ec7575;color:#fff;
+}
+.hijau {
+    background:#63e6be;
+    border: 2px solid #0ca678;
+    box-shadow: 0 .3rem 0 #0ca678;
+}
+.hijau:hover{
+    background:#4ecfa8;color:#fff;
+}
+.biru:active, .ungu:active, .merah:active, .hijau:active{
+    box-shadow: none;
+    transform: translateY(6px);
+}
+
+input{
+display:inline-block;
+margin:0 10px 0 0;
+vertical-align:middle;
+border:none;
+outline:none;
+cursor:inherit
+}
+@media (max-height:450px){
+textarea{resize:none}
+}
+#box{position:relative;margin-bottom:10px}
+#copiedmsg{
+position:absolute;bottom:15px;left:5px;font-size:.9em;
+}
+</style>
+</head>
+<body>
+<div id="box">
+<textarea id="textarea" spellcheck="false" placeholder="Tulis/paste kode di sini lalu klik ‘Konversi’"></textarea>
+<div id="copiedmsg"></div>
+</div>
+<p><button class="btn biru" onclick="addCopy()">Konversi</button>&nbsp;<button class="btn merah">Reset</button>&nbsp;<button class="btn hijau cp" onclick="copy()">Copy</button></p><p><label><input type="checkbox" checked="">Konversi <code>&amp;</code> menjadi <code>&amp;amp;</code></label><label><input type="checkbox" checked="">Konversi <code>&lt;</code> menjadi <code>&amp;lt;</code></label><label><input type="checkbox" checked="">Konversi <code>&gt;</code> menjadi <code>&amp;gt;</code></label><label><input type="checkbox">Konversi <code>"</code> menjadi <code>&amp;quot;</code></label><label><input type="checkbox">Konversi <code>'</code> menjadi <code>&amp;apos;</code></label></p>
+<script>!function(t,e){var n="getElementsByTagName",a="replace",i=e[n]("button"),o=e[n]("input"),s=e[n]("textarea");i[0].onclick=function(){if(0===s[0].value.length)return alert("Eits, jangan ngelamun!"),!1;1===s[0].value.length&&alert("Pelit.");var t=s[0].value;return t=o[0].checked?t[a](/&/g,"&amp;"):t,t=o[1].checked?t[a](/</g,"&lt;"):t,t=o[2].checked?t[a](/>/g,"&gt;"):t,t=o[3].checked?t[a](/"/g,"&quot;"):t,t=o[4].checked?t[a](/'/g,"&apos;"):t,s[0].value='<'+(t.length>40||-1!==t.indexOf("\n")?"pre><code class='language-'":"code")+'>'+t+'<'+(t.length>40||-1!==t.indexOf("\n")?"/code></pre":"/code")+'>',s[0].focus(),s[0].select(),this.disabled=!0,!1},i[1].onclick=function(){return s[0].value="",s[0].focus(),i[0].disabled=!1,!1},s[0].onpaste=function(){i[0].disabled=!1},s[0].onkeydown=function(){i[0].disabled=!1}}(window,document);
+</script>
+<script>/*<![CDATA[*/
+function copy() {
+  let textarea = document.getElementById("textarea");
+  textarea.select();
+  document.execCommand("copy");
+  
+  document.getElementById("copiedmsg").innerHTML = "<span style='background:#8594a9;color:#f1f1f1;padding:8px 10px !important;border-radius:6px !important;'>Copied to Clipboard</span>";
+	setTimeout(function(){ 
+      document.getElementById("copiedmsg").innerHTML = "";
+  }, 1500);
+}
+/*]]>*/</script>
+
+<script>
+function addCopy() {
+   var element = document.getElementById("cp");
+   element.classList.add("c");
+}
+</script>
+</body>
+</html>
