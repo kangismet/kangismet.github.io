@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Uploader Gambar Blogger</title>
+
+<style>
+body{
+  font-family:Arial, sans-serif;
+  max-width:600px;
+  margin:30px auto;
+  padding:15px;
+}
+h2{margin-bottom:10px}
+input, textarea, button{
+  width:100%;
+  margin:6px 0;
+  padding:8px;
+  font-size:14px;
+}
+button{
+  cursor:pointer;
+}
+img{
+  max-width:100%;
+  margin-top:10px;
+  border:1px solid #ddd;
+}
+small{color:#666}
+</style>
+
+</head>
+<body>
+
+<h2>Uploader Gambar Blogger</h2>
+<small>Hanya pemilik akun yang bisa upload</small>
+
+<hr>
+
+<label>Pilih gambar</label>
+<input type="file" id="file" accept="image/*">
+
+<label>Alt text (SEO)</label>
+<input type="text" id="alt" placeholder="Deskripsi gambar">
+
+<button onclick="upload()">Upload</button>
+
+<div id="result"></div>
+
+<script>
+const GAS_URL = "PASTE_URL_GAS_DI_SINI"; // WAJIB ganti
+
+function upload(){
+  const file = document.getElementById("file").files[0];
+  const alt  = document.getElementById("alt").value || "gambar";
+
+  if(!file){
+    alert("Silakan pilih gambar");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onloadend = function(){
+    const base64 = reader.result.split(",")[1];
+
+    fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        filename: file.name,
+        mimeType: file.type,
+        data: base64
+      })
+    })
+    .then(r => r.text())
+    .then(url => {
+      const imgCode =
+`<img alt="${alt}" src="${url}" loading="lazy"/>`;
+
+      document.getElementById("result").innerHTML = `
+        <hr>
+        <b>Preview:</b>
+        <img src="${url}">
+        <b>URL Gambar:</b>
+        <input type="text" value="${url}">
+        <b>Kode IMG Blogger:</b>
+        <textarea rows="3">${imgCode}</textarea>
+      `;
+    })
+    .catch(() => {
+      alert("Upload gagal. Pastikan Anda login sebagai pemilik.");
+    });
+  };
+
+  reader.readAsDataURL(file);
+}
+</script>
+
+</body>
+</html>
