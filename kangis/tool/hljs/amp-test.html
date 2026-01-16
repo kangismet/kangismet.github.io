@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<title>AMP Dev</title>
+<meta name="viewport" content="width=device-width">
+<link rel="shortcut icon" href="https://www.kang-ismet.com/favicon.ico">
+<link href='https://fonts.googleapis.com/css?family=Roboto:300,400italic,400,500,500italic,700,700italic,900%7CMaterial+Icons%7CRoboto+Condensed%3Aregular%2Citalic%2C700' rel='stylesheet' type='text/css'/>
+<style>
+body {font-family:Roboto, sans-serif;background-color:#afced1}
+
+
+.hljs{display:block;overflow-x:auto;padding:20px;color:#f2f2ed;background:#20202a}
+.hljs-tag,.hljs-built_in{color:#f8f8f2}
+.hljs-meta{color:#75715e}
+.hljs-number{color:#ae81ff}
+.hljs-comment{color:#75715e}
+.hljs-selector-class{color:#e2e2d8}
+.hljs-attribute{color:#a6e22e}
+.hljs-symbol{color:#f15a5a}
+.hljs-regexp{color:#75715e}
+.hljs-selector-id{color:#66d9ef}
+.hljs-attr,.hljs-doctag,.hljs-keyword,.hljs-meta-keyword,.hljs-section,.hljs-selector-pseudo,.hljs-selector-tag{color:#a6e22e}
+.hljs-literal,.hljs-name,.hljs-quote,.hljs-template-tag,.hljs-title,.hljs-type{color:#f15a5a}
+.hljs-link,.hljs-meta-string,.hljs-selector-attr,.hljs-string,.hljs-template-variable,.hljs-variable{color:#e6db74}
+.hljs-bullet,.hljs-code{color:#ccc}
+.hljs-deletion{color:#de7176}
+.hljs-addition{color:#76c490}
+.hljs-emphasis{font-style:italic}
+.hljs-strong{font-weight:700}
+</style>
+</head>
+<body>
+
+<h2>Sample dan CSS yang digunakan</h2>
+
+<h3>CSS (Copy CSS ini ke Template)</h3>
+
+<pre><code class="hljs"><span class="hljs-comment">/*!
+ * StackOverflow.com dark style
+ *
+ * <span class="hljs-doctag">@stackoverflow</span>/stacks v0.56.0
+ * https://github.com/StackExchange/Stacks
+ */</span>
+<span class="hljs-selector-class">.hljs</span>{<span class="hljs-attribute">display</span>:block;<span class="hljs-attribute">overflow-x</span>:auto;<span class="hljs-attribute">padding</span>:.<span class="hljs-number">5em</span>;<span class="hljs-attribute">color</span>:<span class="hljs-number">#fff</span>;<span class="hljs-attribute">background</span>:<span class="hljs-number">#1c1b1b</span>}
+<span class="hljs-selector-class">.hljs-comment</span>{<span class="hljs-attribute">color</span>:<span class="hljs-number">#999</span>}
+<span class="hljs-selector-class">.hljs-attr</span>,<span class="hljs-selector-class">.hljs-doctag</span>,<span class="hljs-selector-class">.hljs-keyword</span>,<span class="hljs-selector-class">.hljs-meta</span>,<span class="hljs-selector-class">.hljs-meta-keyword</span>,<span class="hljs-selector-class">.hljs-section</span>,<span class="hljs-selector-class">.hljs-selector-class</span>,<span class="hljs-selector-class">.hljs-selector-pseudo</span>,<span class="hljs-selector-class">.hljs-selector-tag</span>{<span class="hljs-attribute">color</span>:<span class="hljs-number">#88aece</span>}
+<span class="hljs-selector-class">.hljs-attribute</span>{<span class="hljs-attribute">color</span>:v<span class="hljs-number">#c59bc1</span>}
+<span class="hljs-selector-class">.hljs-built_in</span>,<span class="hljs-selector-class">.hljs-literal</span>,<span class="hljs-selector-class">.hljs-name</span>,<span class="hljs-selector-class">.hljs-number</span>,<span class="hljs-selector-class">.hljs-quote</span>,<span class="hljs-selector-class">.hljs-selector-id</span>,<span class="hljs-selector-class">.hljs-template-tag</span>,<span class="hljs-selector-class">.hljs-title</span>,<span class="hljs-selector-class">.hljs-type</span>{<span class="hljs-attribute">color</span>:<span class="hljs-number">#f08d49</span>}
+<span class="hljs-selector-class">.hljs-link</span>,<span class="hljs-selector-class">.hljs-meta-string</span>,<span class="hljs-selector-class">.hljs-regexp</span>,<span class="hljs-selector-class">.hljs-selector-attr</span>,<span class="hljs-selector-class">.hljs-string</span>,<span class="hljs-selector-class">.hljs-symbol</span>,<span class="hljs-selector-class">.hljs-template-variable</span>,<span class="hljs-selector-class">.hljs-variable</span>{<span class="hljs-attribute">color</span>:<span class="hljs-number">#b5bd68</span>}
+<span class="hljs-selector-class">.hljs-bullet</span>,<span class="hljs-selector-class">.hljs-code</span>{<span class="hljs-attribute">color</span>:<span class="hljs-number">#ccc</span>}
+<span class="hljs-selector-class">.hljs-deletion</span>{<span class="hljs-attribute">color</span>:<span class="hljs-number">#de7176</span>}
+<span class="hljs-selector-class">.hljs-addition</span>{<span class="hljs-attribute">color</span>:<span class="hljs-number">#76c490</span>}
+<span class="hljs-selector-class">.hljs-emphasis</span>{<span class="hljs-attribute">font-style</span>:italic}
+<span class="hljs-selector-class">.hljs-strong</span>{<span class="hljs-attribute">font-weight</span>:<span class="hljs-number">700</span>}</code></pre>
+
+<h3>AMP Dev</h3>
+<pre><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">amp-accordion</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"my-accordion"</span> <span class="hljs-attr">disable-session-states</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Section 1<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Content in section 1.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Section 2<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Content in section 2.<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">expanded</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Section 3<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">amp-img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/static/inline-examples/images/squirrel.jpg"</span>
+      <span class="hljs-attr">width</span>=<span class="hljs-string">"320"</span>
+      <span class="hljs-attr">height</span>=<span class="hljs-string">"256"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">amp-img</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">amp-accordion</span>&gt;</span></code></pre>
+
+<h3>Apache Config</h3>
+
+<pre><code class="hljs"><span class="hljs-comment"># rewrite`s rules for wordpress pretty url</span>
+<span class="hljs-attribute"><span class="hljs-nomarkup">LoadModule</span></span> rewrite_module  modules/mod_rewrite.so
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{REQUEST_FILENAME}</span> !-f
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{REQUEST_FILENAME}</span> !-d
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteRule</span></span> . index.php<span class="hljs-meta"> [NC,L]</span>
+
+<span class="hljs-attribute">ExpiresActive</span> <span class="hljs-literal">On</span>
+<span class="hljs-attribute">ExpiresByType</span> application/x-javascript  <span class="hljs-string">"access plus 1 days"</span>
+
+<span class="hljs-attribute"><span class="hljs-nomarkup">Order</span></span> Deny,Allow
+<span class="hljs-attribute"><span class="hljs-nomarkup">Allow</span></span> from <span class="hljs-literal">All</span>
+
+<span class="hljs-section">&lt;Location /maps/&gt;</span>
+  <span class="hljs-attribute">RewriteMap</span> map txt:map.txt
+  <span class="hljs-attribute">RewriteMap</span> lower int:tolower
+  <span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{REQUEST_URI}</span> ^/([^/.]+)\.html$<span class="hljs-meta"> [NC]</span>
+  <span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">${map:<span class="hljs-variable">${lower:<span class="hljs-number">%1</span>}</span>|NOT_FOUND}</span> !NOT_FOUND
+  <span class="hljs-attribute"><span class="hljs-nomarkup">RewriteRule</span></span> .? /index.php?q=<span class="hljs-variable">${map:<span class="hljs-variable">${lower:<span class="hljs-number">%1</span>}</span>}</span><span class="hljs-meta"> [NC,L]</span>
+<span class="hljs-section">&lt;/Location&gt;</span></code></pre>
+
+<h3>Bash</h3>
+
+<pre><code class="hljs"><span class="hljs-meta">#!/bin/bash
+
+</span>
+<span class="hljs-comment">###### CONFIG</span>
+ACCEPTED_HOSTS=<span class="hljs-string">"/root/.hag_accepted.conf"</span>
+BE_VERBOSE=<span class="hljs-literal">false</span>
+
+<span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$UID</span>"</span> <span class="hljs-_">-ne</span> 0 ]
+<span class="hljs-keyword">then</span>
+ <span class="hljs-built_in">echo</span> <span class="hljs-string">"Superuser rights required"</span>
+ <span class="hljs-built_in">exit</span> 2
+<span class="hljs-keyword">fi</span>
+
+<span class="hljs-function"><span class="hljs-title">genApacheConf</span></span>(){
+ <span class="hljs-built_in">echo</span> <span class="hljs-_">-e</span> <span class="hljs-string">"# Host <span class="hljs-variable">${HOME_DIR}</span><span class="hljs-variable">$1</span>/<span class="hljs-variable">$2</span> :"</span>
+}
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">'"quoted"'</span> | tr <span class="hljs-_">-d</span> \<span class="hljs-string">" &gt; text.txt</span></code></pre>
+
+<h3>CoffeeScript</h3>
+<pre><code class="hljs"><span class="hljs-function"><span class="hljs-title">grade</span> = <span class="hljs-params">(student, period=(<span class="hljs-keyword">if</span> b? <span class="hljs-keyword">then</span> <span class="hljs-number">7</span> <span class="hljs-keyword">else</span> <span class="hljs-number">6</span>))</span> -&gt;</span>
+  <span class="hljs-keyword">if</span> student.excellentWork
+    <span class="hljs-string">"A+"</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> student.okayStuff
+    <span class="hljs-keyword">if</span> student.triedHard <span class="hljs-keyword">then</span> <span class="hljs-string">"B"</span> <span class="hljs-keyword">else</span> <span class="hljs-string">"B-"</span>
+  <span class="hljs-keyword">else</span>
+    <span class="hljs-string">"C"</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Being</span></span>
+  constructor: <span class="hljs-function"><span class="hljs-params">(@name)</span> -&gt;</span>
+
+  move: <span class="hljs-function"><span class="hljs-params">(meters)</span> -&gt;</span>
+    alert @name + <span class="hljs-string">" moved <span class="hljs-subst">#{meters}</span>m."</span></code></pre>
+
+<h3>C++</h3>
+
+<pre><code class="hljs"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span> </span>{
+
+  <span class="hljs-comment">/* An annoying "Hello World" example */</span>
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">0xFFFF</span>; i++)
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Hello, World!"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+
+  <span class="hljs-keyword">char</span> c = <span class="hljs-string">'\n'</span>;
+  <span class="hljs-built_in">unordered_map</span> &lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">string</span>&gt; &gt; m;
+  m[<span class="hljs-string">"key"</span>] = <span class="hljs-string">"\\\\"</span>; <span class="hljs-comment">// this is an error</span>
+
+  <span class="hljs-keyword">return</span> <span class="hljs-number">-2e3</span> + <span class="hljs-number">12l</span>;
+}</code></pre>
+
+<h3>C#</h3>
+
+<pre><code class="hljs"><span class="hljs-keyword">using</span> System.IO.Compression;
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span> disable 414, 3021</span>
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MyApplication</span>
+{
+    [Obsolete(<span class="hljs-string">"..."</span>)]
+    <span class="hljs-keyword">class</span> <span class="hljs-title">Program</span> : <span class="hljs-title">IInterface</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> List&lt;<span class="hljs-keyword">int</span>&gt; <span class="hljs-title">JustDoIt</span>(<span class="hljs-params"><span class="hljs-keyword">int</span> count</span>)
+        </span>{
+            Span&lt;<span class="hljs-keyword">int</span>&gt; numbers = <span class="hljs-keyword">stackalloc</span> <span class="hljs-keyword">int</span>[length];
+            Console.WriteLine(<span class="hljs-string">$"Hello <span class="hljs-subst">{Name}</span>!"</span>);
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> List&lt;<span class="hljs-keyword">int</span>&gt;(<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> })
+        }
+    }
+}</code></pre>
+
+<h3>CSS</h3>
+
+<pre><code class="hljs">@font-face{font-family: Chunkfive; src: url(<span class="hljs-string">'Chunkfive.otf'</span>);}
+body, .usertext color:<span class="hljs-comment">#f0f0f0;background:#600;font-family: Chunkfive, sans;--heading-1: 30px/32px Helvetica, sans-serif;}</span>
+@import url(<span class="hljs-built_in">print</span>.css);
+@media <span class="hljs-built_in">print</span>{a[href^=http]::after {content: attr(href)}}</code></pre>
+
+<h3>R</h3>
+<pre><code class="hljs">require(stats)
+
+<span class="hljs-meta">#' Compute different averages</span>
+<span class="hljs-meta">#'</span>
+<span class="hljs-meta">#' @param x \code{numeric} vector of sample data</span>
+<span class="hljs-meta">#' @param type \code{character} vector of length 1 specifying the average type</span>
+<span class="hljs-meta">#' @return \code{centre} returns the sample average according to the chosen method.</span>
+<span class="hljs-meta">#' @examples</span>
+<span class="hljs-meta">#' centre(rcauchy(10), <span class="hljs-meta-string">"mean"</span>)</span>
+<span class="hljs-meta">#' @export</span>
+centre &lt;- function(x, type) {
+  <span class="hljs-keyword">switch</span>(type,
+         mean = mean(x),
+         median = median(x),
+         trimmed = mean(x, trim = <span class="hljs-number">.1</span>))
+}
+x &lt;- rcauchy(<span class="hljs-number">10</span>)
+centre(x, <span class="hljs-string">"mean"</span>)
+
+library(ggplot2)
+
+models &lt;- tibble::tribble(
+  ~model_name,    ~ formula,
+  <span class="hljs-string">"length-width"</span>, Sepal.Length ~ Petal.Width + Petal.Length,
+  <span class="hljs-string">"interaction"</span>,  Sepal.Length ~ Petal.Width * Petal.Length
+)
+
+iris %&gt;% 
+  nest_by(Species) %&gt;% 
+  left_join(models, by = character()) %&gt;% 
+  rowwise(Species, model_name) %&gt;% 
+  mutate(model = list(lm(formula, data = data))) %&gt;% 
+  summarise(broom::glance(model))
+<span class="hljs-meta">#&gt; `summarise()` regrouping output by 'Species', 'model_name' (override with `.groups` argument)</span>
+<span class="hljs-meta">#&gt; # A tibble: 6 x 13</span>
+<span class="hljs-meta">#&gt; # Groups:   Species, model_name [6]</span>
+<span class="hljs-meta">#&gt;   Species model_name r.squared adj.r.squared sigma statistic  p.value    df</span>
+<span class="hljs-meta">#&gt;   <span class="hljs-meta-string">&lt;fct&gt;</span>   <span class="hljs-meta-string">&lt;chr&gt;</span>          <span class="hljs-meta-string">&lt;dbl&gt;</span>         <span class="hljs-meta-string">&lt;dbl&gt;</span> <span class="hljs-meta-string">&lt;dbl&gt;</span>     <span class="hljs-meta-string">&lt;dbl&gt;</span>    <span class="hljs-meta-string">&lt;dbl&gt;</span> <span class="hljs-meta-string">&lt;int&gt;</span></span>
+<span class="hljs-meta">#&gt; 1 setosa  length-wi…     0.112        0.0739 0.339      2.96 6.18e- 2     3</span>
+<span class="hljs-meta">#&gt; 2 setosa  interacti…     0.133        0.0760 0.339      2.34 8.54e- 2     4</span>
+<span class="hljs-meta">#&gt; 3 versic… length-wi…     0.574        0.556  0.344     31.7  1.92e- 9     3</span>
+<span class="hljs-meta">#&gt; 4 versic… interacti…     0.577        0.549  0.347     20.9  1.11e- 8     4</span>
+<span class="hljs-meta">#&gt; 5 virgin… length-wi…     0.747        0.736  0.327     69.3  9.50e-15     3</span>
+<span class="hljs-meta">#&gt; 6 virgin… interacti…     0.757        0.741  0.323     47.8  3.54e-14     4</span>
+<span class="hljs-meta">#&gt; # … with 5 more variables: logLik <span class="hljs-meta-string">&lt;dbl&gt;</span>, AIC <span class="hljs-meta-string">&lt;dbl&gt;</span>, BIC <span class="hljs-meta-string">&lt;dbl&gt;</span>, deviance <span class="hljs-meta-string">&lt;dbl&gt;</span>,</span>
+<span class="hljs-meta">#&gt; #   df.residual <span class="hljs-meta-string">&lt;int&gt;</span></span></code></pre>
+
+</body>
+</html>
