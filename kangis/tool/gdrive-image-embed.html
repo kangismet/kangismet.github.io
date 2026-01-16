@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Google Drive Image Embed Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width">
+<meta property="og:image" content="img/thumb.jpg">
+<meta property="og:image:type" content="image/jpg">
+<meta property="og:image:width" content="436">
+<meta property="og:image:height" content="228">
+<meta property="og:title" content="Google Drive Image Embed">
+<meta property="og:description" content="Google Drive Image Embed Generator Tool">
+<link rel="icon" href="img/favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/gdembed.css">
+
+</head>
+
+<body>
+
+<div class="card">
+  <h1>GD Image Embed Generator</h1>
+  <div class="subtitle">Google Drive → Direct Embed</div>
+
+  <input id="driveInput" placeholder="Paste Google Drive link atau File ID (Image harus diset Anyone with link)">
+  <input id="altInput" placeholder="ALT text (opsional)">
+
+  <div class="toggle">
+    <label><input type="radio" name="mode" value="img" checked> IMG</label>
+    <label><input type="radio" name="mode" value="figure"> FIGURE</label>
+    <label><input type="radio" name="mode" value="picture"> PICTURE</label>
+  </div>
+
+  <button onclick="generate()">Generate Image</button>
+
+  <div class="layout">
+    <div class="viewer" id="viewer">Preview</div>
+    <div class="codebox">
+      <textarea id="embedCode" readonly placeholder="Kode embed muncul di sini"></textarea>
+      <button onclick="copyCode()">Copy Embed Code</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="logo">KI</div>
+  <span>© <span id="year"></span></span>
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>
+</div>
+
+<div class="toast" id="toast">Kode embed tersalin</div>
+
+<script src="js/gdembed.js"></script>
+</body>
+</html>
