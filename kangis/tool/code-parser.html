@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Code Parser Tool Advanced</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.css" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width">
+<meta property="og:image" content="img/thumb.jpg">
+<meta property="og:image:type" content="image/jpg">
+<meta property="og:image:width" content="436">
+<meta property="og:image:height" content="228">
+<meta property="og:title" content="Google Drive Image Embed">
+<meta property="og:description" content="Google Drive Image Embed Generator Tool">
+<link rel="icon" href="img/favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/cparser.css">
+
+</head>
+<body>
+
+<div class="card">
+  <h1>Code Parser Tool</h1>
+  <div class="subtitle">Paste kode → bungkus <code>&lt;code&gt;</code> / <code>&lt;pre&gt;&lt;code&gt;</code> | Prism optional</div>
+
+  <textarea id="inputCode" rows="6" placeholder="Paste kode di sini..."></textarea>
+
+  <div class="buttons">
+    <button class="resetBtn" onclick="resetTool()">Reset</button>
+    <button class="parseBtn" onclick="parseCode()">Parse Kode</button>
+  </div>
+
+  <button class="optionalBtn" style="width:100%; margin-top:10px;" onclick="toggleAdvanced()">Opsional</button>
+
+  <div id="advancedOptions">
+    <!-- Toggle Mode -->
+    <div class="toggleWrapper">
+      <label><input type="radio" name="mode" value="auto" checked> Auto Detect</label>
+      <label><input type="radio" name="mode" value="inline"> Inline <code>&lt;code&gt;</code></label>
+      <label><input type="radio" name="mode" value="block"> Block <code>&lt;pre&gt;&lt;code&gt;</code></label>
+    </div>
+
+    <!-- Prism Options -->
+    <div class="prismOptions">
+      <label><input type="checkbox" id="enablePrism" class="input-30"> <span style="flex-grow: 3">Enable Prism Highlight</span></label>
+      <label>Bahasa Prism:
+        <select id="langSelect">
+          <option value="js" selected>JavaScript</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="php">PHP</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <textarea id="embedCode" rows="5" readonly placeholder="Kode embed muncul di sini"></textarea>
+  <button class="copyBtn" id="copyBtn" onclick="copyCode()">Copy Embed Code</button>
+</div>
+
+<div class="footer">
+  <div class="logo">KI</div>
+  <span>© <span id="year"></span></span>
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js"></script>
+<script src="js/cparser.js"></script>
+</body>
+</html>
