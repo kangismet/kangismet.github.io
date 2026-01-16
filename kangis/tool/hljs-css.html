@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>HLJS CSS Highlighter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:image" content="img/thumb.jpg">
+<meta property="og:image:type" content="image/jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:title" content="HLJS CSS Highlighter">
+<meta property="og:description" content="Syntax Highlighter tanpa JavaScript">
+<link rel="icon" href="img/favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/hljscss.css">
+
+</head>
+
+<body>
+<div class="wrap">
+<div class="card">
+  <h1>HLJS CSS Highlighter</h1>
+  <div class="subtitle">
+    Paste Kode → Generate <code>class</code> dan <code>&lt;pre&gt;&lt;code&gt;</code>
+  </div>
+
+  <textarea id="input" placeholder="Paste kode di sini..."></textarea>
+
+  <div class="actions">
+  <button class="btn-generate" onclick="generate()">Generate Highlight</button>
+  <button class="btn-copy" id="copyBtn" onclick="copyCode()" disabled>Copy Result</button>
+  <button class="btn-reset" onclick="resetAll()">Reset</button>
+</div>
+
+  <div class="note">
+    Hasil di bawah ini HTML + class saja. Copy ke halaman AMP dan warnai dengan CSS.
+  </div>
+
+  <textarea id="output" placeholder="Hasil akan muncul di sini..." readonly></textarea>
+</div>
+
+<div class="footer">
+  <div class="logo">KI</div>
+  <span>© <span id="year"></span></span>
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>
+</div>
+</div>
+
+<script src="js/hljscss.js"></script>
+</body>
+</html>
