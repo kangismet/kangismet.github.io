@@ -1,63 +1,88 @@
-*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
+*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,sans-serif}
 body{
   min-height:100vh;
   display:flex;
-  align-items:center;
+  flex-direction:column;
   justify-content:center;
+  align-items:center;
   background:linear-gradient(135deg,#667eea,#764ba2);
-  padding:0;
+  padding:20px;
   margin:0;
 }
-.wrapper{width:100%;max-width:1000px}
-.box{
-  background:#f8f9ff;
-  border-radius:18px;
+.wrapper{
+  max-width:900px;
+  width:100%;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
   padding:20px;
-  box-shadow:0 14px 32px rgba(0,0,0,.18);
 }
-.locked .main,
-.locked .code-box{display:none}
-
-h2{text-align:center;margin-bottom:8px;margin-top:3px}
-.subtitle{text-align:center;color:#6b7280;font-size:14px;margin-bottom:20px}
-#lockBox{text-align:center;margin-bottom:20px}
-#lockBox input{max-width:280px}
-#lockMsg{color:#e74c3c;font-size:14px;margin-top:6px}
-
-.main{display:flex;gap:24px}
+.main{
+  display:flex;
+  gap:20px;
+}
 .left,.right{flex:1}
+h3{text-align:center;margin-bottom:15px}
 
-input,select,textarea,button{
+input,select,button,textarea{
   width:100%;
   padding:12px;
   margin-top:12px;
-  border-radius:8px;
+  border-radius:10px;
   border:1px solid #ddd;
 }
+
 button{
-  border:none;
   background:linear-gradient(135deg,#667eea,#764ba2);
   color:#fff;
   font-weight:600;
   cursor:pointer;
+  border:none;
 }
 
-.preview-box{
-  min-height:240px;
-  border:2px dashed #bbb;
+.previewBox{
+  height:100%;
+  min-height:260px;
+  border:2px dashed #ccc;
   border-radius:14px;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  color:#777;
-  padding:16px;
+  color:#888;
+  position:relative;
 }
-.preview-box img{max-width:100%;border-radius:12px}
+.previewBox img{
+  max-width:100%;
+  max-height:100%;
+  border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,.2);
+}
 
-.code-box{margin-top:20px}
-.code-box textarea{height:150px;font-family:monospace;resize:none}
-.copyBtn.copied{background:#2ecc71}
+.spinner{
+  width:36px;height:36px;
+  border-radius:50%;
+  border:4px solid #ddd;
+  border-top-color:#667eea;
+  animation:spin 1s linear infinite;
+  position:absolute;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.codeBox{margin-top:20px}
+textarea{resize:none;font-family:monospace;height:120px}
+
+.copyBtn.copied{
+  background:#2ecc71;
+}
+.copyBtn.copied::after{
+  content:"✔ Disalin";
+}
+
+.lockBox{
+  text-align:center;
+}
+.lockBox input{margin-bottom:10px}
 
 .footer{
   margin-top:18px;
@@ -79,8 +104,4 @@ button{
   justify-content:center;
   font-size:12px;
   font-weight:700;
-}
-
-@media(max-width:768px){
-  .main{flex-direction:column}
 }
