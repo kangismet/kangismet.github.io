@@ -1,0 +1,135 @@
+:root {
+      --bg: linear-gradient(135deg, #667eea, #764ba2);
+      --card: rgba(255,255,255,.18);
+      --card-dark: #121425;
+      --text: #ffffff;
+      --text-dark: #e5e7eb;
+      --muted: #e5e9ef;
+      --accent: #22c55e;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      transition: background .3s ease, color .3s ease;
+    }
+
+    body.dark {
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: var(--text-dark);
+    }
+	a {color:var(--text);
+	text-decoration:none;
+	font-weight:700;
+	}
+    .container {
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.25);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+	.brand h1 {
+		font-size:22px;
+		}
+
+    .toggle {
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.25);
+      font-size: .85rem;
+      user-select: none;
+    }
+
+    body.dark .toggle {
+      background: rgba(255,255,255,.1);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.25);
+      transition: transform .2s ease, background .3s ease;	  
+    }
+
+    body.dark .card {
+      background: var(--card-dark);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    
+    .card p {
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .admin{background:#db7a70}
+	
+    .btn {
+      margin-top: 5px;
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.25);
+      color: #fff;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .btn:hover { background: rgba(0,0,0,.35); }
+
+    footer {
+      text-align: center;
+      margin-top: 36px;
+      font-size: .85rem;
+      opacity: .85;
+    }
