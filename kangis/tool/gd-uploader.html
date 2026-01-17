@@ -15,59 +15,58 @@
 <link rel="stylesheet" href="css/gduploader.css">
 
 </head>
-
 <body>
-<div class="wrapper">
-  <div class="box locked" id="uploaderBox">
-    <h2>Google Drive Image Uploader</h2>
-	<div class="subtitle">
-      Upload & Generate Image (Khusus Admin)
-    </div>
 
-    <!-- PASSWORD -->
-    <div id="lockBox">
-      <input type="password" id="passInput" placeholder="Password admin">
-      <button id="unlockBtn">Buka Uploader</button>
-      <div id="lockMsg"></div>
-    </div>
+<div class="wrapper locked" id="uploaderBox">
+
+  <!-- PASSWORD LOCK -->
+  <div class="lockBox" id="lockBox">
+    <h3>🔒 Akses Admin</h3>
+    <input type="password" id="passInput" placeholder="Masukkan password">
+    <button id="unlockBtn">Buka Uploader</button>
+    <div id="lockMsg" style="color:red;margin-top:10px"></div>
+  </div>
+
+  <!-- UPLOADER -->
+  <div id="content" hidden>
+    <h3>Image Uploader</h3>
 
     <div class="main">
       <!-- FORM -->
       <div class="left">
         <input type="file" id="file" accept="image/*">
-        <input type="text" id="alt" placeholder="Alt text (SEO)">
-
+        <input type="text" id="alt" placeholder="Alt text">
         <select id="mode">
-          <option value="img">IMG Tag</option>
-          <option value="figure">Figure + Caption</option>
-          <option value="picture">Picture (Responsive)</option>
+          <option value="img">IMG</option>
+          <option value="figure">FIGURE + CAPTION</option>
+          <option value="picture">PICTURE</option>
         </select>
-
-        <input type="text" id="caption" placeholder="Caption (figure)" hidden>
         <button id="uploadBtn">Upload</button>
       </div>
 
       <!-- PREVIEW -->
       <div class="right">
-        <div class="preview-box" id="previewBox">
-          <div><strong>Preview Area</strong><br>Gambar tampil di sini</div>
+        <div class="previewBox" id="previewBox">
+          <span id="previewText">Preview gambar</span>
+          <div class="spinner" id="spinner" hidden></div>
+          <img id="previewImg" hidden>
         </div>
       </div>
     </div>
 
     <!-- CODE -->
-    <div class="code-box" id="codeBox" hidden>
+    <div class="codeBox" id="codeBox" hidden>
       <textarea id="code" readonly></textarea>
-      <button id="copyBtn" class="copyBtn">Copy</button>
+      <button class="copyBtn" id="copyBtn">Copy</button>
     </div>
   </div>
+</div>
 
 <div class="footer">
   <div class="logo">KI</div>
   <span>© <span id="year"></span></span>
   <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>
 </div>
-</div>
-<script src="js/gduploaderobs.js"></script>
+<script src="js/gduploader.js"></script>
 </body>
 </html>
