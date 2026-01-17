@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>CodeZone HTML Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="icon" href="img/favicon.ico">
+<link rel="stylesheet" href="css/codezone.css">
+
+  
+</head>
+<body>
+
+<header>
+<a href="https://kangis.my.id" target="_blank"> 
+  <div class="logo">
+  <img class="lg" src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" loading="lazy" alt="Logo">
+  </div>
+  <h1>CodeZone</h1>
+  </a>
+  <button id="saveBtn" style="float:right;padding:4px 10px;font-size:12px;cursor:pointer;">Save</button>
+</header>
+
+<div class="main">
+
+  <!-- ===== EDITOR ===== -->
+  <div class="editor">
+
+    <div class="panel">
+      <h3>HTML</h3>
+      <div class="cm-wrapper">
+        <textarea id="html">&lt;h1&gt;Hello World&lt;/h1&gt;
+&lt;p&gt;Silahkan Uji Coba kode di sini!&lt;/p&gt;
+</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>CSS</h3>
+      <div class="cm-wrapper">
+        <textarea id="css">
+body{padding:20px}
+</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>JavaScript</h3>
+      <div class="cm-wrapper">
+        <textarea id="js">
+		</textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== RESULT ===== -->
+  <div class="panel result-panel">
+    <h3>Result</h3>
+    <div class="result-wrapper">
+      <iframe id="result"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<footer>2026 • Kang Ismet • CodeZone</footer>
+
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="js/codezone.js"></script>
+
+</body>
+</html>
