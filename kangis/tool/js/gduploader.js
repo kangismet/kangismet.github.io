@@ -1,43 +1,46 @@
-/* ================= CONFIG ================= */
+/* ===== CONFIG ===== */
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzaIr7INm16-R0FdfhwYmXrYrOWFZiq3IxiEiik0oDI6KByQfTN3NucYMTl7vZrsxHn/exec";
 const UPLOAD_TOKEN = "KANGISMET123";
 const ADMIN_PASSWORD = "mangahung";
 
-/* ================= ELEMENTS ================= */
+/* ===== ELEMENTS ===== */
+const uploaderBox = document.getElementById("uploaderBox");
+const lockBox = document.getElementById("lockBox");
 const passInput = document.getElementById("passInput");
 const unlockBtn = document.getElementById("unlockBtn");
-const lockBox = document.getElementById("lockBox");
-const content = document.getElementById("content");
+const lockMsg = document.getElementById("lockMsg");
 
 const fileInput = document.getElementById("file");
 const uploadBtn = document.getElementById("uploadBtn");
 const spinner = document.getElementById("spinner");
 const previewImg = document.getElementById("previewImg");
 const previewText = document.getElementById("previewText");
+
 const codeBox = document.getElementById("codeBox");
 const codeArea = document.getElementById("code");
 const copyBtn = document.getElementById("copyBtn");
 
-/* ================= PASSWORD ================= */
+/* ===== PASSWORD ===== */
 function unlock(){
   if(passInput.value === ADMIN_PASSWORD){
     sessionStorage.setItem("unlocked","1");
+    uploaderBox.classList.remove("locked");
     lockBox.remove();
-    content.hidden=false;
   }else{
-    document.getElementById("lockMsg").textContent="Password salah";
+    lockMsg.textContent="Password salah";
   }
 }
 unlockBtn.onclick=unlock;
 passInput.addEventListener("keydown",e=>{
   if(e.key==="Enter"){e.preventDefault();unlock();}
 });
+
 if(sessionStorage.getItem("unlocked")==="1"){
+  uploaderBox.classList.remove("locked");
   lockBox.remove();
-  content.hidden=false;
 }
 
-/* ================= UPLOAD ================= */
+/* ===== UPLOAD ===== */
 uploadBtn.onclick=()=>{
   const file=fileInput.files[0];
   if(!file){alert("Pilih gambar");return}
@@ -102,12 +105,12 @@ uploadBtn.onclick=()=>{
   reader.readAsDataURL(file);
 };
 
-/* ================= COPY ================= */
+/* ===== COPY ===== */
 copyBtn.onclick=()=>{
   navigator.clipboard.writeText(codeArea.value);
   copyBtn.classList.add("copied");
   setTimeout(()=>copyBtn.classList.remove("copied"),2000);
 };
 
-/* ================= FOOTER ================= */
+/* ===== FOOTER ===== */
 document.getElementById("year").textContent=new Date().getFullYear();
