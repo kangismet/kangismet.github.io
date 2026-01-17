@@ -19,7 +19,7 @@
 
 <div class="wrapper locked" id="uploaderBox">
 
-  <!-- PASSWORD LOCK -->
+  <!-- LOCK -->
   <div class="lockBox" id="lockBox">
     <h3>🔒 Akses Admin</h3>
     <input type="password" id="passInput" placeholder="Masukkan password">
@@ -27,12 +27,11 @@
     <div id="lockMsg" style="color:red;margin-top:10px"></div>
   </div>
 
-  <!-- UPLOADER -->
-  <div id="content" hidden>
-    <h3>Image Uploader</h3>
+  <!-- CONTENT -->
+  <div id="content">
+    <h3>Google Drive Image Uploader</h3>
 
     <div class="main">
-      <!-- FORM -->
       <div class="left">
         <input type="file" id="file" accept="image/*">
         <input type="text" id="alt" placeholder="Alt text">
@@ -44,9 +43,8 @@
         <button id="uploadBtn">Upload</button>
       </div>
 
-      <!-- PREVIEW -->
       <div class="right">
-        <div class="previewBox" id="previewBox">
+        <div class="previewBox">
           <span id="previewText">Preview gambar</span>
           <div class="spinner" id="spinner" hidden></div>
           <img id="previewImg" hidden>
@@ -54,10 +52,11 @@
       </div>
     </div>
 
-    <!-- CODE -->
     <div class="codeBox" id="codeBox" hidden>
       <textarea id="code" readonly></textarea>
-      <button class="copyBtn" id="copyBtn">Copy</button>
+      <button class="copyBtn" id="copyBtn">
+        <span class="btnText">Copy</span>
+      </button>
     </div>
   </div>
 </div>
@@ -67,6 +66,7 @@
   <span>© <span id="year"></span></span>
   <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>
 </div>
-<script src="js/gduploader.js"></script>
+
+<script src="js/gduploaderobf.js"></script>
 </body>
 </html>
