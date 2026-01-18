@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Drive Image Uploader</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<meta property="og:image" content="img/thumb.jpg">
+<meta property="og:image:type" content="image/jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:title" content="GD Image Uploader">
+<meta property="og:description" content="Tool untuk upload Gambar ke Doodle Drive>
+<link rel="icon" href="img/favicon.ico">
+<link rel="stylesheet" href="css/pbgduploader.css">
+
+
+</head>
+
+<body>
+
+<div class="wrapper">
+  <h2>Google Drive Image Uploader</h2>
+
+  <div class="layout">
+
+    <!-- LEFT -->
+    <div style="flex-grow: 1">
+      <label>Pilih gambar</label>
+      <input type="file" id="file" accept="image/*">
+
+      <label>Alt Text</label>
+      <input type="text" id="alt" placeholder="Deskripsi gambar">
+
+      <label>Mode Embed</label>
+      <select id="mode">
+        <option value="img">IMG</option>
+        <option value="figure">FIGURE</option>
+        <option value="picture">PICTURE</option>
+      </select>
+
+      <button id="uploadBtn">Upload</button>
+
+      <div class="embed" id="embedBox">
+        <label>Kode Embed</label>
+        <textarea id="embedCode" rows="7" readonly></textarea>
+        <button onclick="copyEmbed()">Copy Code</button>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="preview-box" id="previewBox" style="flex-grow: 1">
+      Preview Image akan muncul di sini<br/><br/>
+	 Gunakan dengan bijak, karena image<br/> akan masuk ke Google Drive yang <br/>saya sediakan khusus.
+    </div>
+
+  </div>
+</div>
+<div class="footer">
+  <div class="logo">KI</div>
+  <span>© <span id="year"></span></span>
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+<script src="js/pbgduploader.js"></script>
+
+</body>
+</html>
