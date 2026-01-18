@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Image Uploader</title>
+
+<style>
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f3f4f6;
+  padding: 20px;
+}
+
+.uploader {
+  max-width: 420px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.uploader h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #f9fafb;
+}
+
+button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.result {
+  margin-top: 15px;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.result.success {
+  color: #15803d;
+}
+
+.result.error {
+  color: #b91c1c;
+}
+
+.copy {
+  margin-top: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #2563eb;
+}
+</style>
+</head>
+
+<body>
+
+<div class="uploader">
+  <h2>Upload Image</h2>
+
+  <input type="file" id="file" accept="image/*">
+  <button id="btn" onclick="upload()">Upload</button>
+
+  <div id="result" class="result"></div>
+</div>
+
+<script>
+/* ===============================
+   KONFIGURASI
+================================ */
+const ENDPOINT =
+  "https://script.google.com/macros/s/AKfycbyx_xjSpclArezbMxUraodym7QzzhwC83aZQoHrlcL4u7rNaoO8pzF9l-tqiS94Ejhl/exec";
+
+const TOKEN = "UPLOAD-KANGIS-2026";
+
+/* ===============================
+   UPLOAD FUNCTION
+================================ */
+function upload() {
+  const fileInput = document.getElementById("file");
+  const result = document.getElementById("result");
+  const btn = document.getElementById("btn");
+
+  const file = fileInput.files[0];
+  if (!file) {
+    result.textContent = "Pilih file terlebih dahulu";
+    result.className = "result error";
+    return;
+  }
+
+  btn.disabled = true;
+  result.textContent = "Uploading...";
+  result.className = "result";
+
+  const reader = new FileReader();
+
+  reader.onload = function () {
+    const base64 = reader.result.split(",")[1];
+
+    const fd = new FormData();
+    fd.append("token", TOKEN);
+    fd.append("origin", location.hostname);
+    fd.append("filename", file.name);
+    fd.append("mimeType", file.type);
+    fd.append("data", base64);
+
+    fetch(ENDPOINT, {
+      method: "POST",
+      body: fd
+    })
+    .then(r => r.json())
+    .then(res => {
+      btn.disabled = false;
+
+      if (res.status === "success") {
+        result.innerHTML = `
+          <div class="success">Upload berhasil</div>
+          <div class="copy" onclick="copyText('${res.url}')">
+            ${res.url}
+          </div>
+        `;
+        result.className = "result success";
+      } else {
+        result.textContent = res.message;
+        result.className = "result error";
+      }
+    })
+    .catch(err => {
+      btn.disabled = false;
+      result.textContent = "Gagal menghubungi server";
+      result.className = "result error";
+    });
+  };
+
+  reader.readAsDataURL(file);
+}
+
+/* ===============================
+   COPY
+================================ */
+function copyText(text) {
+  navigator.clipboard.writeText(text);
+  alert("Link disalin");
+}
+</script>
+
+</body>
+</html>
