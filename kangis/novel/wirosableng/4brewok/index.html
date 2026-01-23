@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empat Brewok dari Goa Sanggreng</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header>
+  <button onclick="toggleNav()">☰</button>
+  <button onclick="toggleDark()">🌙</button>
+</header>
+
+<div class="progress"><span></span></div>
+
+<div class="app">
+<nav id="nav">
+  <a href="#" onclick="showCover()" id="link-cover">Cover</a>
+  <hr>
+  <script>
+    for(let i=1;i<=17;i++){
+      document.write(`<a href="#" onclick="loadBab(${i})" id="link-${i}">Bab ${i}</a>`)
+    }
+  </script>
+</nav>
+
+<main id="content">
+
+  <!-- COVER INLINE -->
+  <section class="cover" id="cover">
+	<img src="https://lh3.googleusercontent.com/d/1ChUf9WmSW7ZAmNEKsoJv7C62hbPbpltz=w400"
+     width="400"
+     height="570"
+     alt="Empat Brewok dari Goa Sanggreng"
+     loading="lazy"
+     decoding="async"
+	 class="cover-img">
+    <h1>Empat Brewok dari Goa Sanggreng</h1>   
+    <p>Bastian Tito</p>
+    <button onclick="loadBab(1)">Mulai Membaca →</button>
+  </section>
+
+</main>
+</div>
+
+<div class="hint" id="hint">⬅️ ➡️ Geser untuk ganti bab</div>
+
+<script src="js/theme.js"></script>
+
+</body>
+</html>
