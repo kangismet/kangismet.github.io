@@ -65,6 +65,18 @@ body.dark main a {
 .cover button{margin-top:1rem;padding:.7rem 1.4rem;border:none;border-radius:999px;font-size:1rem;cursor:pointer;background:#4caf50;color:#fff;}
 .progress{height:3px;background:rgba(0,0,0,.15);} .progress span{display:block;height:100%;background:#4caf50;width:0%;}
 .hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel);padding:.4rem .8rem;border-radius:20px;font-size:.8rem;opacity:.85;}
+.block{
+  background:#83be49;
+  color:#fff;
+  padding:15px;
+  margin:20px 0;
+  text-align:center;
+}
+.next{
+  margin:25px 0;
+  font-size:1.4em;
+  text-align:center;
+}
 /* MOBILE */
 @media(max-width:768px){
   .app{flex-direction:column;}
@@ -79,4 +91,5 @@ body.dark main a {
   .header-buttons button:last-child {
     display: none; /* tombol burger */
   }
+  .block{display:none}
 }
