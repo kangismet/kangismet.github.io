@@ -9,14 +9,16 @@
 </head>
 
 <body>
-
 <header>
-  <button onclick="toggleNav()">☰</button>
-  <button onclick="toggleDark()">🌙</button>
+  <span class="header-title">Empat Brewok dari Goa Sanggreng</span>
+  <div class="header-buttons">
+    <button onclick="toggleDark()">🌙</button>
+    <button onclick="toggleNav()">☰</button>
+  </div>
 </header>
 
+<div id="overlay" onclick="closeNav()"></div>
 <div class="progress"><span></span></div>
-
 <div class="app">
 <nav id="nav">
   <a href="#" onclick="showCover()" id="link-cover">Cover</a>
@@ -27,26 +29,15 @@
     }
   </script>
 </nav>
-
 <main id="content">
-
-  <!-- COVER INLINE -->
-  <section class="cover" id="cover">
-	<img src="https://lh3.googleusercontent.com/d/1ChUf9WmSW7ZAmNEKsoJv7C62hbPbpltz=w400"
-     width="400"
-     height="570"
-     alt="Empat Brewok dari Goa Sanggreng"
-     loading="lazy"
-     decoding="async"
-	 class="cover-img">
-    <h1>Empat Brewok dari Goa Sanggreng</h1>   
+  <section class="cover" id="cover-section">
+    <img src="https://lh3.googleusercontent.com/d/1ChUf9WmSW7ZAmNEKsoJv7C62hbPbpltz=w400" alt="Cover Buku" class="cover-img">
+    <h1>Empat Brewok dari Goa Sanggreng</h1>
     <p>Bastian Tito</p>
     <button onclick="loadBab(1)">Mulai Membaca →</button>
   </section>
-
 </main>
 </div>
-
 <div class="hint" id="hint">⬅️ ➡️ Geser untuk ganti bab</div>
 
 <script src="js/theme.js"></script>
