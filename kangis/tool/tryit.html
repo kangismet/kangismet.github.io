@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>Tryit Editor</title>
+<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:image" content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjVeQzkdCLzr2ETRVkEaJu50eSXgofGmP1rqsf_pEJ_2fGdeIS6UPo92E6Y4qjbGF80cwXIrZUxW9DdWxXI4wJbLBQDi-iHDl3E42jzVIL7QBU0xhisyUmvMg1VB0LDjCCWVOVgayh0Ww_oVnedF_wZfwg18WY52iSBuTDDhyphenhyphenbH-6jR-qyS8zfdZE7oSkJj/s436/kangis-logo.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="436">
+<meta property="og:image:height" content="228">
+<meta property="og:title" content="Try it online HTML editor">
+<meta property="og:description" content="Try it online code editor allows you to edit code and view the result in your browser">
+<link rel="stylesheet" href="https://tutorial.kangis.my.id/css/bki1.css">
+<link rel="stylesheet" href="https://tutorial.kangis.my.id/css/bki2.css">
+<link rel="icon" href="https://tutorial.kangis.my.id/blog/img/favicon.ico">
+<link rel='stylesheet' href='https://tutorial.kangis.my.id/js/codemirror.css'>
+<script src='https://tutorial.kangis.my.id/js/codemirror.js'></script>
+<script src='https://tutorial.kangis.my.id/js/codemirror_jsx.js'></script>
+<script src="https://tutorial.kangis.my.id/js/cnvt.js"></script>
+<script src="js/tryit.js"></script>
+<script>
+
+</script>
+<style>
+a {
+	color:#fff;
+	text-decoration:none
+}
+a:hover {
+	color:#fff;
+}
+
+</style>
+<!--[if lt IE 8]>
+<style>
+#textareacontainer, #iframecontainer {width:48%;}
+#container {height:500px;}
+#textarea, #iframe {width:90%;height:450px;}
+#textareaCode, #textareaCode2, #iframeResult, .codewindow {height:450px;}
+.stack {display:none;}
+</style>
+<![endif]-->
+</head>
+<body id="mainContent">
+
+<div id='tryitLeaderboard'>
+<!-- TryitLeaderboard -->
+
+  <a href="https://kangis.my.id"><h1>Try it Editor</h1></a>
+ 
+</div>
+
+<div class="trytopnav">
+<div class="ki-bar" style="overflow:auto">
+  <a id="tryhome" href="https://kangis.my.id" target="_blank" title="bki.com Home" class="ki-button ki-bar-item ki-icons  ga-tryit" style="margin-top:-1px;"><svg class='hNav2' width="20" height="20" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d="M9 21H7C4.79086 21 3 19.2091 3 17V10.7076C3 9.30887 3.73061 8.01175 4.92679 7.28679L9.92679 4.25649C11.2011 3.48421 12.7989 3.48421 14.0732 4.25649L19.0732 7.28679C20.2694 8.01175 21 9.30887 21 10.7076V17C21 19.2091 19.2091 21 17 21H15M9 21V17C9 15.3431 10.3431 14 12 14V14C13.6569 14 15 15.3431 15 17V21M9 21H15"/></svg>
+</a>
+
+  <a href="javascript:void(0);" onclick="restack(currentStack)" title="Change Orientation" class="ki-button ki-bar-item ki-hide-small ki-icons ga-tryit" style="margin-top:1px;"><svg class="hNav"  xmlns="http://www.w3.org/2000/svg" 
+	 viewBox="0 0 122.88 106.43">
+	<path class="st0" d="M11.1,0h35.63c3.05,0,5.85,1.25,7.85,3.25c2.03,2.03,3.25,4.8,3.25,7.85v31.46h-3.19V12.18H3.15v75.26l0,0
+		h7.61v11.61c0,1.58,0.27,3.1,0.77,4.51H11.1c-3.05,0-5.85-1.25-7.85-3.25C1.22,98.27,0,95.51,0,92.45V11.1
+		c0-3.05,1.25-5.85,3.25-7.85C5.28,1.22,8.04,0,11.1,0L11.1,0L11.1,0z M94.95,33.45c-0.37-5.8-2.64-10.56-6.06-13.97
+		c-3.64-3.63-8.59-5.74-13.94-5.93l2.46,2.95c0.73,0.88,0.62,2.18-0.26,2.91c-0.88,0.73-2.18,0.62-2.91-0.26l-5.72-6.85l0,0
+		c-0.72-0.86-0.62-2.14,0.22-2.88l6.71-5.89c0.86-0.75,2.16-0.66,2.91,0.19c0.75,0.86,0.66,2.16-0.19,2.91l-3.16,2.78
+		c6.43,0.21,12.4,2.75,16.8,7.13c4.07,4.06,6.79,9.69,7.25,16.49l2.58-3.08c0.73-0.88,2.04-0.99,2.91-0.26
+		c0.88,0.73,0.99,2.04,0.26,2.91l-5.73,6.84c-0.72,0.86-1.99,0.99-2.87,0.29l-6.98-5.56c-0.89-0.71-1.04-2.01-0.33-2.91
+		c0.71-0.89,2.01-1.04,2.91-0.33L94.95,33.45L94.95,33.45z M122.88,59.7v35.63c0,3.05-1.25,5.85-3.25,7.85
+		c-2.03,2.03-4.8,3.25-7.85,3.25h-78.9c-3.05,0-5.85-1.25-7.85-3.25c-2.03-2.03-3.25-4.8-3.25-7.85V59.7c0-3.05,1.25-5.85,3.25-7.85
+		c2.03-2.03,4.79-3.25,7.85-3.25h78.9c3.05,0,5.85,1.25,7.85,3.25C121.66,53.88,122.88,56.64,122.88,59.7L122.88,59.7L122.88,59.7z
+		 M35.41,77.49c0,2.51-2.03,4.57-4.57,4.57c-2.51,0-4.57-2.03-4.57-4.57c0-2.51,2.03-4.57,4.57-4.57
+		C33.36,72.92,35.41,74.95,35.41,77.49L35.41,77.49L35.41,77.49z M37.88,51.75v51.49h72.82V51.75H37.88L37.88,51.75z"/>
+</svg></a>
+  <a class="ki-button ki-bar-item ki-icons  ga-tryit" title="Change Theme">
+   <div class='dark-link' onclick='darkMode()'>
+  <span class="dark"></span><svg class='hNav2 svg-1' width="18" height="18" data-text='Dark mode' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg>
+  <span class="light"></span> <svg class='line svg-2' width="18" height="18" viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><circle cx='12' cy='12' r='5'/><line x1='12' x2='12' y1='1' y2='3'/><line x1='12' x2='12' y1='21' y2='23'/><line x1='4.22' x2='5.64' y1='4.22' y2='5.64'/><line x1='18.36' x2='19.78' y1='18.36' y2='19.78'/><line x1='1' x2='3' y1='12' y2='12'/><line x1='21' x2='23' y1='12' y2='12'/><line x1='4.22' x2='5.64' y1='19.78' y2='18.36'/><line x1='18.36' x2='19.78' y1='5.64' y2='4.22'/></svg>
+</div>
+</a>
+  <button id="runbtn" class="ki-button ki-bar-item ki-hover-white ki-hover-text-green ga-tryit" onclick="submitTryit(1);cnvt_r_p();">Run &#10095;</button> 
+  <!--<span class="ki-right ki-hide-small xxw3-hide-medium" style="padding:8px 8px 8px 8px;display:block"></span>-->
+  <span class="ki-right ki-hide-small" style="padding:8px 16px 8px 0;display:block;float:right;font-size:16px;margin-top:4px"><span id="framesize"></span></span>
+</div>
+
+</div>
+
+<div id="shield"></div>
+
+<a href="javascript:void(0)" id="dragbar"></a>
+<div id="container">
+  <div id="menuOverlay" class="ki-overlay ki-transparent" style="cursor:pointer;z-index:4"></div>
+  <div id="textareacontainer">
+    <div id="textarea">
+      <div id="textareawrapper">
+        
+<textarea autocomplete="off" id="textareaCode" wrap="logical" spellcheck="false">
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+body {
+	font-family:Arial, sans-serif;
+}
+</style>
+
+</head>
+<body>
+
+<h2>JavaScript di atas Body</h2>
+<p id="demo"></p>
+
+<script>
+document.getElementById("demo").innerHTML = "Coba JavaScript";
+</script>
+
+</body>
+</html>
+
+</textarea>
+    <form id="codeForm" autocomplete="off" style="margin:0px;display:none;">
+        <input type="hidden" name="code" id="code" />
+    </form>
+                  
+		</div>
+    </div>
+  </div>
+  <div id="iframecontainer">
+    <div id="iframe">      
+      <div id="iframewrapper">               
+      </div>
+    </div>
+  </div>
+  
+</div>
+<script src="js/tryit2.js"></script>
+</body>
+</html>
