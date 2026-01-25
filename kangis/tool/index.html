@@ -9,22 +9,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
+<style>
+.rating {
+  color: gold;
+  font-size: 20px;
+  position:absolute;
+  bottom:20px;
+  right:25px;
+}
+</style>
 </head>
 <body>
   <div class="container">
     <header>
       <div class="brand">
-        <a href="https://kangis.my.id"><div class="logo">KI</div></a>
+        <a href="https://kangis.my.id" target="_blank"><div class="logo">KI</div></a>
         <h1>Web Tools</h1>
       </div>
       <div class="toggle" onclick="toggleDark()">🌙 / ☀️</div>
     </header>
     <section class="grid">
-      <div class="card">
-        <h3>Arabic Keyboard</h3>
-        <p>Tool untuk mengetik tulisan arab untuk Blog & Ms Word.</p>
-        <a href="arabickeyboard.html" class="btn" target="_blank">Buka Tool</a>
-      </div>
+	<div class="card">
+        <h3>HTML Cleaner & Formatter Pro</h3>
+        <p>Tool untuk membersihkan dan memformat HTML secara otomatis.</p>
+        <a href="html-cleaner-formatter-pro.html" class="btn" target="_blank">Buka Tool</a>
+      <div class="rating">
+    ★★★★☆
+  </div>
+	  </div>     
       <div class="card">
         <h3>Code Parser</h3>
         <p>Parse Code untuk disimpan di dalam Postingan.</p>
@@ -50,6 +62,11 @@
         <p>Upload image otomatis ke Google Drive, ditambah kode embed. </p>
         <a href="public-gd-uploader.html" class="btn" target="_blank">Buka Tool</a>
       </div>
+	  <div class="card">
+        <h3>GD Direct Link</h3>
+        <p>Tool untuk mendapatkan URL Github Google Drive, misal file untuk Link Download. </p>
+        <a href="gdrive-direct-link.html" class="btn" target="_blank">Buka Tool</a>
+      </div>
 	  <div class="card admin">
         <h3>Admin GD Image Uploader</h3>
         <p>Upload image otomatis ke Google Drive (khusus Admin Blog)</p>
@@ -65,6 +82,21 @@
         <p>Tool editor HTML online, seperti CodePen dan JSFiddle.</p>
         <a href="code-zone.html" class="btn" target="_blank">Buka Tool</a>
       </div>
+	  <div class="card">
+        <h3>Try it Editor</h3>
+        <p>Tool HTML Online Editor seperti W3Shools, untuk ujicoba CSS, HTM dan JS.</p>
+        <a href="tryit.html" class="btn" target="_blank">Buka Tool</a>
+      </div>
+	  <div class="card">
+        <h3>Responsinator</h3>
+        <p>Tool untuk mengecek Responsive layout sebuah web / blog.</p>
+        <a href="responsinator.html" class="btn" target="_blank">Buka Tool</a>
+      </div>
+	  <div class="card">
+        <h3>Arabic Keyboard</h3>
+        <p>Tool untuk mengetik tulisan arab untuk Blog & Ms Word.</p>
+        <a href="arabickeyboard.html" class="btn" target="_blank">Buka Tool</a>
+      </div>
     </section>
 
     <footer>
@@ -75,4 +107,3 @@
 <script src="js/theme.js"></script>
 </body>
 </html>
-
