@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>HTML Cleaner & Formatter Pro</title>
+
+<!-- Primary Meta -->
+<title>HTML Cleaner & Formatter Pro</title>
+<meta name="description" content="HTML Cleaner & Formatter Pro adalah tool untuk membersihkan dan memformat HTML secara otomatis. Mendukung Markdown-safe, auto tagging, dan secure escaping untuk konten yang aman dan rapi.">
+<meta name="keywords" content="HTML Cleaner, HTML Formatter, Markdown to HTML, HTML escape, auto paragraph, auto list, HTML sanitizer">
+<meta name="author" content="Kang Ismet">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="HTML Cleaner & Formatter Pro">
+<meta property="og:description" content="Bersihkan dan format HTML otomatis dengan dukungan Markdown-safe, auto tag, dan secure escape. Cocok untuk blogger dan developer.">
+<meta property="og:url" content="https://kangis.my.id">
+<meta property="og:site_name" content="HTML Cleaner & Formatter Pro">
+<meta property="og:image" content="https://kangis.my.id/assets/html-cleaner-og.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HTML Cleaner & Formatter Pro – Markdown-safe, Auto tagging, Secure escaping">
+
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTML Cleaner & Formatter Pro">
+<meta name="twitter:description" content="Tool HTML Cleaner & Formatter dengan Markdown-safe, auto tagging, dan secure escaping. Aman untuk CMS dan SEO.">
+
+<!-- Mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#020617">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/htmlformatter.css">
+
+</head>
+
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h2>✨ HTML Cleaner & Formatter Pro</h2>
+    <small>Markdown-safe • Auto Paragraph & List • Safe HTML Escape</small>
+  </div>
+</div>
+
+<div class="main">
+  <div class="editor">
+
+    <div class="section">
+      <div class="section-head input">Input</div>
+      <textarea id="input" placeholder="Paste teks / HTML / Markdown di sini..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="resetAll()">Reset</button>
+        <button class="btn-clean" onclick="runCleaner()">Convert</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head output">Output</div>
+      <textarea id="output" placeholder="Hasil akan muncul di sini..." readonly></textarea>
+      <div class="actions" style="justify-content:flex-end">
+        <button class="btn-copy" onclick="copyResult()">Copy</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © <span id="year"></span>
+    <a href="https://kangis.my.id" target="_blank" rel="noopener">Kang Ismet</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">Disalin ✨</div>
+<script src="js/htmlformatter.js"></script>
+</body>
+</html>
