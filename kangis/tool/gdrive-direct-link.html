@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Google Drive Direct Link Generator</title>
+
+	<!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Kanis.my.id">
+	<meta name="description" content="Tutorial Blog Kang Ismet">
+	
+	<!-- Open graph -->
+	<meta property="og:url" content="https://kangis.my.id/tool/gdrive-direct-link" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Google Drive Direct Link Generator" />
+	<meta property="og:description" content="Tutorial Bootstrap, JavaScript, jQuery, dll " />
+	<meta property="og:image" content="https://tutorial.kangis.my.id/img/kismt-thumb.jpg" />
+
+	
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="img/favicon.ico">
+
+	<!-- Google Font -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+
+ 
+  <!-- Theme CSS -->
+	<link rel="stylesheet" type="text/css" href="https://tutorial.kangis.my.id/css/feed-loader.css">
+	<link rel="stylesheet" type="text/css" href="https://tutorial.kangis.my.id/css/tutorial.css">
+    <link rel="stylesheet" type="text/css" href="css/gdlink.css">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type='text/javascript'>
+$(function() { $(window).scroll(function() { if($(this).scrollTop()>100) { $('#ScrollToTop').fadeIn()} else { $('#ScrollToTop').fadeOut();}});
+$('#ScrollToTop').click(function(){$('html,body').animate({scrollTop:0},200);return false})});
+</script>
+</head>
+<body>
+
+<main>
+
+<!-- Page header START -->
+  <div class="py-4" style="background-image:url(https://tutorial.kangis.my.id/img/bggdrive.jpg); background-position: center center; background-size: cover; background-repeat: no-repeat;">
+	<div class="container">
+      <div class="row justify-content-center py-4">
+        <div class="col-md-6 text-center">
+        <!-- Title -->
+        <h1 class="text-white">Google Drive Direct Link Generator</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page header END -->
+
+    <!-- Komite Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-8">
+                     <div class="link-generate">
+    <script language="javascript">
+        window.onload = setup;
+
+        function setup(){
+            document.getElementById("button").addEventListener("click", go);
+            document.getElementById("output").addEventListener("click", copy);
+        }
+        
+        function setStatus(status, error = false) {
+            var helpText = document.getElementById("help-text");
+            
+            helpText.innerText = status;
+            
+            if (error) {
+                helpText.style.color = "darkred";
+            } else {
+                helpText.style.color = "#227300";
+            }
+        }
+          
+        function go(){
+            var linkId = document.getElementById("input").value;
+            var idExtractor = /\/d\/(.+?)(?:\/|#|\?|$)/;
+            var result = idExtractor.exec(linkId);
+            
+            var outputBox = document.getElementById("output");
+            
+            
+            if (!result) {
+                outputBox.value = "";
+                setStatus("Error: Invalid URL", true);
+                outputBox.disabled = true;
+                return;
+            }
+            
+            var finalLink = "https://drive.google.com/uc?export=download&id=" + result[1];
+            outputBox.disabled = false;
+            outputBox.value = finalLink;
+            setStatus("Success! Click the output link to copy it to your clipboard");
+        }
+        
+        function copy() {
+            if (this.disabled) {
+                return;
+            }
+            
+            this.select();
+            var copied = document.execCommand("copy");
+            
+            if (copied) {
+                setStatus("Link copied to clipboard!");
+            } else {
+                setStatus("Couldn't copy link to clipboard. Please copy it manually.", true);
+            }
+        }
+    </script>
+    <div class="title">Masukan URL Google Drive:&nbsp;<span class="sub">(<a href="#instr">Membuat Sharing URL</a>)</span></div>
+	<p>URL Google Drive kurang lebih seperti ini:<br/>
+	<code>https://drive.google.com/file/d/1LDRlyZaZTF-bxHjBDEiL2obMxYHtf3YT/view?usp=sharing</code><p>
+    <input id="input" type="text">
+    <button id="button" class="btn btn-danger mt-3">Buat Direct Link</button>
+    <div class="title">Output link:</div>
+    <input id="output" type="text" readonly="" disabled="">
+    <div id="help-text"></div>
+
+</div>
+                </div>
+                <div class="col-lg-4 notes">
+                    <h3 class="mb-4">Catatan:</h3>
+					<ul>
+					<li>Pastikan di Google Drive file sudah "Anyone with the link" (Siapa saja yang meliki link). Apabila pengaturan "Dibatasi" maka hanya Anda pemilik file yang bisa mengakses file. (Buat umum, karena tujuan akan dibagikan).</li>
+					<li>Tool ini hanya berjalan untuk file yang diupload, bukan dokumen di Google Docs/Sheets/Slides.</li>
+					<li>Apabila file terlalu besar, direct link akan mebuka halaman dan menyatakan file terlalu besar untuk scan virus. Halaman tersebut akan menampilkan tombol untuk mendownload file.</li>
+					</ul>
+					<div id="instr"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+	 
+    <!-- KOmite End -->
+
+<div class="py-5 instr">
+	<div class="container text-center">
+	<h1 class="text-white">Cara Membuat File Google Drive untuk Dibagikan</h1>
+	</div>
+</div>
+<div class="py-5">
+	<div class="container text-center">
+		<div class="notes1">
+			<b>Step 1</b>: Kunjungi <b>Google Drive</b> kilik kanan pada file yang akan dibagikan, dan klik "Share" / "Bagikan"
+		</div>
+		<div class="img-600 img-center mt-4 border">
+			<img alt="google drive" src="https://tutorial.kangis.my.id/img/gdrive1.jpg"/>
+		</div>
+		<div class="notes1 mt-5">
+			<b>Step 2</b>: Pada jendela yang muncul, ganti akses ke "Anyone with the link" / "Siapa saja yang memiliki link"
+		</div>
+		<div class="img-500 img-center mt-4 border">
+			<img alt="google drive" src="https://tutorial.kangis.my.id/img/gdrive2.jpg"/>
+		</div>
+		<div class="notes1 mt-5">
+			<b>Step 3</b>: Klik "Copy link" / "Salin link"
+		</div>
+		<div class="img-500 img-center mt-4 border">
+			<img alt="google drive" src="https://tutorial.kangis.my.id/img/gdrive3.jpg"/>
+		</div>
+		<div class="notes1 mt-5">
+			<b>Step 4</b>: Paste link tersebut di isiian paling atas pada Tool ini, kemudian  "Buat Direct Link". Salam!
+		</div>
+	</div>
+</div>
+
+<div class="py-2">
+	<div class="container text-center">
+	<span class='post-view' data-id='2222'>
+	<code><b><span class='view-load' id='postviews'></span></b> Views since January 26, 2026</code>
+	</span>
+	</div>
+</div>
+</main>
+
+
+  <footer class="pt-3 pb-1 mt-4">
+    <p class="text-center">© <span id="year"></span> <a href="https://kangis.my.id">Kang Ismet</a></p>
+	<div id="ScrollToTop" class="toTopB vsbl">
+<svg viewBox="0 0 38 38"><circle class="b" cx="17" cy="17" r="15.92"></circle><circle class="c scrollProgress" cx="17" cy="17" r="15.92" style="stroke-dashoffset: 79.6851;"></circle><path class="line d" d="M15.07,21.06,19.16,17l-4.09-4.06"></path></svg>
+</div>
+  </footer>
+
+<script>
+//<![CDATA[
+document.write("<scr" + "ipt type=\"text/javascript\" src=\"https://cdn.firebase.com/js/client/2.4.2/firebase.js\"></scr" + "ipt>");
+//]]>
+</script>	
+<script>
+year.textContent = new Date().getFullYear();
+    $.each($(".post-view[data-id]"), function(a, e) {
+        var l = $(e).parent().find("#postviews").addClass("view-load"),
+            i = new Firebase("https://assaef-1-default-rtdb.firebaseio.com/pages/id/" + $(e).attr("data-id"));
+        i.once("value", function(a) {
+            var n = a.val(),
+                t = !1;
+            null == n && (n = {}, n.value = 0, n.url = window.location.href, n.id = $(e).attr("data-id"), t = !0), l.removeClass("view-load").text(n.value), n.value++, "/" != window.location.pathname && (t ? i.set(n) : i.child("value").set(n.value))
+        })
+    });
+</script> 
+
+</body>
+</html>
+
