@@ -1,0 +1,107 @@
+/* ===== HTML Cleaner & Formatter by Kang Ismet ===== */
+:root{
+  --bg:#f4f6f8;
+  --dark:#020617;
+  --border:#cfd1d4;
+  --head-input:#e0f2fe;
+  --head-output:#ecfeff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Inter",system-ui,sans-serif;
+  background:var(--bg);
+}
+
+/* HEADER */
+.header{
+  background:var(--dark);
+  color:#e5e7eb;
+  padding:20px;
+}
+.header-inner{max-width:1200px;margin:auto}
+.header h2{margin:0;color:#fff}
+.header small{color:#9ca3af}
+
+/* MAIN */
+.main{max-width:1200px;margin:50px auto;padding:0 16px}
+.editor{display:grid;gap:20px}
+@media(min-width:768px){
+  .editor{grid-template-columns:1fr 1fr}
+}
+
+/* SECTION */
+.section{display:flex;flex-direction:column}
+.section-head{
+  align-self:flex-start;
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:600;
+  border:1px solid var(--border);
+  border-radius:8px 8px 0 0;
+  margin-left:8px;
+  margin-bottom:-1px;
+}
+.section-head.input{background:var(--head-input)}
+.section-head.output{background:var(--head-output)}
+
+textarea{
+  width:100%;
+  min-height:280px;
+  padding:14px 16px;
+  font-size:14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  resize:vertical;
+}
+textarea:focus{outline:none;border-color:#7c83ff}
+#output{
+  background:#020617;
+  color:#22ff88;
+  font-family:ui-monospace,Consolas,monospace;
+}
+
+/* ACTIONS */
+.actions{display:flex;gap:10px;margin-top:15px}
+button{
+  border:none;
+  border-radius:6px;
+  padding:12px;
+  font-weight:600;
+  cursor:pointer;
+  color:#fff;
+}
+.btn-reset{background:#ef4444}
+.btn-clean{background:#10b981;flex:1}
+.btn-copy{background:#6366f1}
+
+/* FOOTER */
+.footer{
+  margin-top:60px;
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  font-size:13px;
+}
+.footer a{text-decoration:none;font-weight:600;color:#020617}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#111;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:10px;
+  opacity:0;
+  transform:translateY(20px);
+  transition:.3s;
+}
+
+.toast.show{opacity:1;transform:none}
+
+@media (min-width: 768px) {
+   .header h2, .header small{padding-left:20px}
+   .main{margin:70px auto 50px}
+}
