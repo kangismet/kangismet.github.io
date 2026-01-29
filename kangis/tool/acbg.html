@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<title>ACBG | Auto Code Block Generator</title>
+<!-- Basic Meta -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Auto Code Block Generator untuk membuat code block HTML otomatis dengan live preview dan syntax highlighting.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Auto Code Block Generator">
+<meta property="og:description" content="Generate code block HTML Otomatis dengan Live Preview dan Syntax Highlighting.">
+<meta property="og:url" content="https://kangis.my.id/tool/acbg.html">
+<meta property="og:image" content="img/acbg.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Auto Code Block Generator - HTML Code Generator Tool">
+<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Auto Code Block Generator">
+<meta name="twitter:description" content="Generate code block HTML Otomatis dengan Live Preview dan Syntax Highlighting.">
+<meta name="twitter:image" content="img/acbg.jpg">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/acbg.css">
+
+<!-- Prism CSS (light default) -->
+<link id="prismTheme" rel="stylesheet"
+ href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.min.css">
+
+
+</head>
+
+<body>
+<div class="card">
+
+<h2>Auto Code Block Generator</h2>
+<small>Parse Code • Live Preview • Dark / Light • Prism / HLJS Friendly</small>
+
+<textarea id="inputCode" placeholder="Tempel kode di sini..."></textarea>
+
+<div class="actions">
+  <button class="primary" onclick="parseCode()">Parse</button>
+  <button class="secondary" onclick="copyCode()" id="copyBtn">Copy</button>
+  <button class="ghost" onclick="resetTool()">Reset</button>
+</div>
+
+<div class="options">
+
+  <div class="option-group" style="flex-grow:2">
+    <strong>Mode:</strong>
+    <label><input type="radio" name="mode" value="auto" checked> Auto</label>
+    <label><input type="radio" name="mode" value="inline"> Inline</label>
+    <label><input type="radio" name="mode" value="block"> Block</label>
+  </div>
+
+  <div class="option-group" style="flex-grow:1">
+    <strong>Language:</strong>
+    <select id="langSelect">
+      <option value="auto">Auto Detect</option>
+      <option value="html">HTML</option>
+      <option value="css">CSS</option>
+      <option value="javascript">JavaScript</option>
+      <option value="php">PHP</option>
+      <option value="python">Python</option>
+      <option value="sql">SQL</option>
+    </select>
+  </div>
+
+  <div class="option-group" style="flex-grow:1">
+    <strong>Highlight:</strong>
+    <label><input type="checkbox" id="enablePrismCheckbox" checked> Prism / HLJS</label>
+  </div>
+
+  <div class="option-group" style="flex-grow:1">
+    <strong>Preview:</strong>
+    <label><input type="checkbox" id="livePreviewToggle" checked> Live</label>
+  </div>
+
+  <div class="option-group" style="flex-grow:1">
+    <strong>Theme:</strong>
+    <label><input type="radio" name="theme" value="light" checked> Light</label>
+    <label><input type="radio" name="theme" value="dark"> Dark</label>
+  </div>
+
+</div>
+
+<div class="result">
+
+  <textarea id="embedCode" placeholder="Hasil embed muncul di sini..." readonly></textarea>
+
+  <div id="previewBox" class="preview-box">
+    <div id="previewPlaceholder" class="preview-placeholder">
+      Preview highlighted code
+    </div>
+    <div id="preview"></div>
+  </div>
+
+</div>
+
+<footer>
+  © <span id="year"></span> • <a href="https://kangis.my.id" target="_blank" rel="noopener">Kang Ismet</a>
+</footer>
+
+</div>
+
+<!-- Prism JS -->
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
+
+<script src="js/acbg.js"></script>
+</body>
+</html>
