@@ -93,21 +93,28 @@ header h1{
 
 .cm-wrapper{
   flex:1;
+  min-height:0;
+  min-width:0;
   overflow:hidden;
 }
 
-/* CodeMirror FIX */
+/* ⭐ FINAL FIX */
 .CodeMirror{
   height:100%;
   width:100%;
   font-size:14px;
+}
+
+.CodeMirror-scroll{
   overflow:auto;
 }
 
+/* optional: wrap line panjang biar tidak dorong layout */
 .CodeMirror pre{
   white-space:pre-wrap;
   word-break:break-word;
 }
+
 
 /* ===============================
    RESULT
@@ -130,6 +137,17 @@ iframe{
   background:#fff;
 }
 textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0} 
+   	::-webkit-scrollbar {
+    width: 6px;height:6px;
+}
+ 
+::-webkit-scrollbar-track {    
+    background: #111;    
+}
+ 
+::-webkit-scrollbar-thumb {
+    background: #444;
+}
 /* ===============================
    FOOTER
 ================================ */
@@ -329,4 +347,5 @@ saveBtn.onclick = () => {
 
 </body>
 </html>
+
 
