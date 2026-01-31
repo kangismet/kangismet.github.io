@@ -172,16 +172,23 @@ async function loadDemo(id){
 
     const text = await res.text();
 
-    const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
-    const js   = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
-    const html = text
-      .replace(/<style[\s\S]*?<\/style>/ig,'')
-      .replace(/<script[\s\S]*?<\/script>/ig,'')
-      .trim();
+    const css = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
+    const js  = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
 
-    htmlEditor.setValue(html);
-    cssEditor.setValue(css);
-    jsEditor.setValue(js);
+    // ✅ AMBIL ISI BODY JIKA ADA
+    let html = '';
+    const bodyMatch = text.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    if(bodyMatch){
+      html = bodyMatch[1];
+    }else{
+      html = text
+        .replace(/<style[\s\S]*?<\/style>/ig,'')
+        .replace(/<script[\s\S]*?<\/script>/ig,'');
+    }
+
+    htmlEditor.setValue(html.trim());
+    cssEditor.setValue(css.trim());
+    jsEditor.setValue(js.trim());
 
     run();
   }catch(e){
@@ -205,3 +212,4 @@ document.getElementById('saveBtn').onclick = ()=>{
 
 </body>
 </html>
+
