@@ -1,0 +1,66 @@
+<style>
+body {
+  font-family: Arial, sans-serif;
+  padding: 30px;
+}
+/* area copy */
+textarea {
+  width: 300px;
+  height: 80px;
+  display: block;
+  margin-bottom: 10px;
+}
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb; /* biru */
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.copy-btn.copied {
+  background: #16a34a; /* hijau */
+}
+.icon {
+  font-size: 16px;
+}
+</style>
+
+
+<body>
+<h3>Contoh Copy Text</h3>
+<textarea id="text1">Ini contoh teks yang bisa disalin</textarea>
+<button class="copy-btn" onclick="copyText('text1', this)">
+  <span class="label">Copy</span>
+  <span class="icon"></span>
+</button>
+</body>
+
+<script>
+function copyText(textareaId, btn) {
+  const textarea = document.getElementById(textareaId);
+  const text = textarea.value;
+  if (!text) return;
+  const label = btn.querySelector(".label");
+  const icon  = btn.querySelector(".icon");
+  const originalLabel = label.textContent;
+  const originalIcon  = icon.textContent;
+  label.textContent = "Tersalin";
+  icon.textContent = "✔";
+  btn.classList.add("copied");
+  clearTimeout(btn._timer);
+  btn._timer = setTimeout(() => {
+    label.textContent = originalLabel;
+    icon.textContent = originalIcon;
+    btn.classList.remove("copied");
+  }, 1200);
+  navigator.clipboard.writeText(text).catch(() => {
+    label.textContent = "Gagal";
+    icon.textContent = "✖";
+  });
+}
+</script>
