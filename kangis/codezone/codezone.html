@@ -226,7 +226,7 @@ ${htmlEditor.getValue()}
    LOAD DEMO FILE → EDITOR
 ================================ */
 async function loadFileByID(id){
-  const res = await fetch(`demos/${id}.html`);
+  const res = await fetch(`demo/${id}.html`);
   if(!res.ok){
     console.error('Demo file tidak ditemukan');
     return;
@@ -262,3 +262,4 @@ document.getElementById('saveBtn').onclick = () => {
 
 </body>
 </html>
+
