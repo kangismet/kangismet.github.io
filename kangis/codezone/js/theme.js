@@ -1,6 +1,7 @@
 year.textContent = new Date().getFullYear();
+
 /* ===============================
-   CodeZone by Kang Ismet
+   CodeZone by Kang Ismet (FIXED)
 ================================ */
 const FILE_ID =
   new URLSearchParams(location.search).get('file') || 'demo-001';
@@ -26,12 +27,15 @@ const jsEditor = CodeMirror.fromTextArea(
 const result = document.getElementById('result');
 
 /* ===============================
-   RUN RESULT
+   RUN RESULT (SAFE RENDER)
 ================================ */
 function run(){
-  result.srcdoc = `<!DOCTYPE html>
+  const doc = result.contentDocument || result.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <style>
 html,body{margin:0}
 ${cssEditor.getValue()}
@@ -39,30 +43,39 @@ ${cssEditor.getValue()}
 </head>
 <body>
 ${htmlEditor.getValue()}
-<script>${jsEditor.getValue()}<\/script>
+<script>
+${jsEditor.getValue()}
+<\/script>
 </body>
-</html>`;
+</html>`);
+  doc.close();
 }
 
 [htmlEditor,cssEditor,jsEditor].forEach(ed=>{
-  ed.on('change',run);
+  ed.on('change', run);
 });
 
 /* ===============================
-   LOAD DEMO FILE → EDITOR
+   LOAD DEMO FILE → EDITOR (IMPROVED)
 ================================ */
 async function loadFileByID(id){
   const res = await fetch(`demo/${id}.html`);
   if(!res.ok){
-    console.error('Demo file tidak ditemukan');
+    console.error('Demo file tidak ditemukan:', id);
     return;
   }
 
   const text = await res.text();
 
-  const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
+  const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/gi)||[])
+    .map(s => s.replace(/<\/?style[^>]*>/gi,''))
+    .join('\n');
+
   const html = (text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||[])[1] || '';
-  const js   = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
+
+  const js   = (text.match(/<script(?![^>]*src)[^>]*>([\s\S]*?)<\/script>/gi)||[])
+    .map(s => s.replace(/<\/?script[^>]*>/gi,''))
+    .join('\n');
 
   htmlEditor.setValue(html.trim());
   cssEditor.setValue(css.trim());
@@ -78,7 +91,10 @@ loadFileByID(FILE_ID);
    SAVE RESULT
 ================================ */
 document.getElementById('saveBtn').onclick = () => {
-  const blob = new Blob([result.srcdoc], { type:'text/html' });
+  const doc = result.contentDocument;
+  const html = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+
+  const blob = new Blob([html], { type:'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'result.html';
