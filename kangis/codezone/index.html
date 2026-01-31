@@ -2,16 +2,20 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<title>CodeZone HTML Editor</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>CodeZone — Kang Ismet</title>
 
 <!-- CodeMirror -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material-darker.css">
 
 <style>
+/* ===============================
+   BASE
+================================ */
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:system-ui,sans-serif;
@@ -21,38 +25,61 @@ body{
   display:flex;
   flex-direction:column;
 }
+
+a{color:#bfed50;text-decoration:none}
+a:hover{color:#fff}
+
+/* ===============================
+   HEADER
+================================ */
 header{
   padding:15px;
   background:#090f24;
   font-weight:600;
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  gap:12px;
 }
+
 header h1{
   font-size:1.5rem;
   margin:0;
 }
-a{color:#bfed50;text-decoration:none}
-a:hover{color:#fff}
 
-.logo{
-  width:40px;
-  margin-right:12px;
+.logo img{
+  width:30px;
+  height:30px;
 }
 
+#saveBtn{
+  margin-left:auto;
+  cursor:pointer;
+  padding:5px 12px;
+}
+
+/* ===============================
+   MAIN GRID
+================================ */
 .main{
   flex:1;
   display:grid;
-  grid-template-columns:minmax(0,420px) 1fr;
-  background:#020617;
+
+  /* editor | drag | result */
+  grid-template-columns:420px 6px 1fr;
+
+  min-height:0;
   overflow:hidden;
+  background:#020617;
 }
 
+/* ===============================
+   EDITOR
+================================ */
 .editor{
   display:grid;
   grid-template-rows:1fr 1fr 1fr;
   border-right:1px solid #1e293b;
+  min-height:0;
 }
 
 .panel{
@@ -64,23 +91,61 @@ a:hover{color:#fff}
 .panel h3{
   margin:0;
   padding:6px 10px;
-  font-size:14px;
+  font-size:13px;
   background:#020617;
   border-bottom:1px solid #1e293b;
 }
 
-.cm-wrapper{flex:1;min-height:0}
+.cm-wrapper{
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+}
 
 .CodeMirror{
   height:100%;
+  width:100%;
   font-size:14px;
 }
-.CodeMirror-scroll {
-    max-width: 450px;
+
+/* cegah dorong layout */
+.CodeMirror-scroll{
+  max-width:450px;
 }
+
+/* ===============================
+   RESIZER
+================================ */
+.resizer{
+  cursor:col-resize;
+  background:#0b1220;
+  border-left:1px solid #1e293b;
+  border-right:1px solid #1e293b;
+  position:relative;
+}
+
+.resizer:hover{
+  background:#1e293b;
+}
+
+.resizer::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:2px;
+  height:40px;
+  background:#334155;
+}
+
+/* ===============================
+   RESULT
+================================ */
 .result-panel{
   display:flex;
   flex-direction:column;
+  min-height:0;
 }
 
 .result-wrapper{
@@ -88,59 +153,59 @@ a:hover{color:#fff}
   overflow:hidden;
 }
 
-#result{
+iframe{
   width:100%;
   height:100%;
   border:none;
   background:#fff;
 }
 
+/* ===============================
+   FOOTER
+================================ */
 footer{
   padding:6px 12px;
   font-size:12px;
   background:#020617;
   border-top:1px solid #1e293b;
   color:#94a3b8;
+  text-align:center;
 }
 
-#saveBtn{
-  cursor:pointer;
-  padding:4px 10px;
-}
-textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0}
- ::-webkit-scrollbar{-webkit-appearance:none;width:8px;height:5px;background:rgba(0,0,0,.1)}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.25);border-radius:10px}::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.45)}::-webkit-scrollbar-thumb:active{background:rgba(0,0,0,.45)}
-}
-html {
-overflow-y:scroll;
-overflow-x:scroll;
-scrollbar-color:#777879 #d8d9db;
-scrollbar-width:thin;
-} 
+/* ===============================
+   MOBILE
+================================ */
 @media(max-width:900px){
   .main{
     grid-template-columns:1fr;
     grid-template-rows:60vh 1fr;
   }
-  .editor{
-    border-right:none;
-    border-bottom:1px solid #1e293b;
+
+  .resizer{
+    display:none;
   }
 }
+
+/* ===============================
+   SCROLLBAR
+================================ */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#444}
+::-webkit-scrollbar-track{background:#111}
+
+textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0}
 </style>
 </head>
-
 
 <body>
 
 <header>
-  <a href="https://kangis.my.id" target="_blank" style="display:flex;align-items:center;">
-    <img class="logo" src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" loading="lazy">
-    <h1>CodeZone</h1>
-  </a>
-
+  <div class="logo">
+    <img src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" alt="">
+  </div>
+  <h1>CodeZone</h1>
   <button id="saveBtn">Save</button>
 </header>
-
 
 <div class="main">
 
@@ -170,6 +235,9 @@ scrollbar-width:thin;
 
   </div>
 
+  <!-- DRAG BAR -->
+  <div class="resizer" id="dragbar"></div>
+
   <!-- RESULT -->
   <div class="panel result-panel">
     <h3>Result</h3>
@@ -180,24 +248,101 @@ scrollbar-width:thin;
 
 </div>
 
-
 <footer>
-  © <span id="year"></span> • 
-  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a> • CodeZone
+  © <span id="year"></span> • Kang Ismet • CodeZone
 </footer>
 
+<!-- ===============================
+     SCRIPTS
+================================ -->
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/css/css.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/javascript/javascript.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/htmlmixed/htmlmixed.js"></script>
 
-<!-- CodeMirror JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script>
+year.textContent = new Date().getFullYear();
 
-<script src="js/theme.js"></script>
+const FILE_ID = new URLSearchParams(location.search).get('file');
+const result = document.getElementById('result');
+
+/* ===============================
+   CODEMIRROR INIT
+================================ */
+const htmlEditor = CodeMirror.fromTextArea(html,{mode:'htmlmixed',theme:'material-darker',lineNumbers:true});
+const cssEditor  = CodeMirror.fromTextArea(css,{mode:'css',theme:'material-darker',lineNumbers:true});
+const jsEditor   = CodeMirror.fromTextArea(js,{mode:'javascript',theme:'material-darker',lineNumbers:true});
+
+/* ===============================
+   RUN
+================================ */
+function run(){
+  const doc = result.contentDocument;
+  doc.open();
+  doc.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>${cssEditor.getValue()}</style>
+</head>
+<body>
+${htmlEditor.getValue()}
+<script>${jsEditor.getValue()}<\/script>
+</body>
+</html>`);
+  doc.close();
+}
+
+[htmlEditor,cssEditor,jsEditor].forEach(e=>e.on('change',run));
+
+/* ===============================
+   LOAD DEMO (?file=)
+================================ */
+async function loadFile(id){
+  if(!id) return;
+
+  const res = await fetch('demo/'+id+'.html');
+  if(!res.ok) return;
+
+  const text = await res.text();
+
+  cssEditor.setValue((text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||['',''])[1]);
+  htmlEditor.setValue((text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||['',''])[1]);
+  jsEditor.setValue((text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||['',''])[1]);
+
+  run();
+}
+
+loadFile(FILE_ID);
+
+/* ===============================
+   SAVE
+================================ */
+saveBtn.onclick=()=>{
+  const blob=new Blob([result.contentDocument.documentElement.outerHTML],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='result.html';
+  a.click();
+};
+
+/* ===============================
+   DRAG RESIZE
+================================ */
+let dragging=false;
+
+dragbar.onmousedown=()=>dragging=true;
+document.onmouseup=()=>dragging=false;
+
+document.onmousemove=e=>{
+  if(!dragging) return;
+  let x=e.clientX;
+  if(x<260) x=260;
+  if(x>window.innerWidth-260) x=window.innerWidth-260;
+  document.querySelector('.main').style.gridTemplateColumns=`${x}px 6px 1fr`;
+};
+</script>
 
 </body>
 </html>
-
-
-
