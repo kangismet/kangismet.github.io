@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>CodeZone HTML Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
+
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+
+<style>
+/* ===============================
+   BASE
+================================ */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, sans-serif;
+  background: #121212;
+  color: #eee;
+}
+
+/* ===============================
+   HEADER
+================================ */
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+header a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+header img.lg {
+  width: 28px;
+  height: 28px;
+}
+
+header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+#saveBtn {
+  margin-left: auto;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ===============================
+   MAIN LAYOUT
+================================ */
+.main {
+  display: flex;
+  height: calc(100vh - 96px);
+}
+
+/* ===============================
+   EDITOR
+================================ */
+.editor {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #2a2a2a;
+}
+
+.panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel h3 {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 13px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+/* CodeMirror height fix */
+.cm-wrapper,
+.CodeMirror {
+  flex: 1;
+  height: 100%;
+}
+
+/* ===============================
+   RESULT
+================================ */
+.result-panel {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+#result {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #fff;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+footer {
+  height: 40px;
+  background: #1c1c1c;
+  border-top: 1px solid #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+footer a {
+  color: #aaa;
+  text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="https://kangis.my.id" target="_blank">
+    <img class="lg" src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" alt="Logo">
+    <h1>CodeZone</h1>
+  </a>
+  <button id="saveBtn">Save</button>
+</header>
+
+<div class="main">
+
+  <!-- EDITOR -->
+  <div class="editor">
+    <div class="panel">
+      <h3>HTML</h3>
+      <div class="cm-wrapper">
+        <textarea id="html"></textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>CSS</h3>
+      <div class="cm-wrapper">
+        <textarea id="css"></textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>JavaScript</h3>
+      <div class="cm-wrapper">
+        <textarea id="js"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="panel result-panel">
+    <h3>Result</h3>
+    <div class="result-wrapper">
+      <iframe id="result" sandbox="allow-scripts"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © <span id="year"></span> •
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a> • CodeZone
+</footer>
+
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+
+<!-- FIXED JS -->
+<script src="js/theme.js"></script>
+
+</body>
+</html>
