@@ -1,0 +1,13 @@
+<style>
+body{padding:20px}
+h1{color:tomato}
+</style>
+
+<body>
+<h1>Selamat Datang di CodeZone</h1>
+<p>Selamat berkreasi</p>
+</body>
+
+<script>
+console.log('Demo OK');
+</script>
