@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<title>CodeZone HTML Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:#0f172a;
+  color:#e5e7eb;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+header{
+  padding:15px;
+  background:#090f24;
+  font-weight:600;
+}
+header h1{
+  font-size:1.5rem;
+  margin:0;
+  display:inline-block;
+}
+a{color:#bfed50;text-decoration:none;transition: background-color 0.3s ease, transform 0.2s ease;}
+a:hover{color:#fff}
+.logo {
+    width: 50px;
+    height: 50px;
+    display: inline;
+    align-items: center;
+	margin-right:15px
+}
+.main{
+  flex:1;
+  display:grid;
+  grid-template-columns:minmax(0,420px) 1fr;
+  background:#020617;
+  overflow:hidden;
+}
+.editor{
+  display:grid;
+  grid-template-rows:1fr 1fr 1fr;
+  border-right:1px solid #1e293b;
+}
+.panel{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+.panel h3{
+  margin:0;
+  padding:6px 10px;
+  font-size:14px;
+  background:#020617;
+  border-bottom:1px solid #1e293b;
+}
+.cm-wrapper{flex:1;min-height:0}
+.CodeMirror{
+  height:100%;
+  font-size:14px;
+}
+.CodeMirror-scroll{
+  max-width:450px;
+}
+.result-panel{
+  display:flex;
+  flex-direction:column;
+}
+.result-wrapper{
+  flex:1;
+  overflow:hidden;
+}
+iframe{
+  width:100%;
+  height:100%;
+  border:none;
+  background:#fff;
+}
+footer{
+  padding:6px 12px;
+  font-size:12px;
+  background:#020617;
+  border-top:1px solid #1e293b;
+  color:#94a3b8;
+}
+footer a{color:#bacae0;transition: background-color 0.3s ease, transform 0.2s ease;}
+footer a:hover{color:#e5ebf4}
+#saveBtn{cursor:pointer}
+@media(max-width:900px){
+  .main{
+    grid-template-columns:1fr;
+    grid-template-rows:60vh 1fr;
+  }
+  .editor{
+    border-right:none;
+    border-bottom:1px solid #1e293b;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<a href="https://kangis.my.id" target="_blank">
+   <div class="logo">
+  <img class="lg" src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" loading="lazy" alt="Logo">
+  </div>
+  <h1>CodeZone</h1>
+  </a>
+  <button id="saveBtn" style="float:right;padding:4px 10px;font-size:12px">Save</button>
+</header>
+
+<div class="main">
+
+<!-- EDITOR -->
+<div class="editor">
+
+  <div class="panel">
+    <h3>HTML</h3>
+    <div class="cm-wrapper">
+      <textarea id="html"></textarea>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>CSS</h3>
+    <div class="cm-wrapper">
+      <textarea id="css"></textarea>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>JavaScript</h3>
+    <div class="cm-wrapper">
+      <textarea id="js"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- RESULT -->
+<div class="panel result-panel">
+  <h3>Result</h3>
+  <div class="result-wrapper">
+    <iframe id="result"></iframe>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <span>© <span id="year"></span></span>
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>  • CodeZone
+</footer>
+
+
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+
+<script>
+year.textContent = new Date().getFullYear();
+/* ===============================
+   FILE ID (HARDCODE / QUERY)
+================================ */
+const FILE_ID =
+  new URLSearchParams(location.search).get('file') || 'demo-001';
+
+/* ===============================
+   CODEMIRROR INIT
+================================ */
+const htmlEditor = CodeMirror.fromTextArea(
+  document.getElementById('html'),
+  { mode:'htmlmixed', theme:'material-darker', lineNumbers:true }
+);
+
+const cssEditor = CodeMirror.fromTextArea(
+  document.getElementById('css'),
+  { mode:'css', theme:'material-darker', lineNumbers:true }
+);
+
+const jsEditor = CodeMirror.fromTextArea(
+  document.getElementById('js'),
+  { mode:'javascript', theme:'material-darker', lineNumbers:true }
+);
+
+const result = document.getElementById('result');
+
+/* ===============================
+   RUN RESULT
+================================ */
+function run(){
+  result.srcdoc = `<!DOCTYPE html>
+<html>
+<head>
+<style>
+html,body{margin:0}
+${cssEditor.getValue()}
+</style>
+</head>
+<body>
+${htmlEditor.getValue()}
+<script>${jsEditor.getValue()}<\/script>
+</body>
+</html>`;
+}
+
+[htmlEditor,cssEditor,jsEditor].forEach(ed=>{
+  ed.on('change',run);
+});
+
+/* ===============================
+   LOAD DEMO FILE → EDITOR
+================================ */
+async function loadFileByID(id){
+  const res = await fetch(`demos/${id}.html`);
+  if(!res.ok){
+    console.error('Demo file tidak ditemukan');
+    return;
+  }
+
+  const text = await res.text();
+
+  const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
+  const html = (text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||[])[1] || '';
+  const js   = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
+
+  htmlEditor.setValue(html.trim());
+  cssEditor.setValue(css.trim());
+  jsEditor.setValue(js.trim());
+
+  run();
+}
+
+/* AUTO LOAD */
+loadFileByID(FILE_ID);
+
+/* ===============================
+   SAVE RESULT
+================================ */
+document.getElementById('saveBtn').onclick = () => {
+  const blob = new Blob([result.srcdoc], { type:'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'result.html';
+  a.click();
+};
+</script>
+
+</body>
+</html>
