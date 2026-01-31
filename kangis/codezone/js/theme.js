@@ -6,35 +6,38 @@ document.getElementById('year').textContent =
 
 
 /* ===============================
-   CONFIG
+   FILE ID (AUTO DEFAULT)
 ================================ */
-const FILE_ID =
-  new URLSearchParams(location.search).get('file') || 'demo-001';
+const params = new URLSearchParams(location.search);
+const FILE_ID = params.get('file') || 'demo-001';
 
 
 /* ===============================
-   CODEMIRROR INIT
+   CODEMIRROR
 ================================ */
-const htmlEditor = CodeMirror.fromTextArea(
-  document.getElementById('html'),
-  { mode:'htmlmixed', theme:'material-darker', lineNumbers:true }
-);
+const htmlEditor = CodeMirror.fromTextArea(html, {
+  mode:'htmlmixed',
+  theme:'material-darker',
+  lineNumbers:true
+});
 
-const cssEditor = CodeMirror.fromTextArea(
-  document.getElementById('css'),
-  { mode:'css', theme:'material-darker', lineNumbers:true }
-);
+const cssEditor = CodeMirror.fromTextArea(css, {
+  mode:'css',
+  theme:'material-darker',
+  lineNumbers:true
+});
 
-const jsEditor = CodeMirror.fromTextArea(
-  document.getElementById('js'),
-  { mode:'javascript', theme:'material-darker', lineNumbers:true }
-);
+const jsEditor = CodeMirror.fromTextArea(js, {
+  mode:'javascript',
+  theme:'material-darker',
+  lineNumbers:true
+});
 
 const result = document.getElementById('result');
 
 
 /* ===============================
-   RUN RESULT (SAFE IFRAME RENDER)
+   RUN RESULT
 ================================ */
 function run(){
   const doc = result.contentDocument;
@@ -43,7 +46,6 @@ function run(){
   doc.write(`<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
 <style>
 html,body{margin:0}
 ${cssEditor.getValue()}
@@ -59,62 +61,43 @@ ${jsEditor.getValue()}
   doc.close();
 }
 
-[htmlEditor, cssEditor, jsEditor].forEach(ed =>
-  ed.on('change', run)
+[htmlEditor, cssEditor, jsEditor].forEach(e =>
+  e.on('change', run)
 );
 
 
 /* ===============================
-   LOAD DEMO
-   (gunakan .txt biar tidak kena inject)
+   LOAD DEMO (.txt)
 ================================ */
-async function loadFileByID(id){
-  try{
-    const res = await fetch(`demo/${id}.txt`);
-    if(!res.ok) return;
+async function loadDemo(id){
+  const res = await fetch(`demo/${id}.txt`);
+  const text = await res.text();
 
-    const text = await res.text();
+  const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
+  const js   = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
+  const html = (text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||[])[1] || text;
 
-    const css = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/gi)||[])
-      .map(s => s.replace(/<\/?style[^>]*>/gi,''))
-      .join('\n');
+  htmlEditor.setValue(html.trim());
+  cssEditor.setValue(css.trim());
+  jsEditor.setValue(js.trim());
 
-    const js = (text.match(/<script(?![^>]*src)[^>]*>([\s\S]*?)<\/script>/gi)||[])
-      .map(s => s.replace(/<\/?script[^>]*>/gi,''))
-      .join('\n');
-
-    const bodyMatch = text.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-
-    let html = bodyMatch
-      ? bodyMatch[1]
-      : text
-        .replace(/<style[\s\S]*?<\/style>/ig,'')
-        .replace(/<script[\s\S]*?<\/script>/ig,'');
-
-    htmlEditor.setValue(html.trim());
-    cssEditor.setValue(css.trim());
-    jsEditor.setValue(js.trim());
-
-    run();
-
-  }catch(e){
-    console.error(e);
-  }
+  run();
 }
 
-
 /* AUTO LOAD */
-loadFileByID(FILE_ID);
+loadDemo(FILE_ID);
 
 
 /* ===============================
-   SAVE RESULT
+   SAVE BUTTON
 ================================ */
-document.getElementById('saveBtn').onclick = () => {
+saveBtn.onclick = () => {
   const doc = result.contentDocument;
-  const html = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
 
-  const blob = new Blob([html], { type:'text/html' });
+  const blob = new Blob(
+    ['<!DOCTYPE html>\n' + doc.documentElement.outerHTML],
+    { type:'text/html' }
+  );
 
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
