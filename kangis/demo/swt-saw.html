@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>SWT & SAW</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
+<link rel="stylesheet" href="css/codezone.css">
+
+  
+</head>
+<body>
+
+<header>
+<a href="https://kangis.my.id" target="_blank"> 
+  <div class="logo">
+  <img class="lg" src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" loading="lazy" alt="Logo">
+  </div>
+  <h1>CodeZone</h1>
+  </a>
+  <button id="saveBtn" style="float:right;padding:4px 10px;font-size:12px;cursor:pointer;">Save</button>
+</header>
+
+<div class="main">
+
+  <!-- ===== EDITOR ===== -->
+  <div class="editor">
+
+    <div class="panel">
+      <h3>HTML</h3>
+      <div class="cm-wrapper">
+        <textarea id="html">&lt;h1&gt;SWT, SAW, AS, RA&lt;/h1&gt;
+&lt;div class="post-body"&gt;
+	&lt;p&gt;Nabi Muhammad SAW adalah nabi terakhir utusan Allah SWT&lt;/p&gt;
+ 	&lt;p&gt;Nabi Adam (as) adalah nabi pertama.&lt;/p&gt;
+ 	&lt;p&gt;Khalifah pertama adalah Sayyidina Abu Bakar (ra) dan jumlah khalifah ada 4 yaitu, Khalifah Abu Bakar, Umar, Utsman dan Ali (radhiyallahu anhum).&lt;/p&gt;
+	&lt;p&gt;Istri pertama Rasulullah SAW adalah Siti Khadijah (radhiyallahu anha). Cucu Rasulullah SAW adalah Sayid Hasan dan Husein (radhiyallahu anhuma).&lt;/p&gt;
+	&lt;p&gt;Contoh penulisan ulama: Imam Syafii (rahimahullah).&lt;/p&gt;
+&lt;/div&gt;
+</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>CSS</h3>
+      <div class="cm-wrapper">
+        <textarea id="css">
+body{padding:20px;font-family:system-ui,Arial,sans-derif}
+@font-face{
+font-family:'UthmanThaha';
+src:url('https://kangismet.github.io/fonts/Uthman-Thaha.eot');
+src:url('https://kangismet.github.io/fonts/Uthman-Thaha.eot?#iefix') format('embedded-opentype'),
+url('https://kangismet.github.io/fonts/Uthman-Thaha.ttf') format('truetype');
+font-weight:400;
+font-weight:normal;
+font-display: swap;
+}
+.lafadz-saw,.lafadz-swt {
+  line-height: 1;
+  margin-left: 2px;
+  font-family: "UthmanThaha", "Scheherazade", serif;
+  white-space: nowrap;
+}
+.lafadz-saw{font-size: 1.2em;vertical-align: middle;}
+.lafadz-swt {font-size: 1.8em;vertical-align: sub;}
+p {
+  line-height: 1.6;
+}
+.arabic-inline {
+  font-family:"UthmanThaha", "Scheherazade", "Noto Naskh Arabic", serif;
+  direction: rtl;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  font-size: 1.2em;
+  line-height: 1.2;
+}
+</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>JavaScript</h3>
+      <div class="cm-wrapper">
+        <textarea id="js">
+(function () {
+  const SELECTOR = '.post-body p, .post-body li, .post-body span, .comments p';
+  const rules = [
+    {
+      regex: /\b(Muhammad|Nabi Muhammad|Rasulullah)\s*(?:\((SAW|saw)\)|\b(SAW|saw)\b)/g,
+      replace: '$1 &lt;span class="lafadz-saw" aria-label="Shallallahu alaihi wasallam"&gt;ﷺ&lt;/span&gt;'
+    },
+    {
+      regex: /\b(Allah)\s*(?:\((swt|SWT)\)|(swt|SWT))\b/g,
+      replace: '$1 &lt;span class="lafadz-swt" aria-label="Subhanahu wa ta\'ala"&gt;ﷻ&lt;/span&gt;'
+    },
+    {
+      regex: /سُبْحَانَهُ وَتَعَالَى/g,
+      replace: '&lt;span class="lafadz-swt" aria-label="Subhanahu wa ta\'ala"&gt;ﷻ&lt;/span&gt;'
+    },
+    {
+      regex: /\((as)\)/gi,
+      replace: '&lt;span class="arabic-inline" aria-label="Alaihis salam"&gt;عَلَيْهِ السَّلَامُ&lt;/span&gt;'
+    },
+    {
+      regex: /\((ra)\)/gi,
+      replace: '&lt;span class="arabic-inline" aria-label="Radhiyallahu anhu"&gt;رَضِيَ اللهُ عَنْهُ&lt;/span&gt;'
+    },
+    {
+      regex: /\((radhiyallahu\s+anha)\)/gi,
+      replace: '&lt;span class="arabic-inline" aria-label="Radhiyallahu anha"&gt;رَضِيَ اللهُ عَنْهَا&lt;/span&gt;'
+    },
+    {
+      regex: /\((radhiyallahu\s+anhuma)\)/gi,
+      replace: '&lt;span class="arabic-inline" aria-label="Radhiyallahu anhuma"&gt;رَضِيَ اللهُ عَنْهُمَا&lt;/span&gt;'
+    },
+    {
+      regex: /\((radhiyallahu\s+anhum)\)/gi,
+      replace: '&lt;span class="arabic-inline" aria-label="Radhiyallahu anhum"&gt;رَضِيَ اللهُ عَنْهُمْ&lt;/span&gt;'
+    },
+    {
+      regex: /\((rahimahullah)\)/gi,
+      replace: '&lt;span class="arabic-inline" aria-label="Rahimahullah"&gt;رَحِمَهُ اللهُ&lt;/span&gt;'
+    }
+  ];
+  document.querySelectorAll(SELECTOR).forEach(el =&gt; {
+    if (el.closest('pre, code')) return;
+    let html = el.innerHTML;
+    rules.forEach(rule =&gt; {
+      html = html.replace(rule.regex, rule.replace);
+    });
+    el.innerHTML = html;
+  });
+})();
+		</textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== RESULT ===== -->
+  <div class="panel result-panel">
+    <h3>Result</h3>
+    <div class="result-wrapper">
+      <iframe id="result"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<footer>2026 • Kang Ismet • CodeZone</footer>
+
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="js/codezone.js"></script>
+
+</body>
+</html>
