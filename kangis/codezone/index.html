@@ -108,6 +108,14 @@ footer{
   padding:4px 10px;
 }
 textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0}
+ ::-webkit-scrollbar{-webkit-appearance:none;width:8px;height:5px;background:rgba(0,0,0,.1)}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.25);border-radius:10px}::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.45)}::-webkit-scrollbar-thumb:active{background:rgba(0,0,0,.45)}
+}
+html {
+overflow-y:scroll;
+overflow-x:scroll;
+scrollbar-color:#777879 #d8d9db;
+scrollbar-width:thin;
+} 
 @media(max-width:900px){
   .main{
     grid-template-columns:1fr;
@@ -190,5 +198,6 @@ textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0}
 
 </body>
 </html>
+
 
 
