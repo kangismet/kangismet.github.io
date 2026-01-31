@@ -2,20 +2,27 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>CodeZone — Kang Ismet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CodeZone</title>
 
 <!-- CodeMirror -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material-darker.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
 
 <style>
+
+/* ===============================
+   RESET
+================================ */
+*{
+  box-sizing:border-box;
+  min-width:0;
+  min-height:0;
+}
+
 /* ===============================
    BASE
 ================================ */
-*{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:system-ui,sans-serif;
@@ -24,10 +31,8 @@ body{
   height:100vh;
   display:flex;
   flex-direction:column;
+  overflow:hidden;
 }
-
-a{color:#bfed50;text-decoration:none}
-a:hover{color:#fff}
 
 /* ===============================
    HEADER
@@ -38,38 +43,28 @@ header{
   font-weight:600;
   display:flex;
   align-items:center;
-  gap:12px;
 }
 
 header h1{
-  font-size:1.5rem;
   margin:0;
-}
-
-.logo img{
-  width:30px;
-  height:30px;
+  font-size:1.5rem;
 }
 
 #saveBtn{
   margin-left:auto;
+  padding:4px 10px;
   cursor:pointer;
-  padding:5px 12px;
 }
 
 /* ===============================
-   MAIN GRID
+   LAYOUT
 ================================ */
 .main{
   flex:1;
   display:grid;
-
-  /* editor | drag | result */
-  grid-template-columns:420px 6px 1fr;
-
-  min-height:0;
-  overflow:hidden;
+  grid-template-columns:minmax(0,420px) 1fr;
   background:#020617;
+  overflow:hidden;
 }
 
 /* ===============================
@@ -79,64 +74,39 @@ header h1{
   display:grid;
   grid-template-rows:1fr 1fr 1fr;
   border-right:1px solid #1e293b;
-  min-height:0;
+  overflow:hidden;
 }
 
 .panel{
   display:flex;
   flex-direction:column;
-  min-height:0;
+  overflow:hidden;
 }
 
 .panel h3{
   margin:0;
   padding:6px 10px;
-  font-size:13px;
+  font-size:14px;
   background:#020617;
   border-bottom:1px solid #1e293b;
 }
 
 .cm-wrapper{
   flex:1;
-  min-height:0;
   overflow:hidden;
 }
 
+/* CodeMirror FIX */
 .CodeMirror{
   height:100%;
   width:100%;
   font-size:14px;
+  overflow:auto;
 }
 
-/* cegah dorong layout */
-.CodeMirror-scroll{
-  max-width:450px;
-}
-
-/* ===============================
-   RESIZER
-================================ */
-.resizer{
-  cursor:col-resize;
-  background:#0b1220;
-  border-left:1px solid #1e293b;
-  border-right:1px solid #1e293b;
-  position:relative;
-}
-
-.resizer:hover{
-  background:#1e293b;
-}
-
-.resizer::after{
-  content:'';
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:2px;
-  height:40px;
-  background:#334155;
+.CodeMirror pre{
+  white-space:pre-wrap;
+  word-break:break-word;
 }
 
 /* ===============================
@@ -145,7 +115,7 @@ header h1{
 .result-panel{
   display:flex;
   flex-direction:column;
-  min-height:0;
+  overflow:hidden;
 }
 
 .result-wrapper{
@@ -159,7 +129,7 @@ iframe{
   border:none;
   background:#fff;
 }
-
+textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0} 
 /* ===============================
    FOOTER
 ================================ */
@@ -180,29 +150,18 @@ footer{
     grid-template-columns:1fr;
     grid-template-rows:60vh 1fr;
   }
-
-  .resizer{
-    display:none;
+  .editor{
+    border-right:none;
+    border-bottom:1px solid #1e293b;
   }
 }
 
-/* ===============================
-   SCROLLBAR
-================================ */
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-thumb{background:#444}
-::-webkit-scrollbar-track{background:#111}
-
-textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">
-    <img src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" alt="">
-  </div>
   <h1>CodeZone</h1>
   <button id="saveBtn">Save</button>
 </header>
@@ -235,9 +194,6 @@ textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0}
 
   </div>
 
-  <!-- DRAG BAR -->
-  <div class="resizer" id="dragbar"></div>
-
   <!-- RESULT -->
   <div class="panel result-panel">
     <h3>Result</h3>
@@ -252,97 +208,125 @@ textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0}
   © <span id="year"></span> • Kang Ismet • CodeZone
 </footer>
 
+
 <!-- ===============================
-     SCRIPTS
+   SCRIPTS
 ================================ -->
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/css/css.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/javascript/javascript.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/htmlmixed/htmlmixed.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 
 <script>
-year.textContent = new Date().getFullYear();
+/* ===============================
+   YEAR
+================================ */
+document.getElementById('year').textContent =
+  new Date().getFullYear();
 
-const FILE_ID = new URLSearchParams(location.search).get('file');
+
+/* ===============================
+   FILE ID (AUTO DEFAULT)
+================================ */
+const params = new URLSearchParams(location.search);
+const FILE_ID = params.get('file') || 'demo-001';
+
+
+/* ===============================
+   CODEMIRROR
+================================ */
+const htmlEditor = CodeMirror.fromTextArea(html, {
+  mode:'htmlmixed',
+  theme:'material-darker',
+  lineNumbers:true
+});
+
+const cssEditor = CodeMirror.fromTextArea(css, {
+  mode:'css',
+  theme:'material-darker',
+  lineNumbers:true
+});
+
+const jsEditor = CodeMirror.fromTextArea(js, {
+  mode:'javascript',
+  theme:'material-darker',
+  lineNumbers:true
+});
+
 const result = document.getElementById('result');
 
-/* ===============================
-   CODEMIRROR INIT
-================================ */
-const htmlEditor = CodeMirror.fromTextArea(html,{mode:'htmlmixed',theme:'material-darker',lineNumbers:true});
-const cssEditor  = CodeMirror.fromTextArea(css,{mode:'css',theme:'material-darker',lineNumbers:true});
-const jsEditor   = CodeMirror.fromTextArea(js,{mode:'javascript',theme:'material-darker',lineNumbers:true});
 
 /* ===============================
-   RUN
+   RUN RESULT
 ================================ */
 function run(){
   const doc = result.contentDocument;
+
   doc.open();
   doc.write(`<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<style>${cssEditor.getValue()}</style>
+<style>
+html,body{margin:0}
+${cssEditor.getValue()}
+</style>
 </head>
 <body>
 ${htmlEditor.getValue()}
-<script>${jsEditor.getValue()}<\/script>
+<script>
+${jsEditor.getValue()}
+<\/script>
 </body>
 </html>`);
   doc.close();
 }
 
-[htmlEditor,cssEditor,jsEditor].forEach(e=>e.on('change',run));
+[htmlEditor, cssEditor, jsEditor].forEach(e =>
+  e.on('change', run)
+);
+
 
 /* ===============================
-   LOAD DEMO (?file=)
+   LOAD DEMO (.txt)
 ================================ */
-async function loadFile(id){
-  if(!id) return;
-
-  const res = await fetch('demo/'+id+'.html');
-  if(!res.ok) return;
-
+async function loadDemo(id){
+  const res = await fetch(`demo/${id}.txt`);
   const text = await res.text();
 
-  cssEditor.setValue((text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||['',''])[1]);
-  htmlEditor.setValue((text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||['',''])[1]);
-  jsEditor.setValue((text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||['',''])[1]);
+  const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
+  const js   = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
+  const html = (text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||[])[1] || text;
+
+  htmlEditor.setValue(html.trim());
+  cssEditor.setValue(css.trim());
+  jsEditor.setValue(js.trim());
 
   run();
 }
 
-loadFile(FILE_ID);
+/* AUTO LOAD */
+loadDemo(FILE_ID);
+
 
 /* ===============================
-   SAVE
+   SAVE BUTTON
 ================================ */
-saveBtn.onclick=()=>{
-  const blob=new Blob([result.contentDocument.documentElement.outerHTML],{type:'text/html'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='result.html';
+saveBtn.onclick = () => {
+  const doc = result.contentDocument;
+
+  const blob = new Blob(
+    ['<!DOCTYPE html>\n' + doc.documentElement.outerHTML],
+    { type:'text/html' }
+  );
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'result.html';
   a.click();
-};
-
-/* ===============================
-   DRAG RESIZE
-================================ */
-let dragging=false;
-
-dragbar.onmousedown=()=>dragging=true;
-document.onmouseup=()=>dragging=false;
-
-document.onmousemove=e=>{
-  if(!dragging) return;
-  let x=e.clientX;
-  if(x<260) x=260;
-  if(x>window.innerWidth-260) x=window.innerWidth-260;
-  document.querySelector('.main').style.gridTemplateColumns=`${x}px 6px 1fr`;
 };
 </script>
 
 </body>
 </html>
+
