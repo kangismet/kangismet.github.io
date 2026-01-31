@@ -1,79 +1,207 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<title>CodeZone HTML Editor</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
-<!-- CodeMirror CSS -->
+<meta charset="UTF-8">
+<title>CodeZone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- CodeMirror -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
-<link rel="stylesheet" href="css/style.css">
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:#0f172a;
+  color:#e5e7eb;
+}
+header{
+  padding:12px 16px;
+  background:#020617;
+  font-weight:600;
+}
+main{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  height:calc(100vh - 48px);
+}
+.editor{
+  display:grid;
+  grid-template-rows:1fr 1fr 1fr;
+  border-right:1px solid #1e293b;
+}
+.editor section{
+  display:flex;
+  flex-direction:column;
+}
+.editor h3{
+  margin:0;
+  padding:6px 10px;
+  background:#020617;
+  font-size:13px;
+}
+.CodeMirror{
+  flex:1;
+  font-size:13px;
+}
+.preview{
+  display:flex;
+  flex-direction:column;
+}
+.preview header{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.preview iframe{
+  flex:1;
+  border:0;
+  background:white;
+}
+button{
+  padding:6px 10px;
+  border:0;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
+</style>
 </head>
 
 <body>
 
-<header>
-<a href="https://kangis.my.id" target="_blank">
-   <div class="logo">
-  <img class="lg" src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" loading="lazy" alt="Logo">
-  </div>
-  <h1>CodeZone</h1>
-  </a>
-  <button id="saveBtn" style="float:right;padding:4px 10px;font-size:12px">Save</button>
-</header>
+<header>⚡ CodeZone</header>
 
-<div class="main">
+<main>
 
-<!-- EDITOR -->
-<div class="editor">
-
-  <div class="panel">
-    <h3>HTML</h3>
-    <div class="cm-wrapper">
+  <div class="editor">
+    <section>
+      <h3>HTML</h3>
       <textarea id="html"></textarea>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h3>CSS</h3>
-    <div class="cm-wrapper">
+    </section>
+    <section>
+      <h3>CSS</h3>
       <textarea id="css"></textarea>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h3>JavaScript</h3>
-    <div class="cm-wrapper">
+    </section>
+    <section>
+      <h3>JS</h3>
       <textarea id="js"></textarea>
-    </div>
+    </section>
   </div>
 
-</div>
-
-<!-- RESULT -->
-<div class="panel result-panel">
-  <h3>Result</h3>
-  <div class="result-wrapper">
-    <iframe id="result"></iframe>
+  <div class="preview">
+    <header>
+      <span>Result</span>
+      <button id="saveBtn">Save</button>
+    </header>
+    <iframe id="result" sandbox="allow-scripts"></iframe>
   </div>
-</div>
 
-</div>
+</main>
 
-<footer>
-  <span>© <span id="year"></span></span>
-  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a>  • CodeZone
-</footer>
-
-
-<!-- CodeMirror JS -->
+<!-- CodeMirror -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 
-<script src="js/theme.js"></script>
+<script>
+/* ===============================
+   CodeZone by Kang Ismet
+================================ */
+
+const FILE_ID =
+  new URLSearchParams(location.search).get('file') || 'demo-001';
+
+/* ===============================
+   CODEMIRROR
+================================ */
+const htmlEditor = CodeMirror.fromTextArea(
+  document.getElementById('html'),
+  {mode:'htmlmixed',theme:'material-darker',lineNumbers:true}
+);
+const cssEditor = CodeMirror.fromTextArea(
+  document.getElementById('css'),
+  {mode:'css',theme:'material-darker',lineNumbers:true}
+);
+const jsEditor = CodeMirror.fromTextArea(
+  document.getElementById('js'),
+  {mode:'javascript',theme:'material-darker',lineNumbers:true}
+);
+
+const result = document.getElementById('result');
+
+/* ===============================
+   RENDER RESULT
+================================ */
+function run(){
+  result.srcdoc = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+html,body{margin:0;padding:0}
+${cssEditor.getValue()}
+</style>
+</head>
+<body>
+${htmlEditor.getValue()}
+<script>
+${jsEditor.getValue()}
+<\/script>
+</body>
+</html>`;
+}
+
+[htmlEditor,cssEditor,jsEditor].forEach(ed=>{
+  ed.on('change',run);
+});
+
+/* ===============================
+   LOAD DEMO (FRAGMENT ONLY)
+================================ */
+async function loadDemo(id){
+  try{
+    const res = await fetch(`demo/${id}.html`);
+    if(!res.ok) return;
+
+    const text = await res.text();
+
+    const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
+    const js   = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
+    const html = text
+      .replace(/<style[\s\S]*?<\/style>/ig,'')
+      .replace(/<script[\s\S]*?<\/script>/ig,'')
+      .trim();
+
+    htmlEditor.setValue(html);
+    cssEditor.setValue(css);
+    jsEditor.setValue(js);
+
+    run();
+  }catch(e){
+    console.error(e);
+  }
+}
+
+loadDemo(FILE_ID);
+
+/* ===============================
+   SAVE RESULT
+================================ */
+document.getElementById('saveBtn').onclick = ()=>{
+  const blob = new Blob([result.srcdoc],{type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'result.html';
+  a.click();
+};
+</script>
+
 </body>
 </html>
