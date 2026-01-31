@@ -1,0 +1,93 @@
+<style>
+body{padding:20px}
+@font-face{
+font-family:'UthmanThaha';
+src:url('https://kangismet.github.io/fonts/Uthman-Thaha.eot');
+src:url('https://kangismet.github.io/fonts/Uthman-Thaha.eot?#iefix') format('embedded-opentype'),
+url('https://kangismet.github.io/fonts/Uthman-Thaha.ttf') format('truetype');
+font-weight:400;
+font-weight:normal;
+font-display: swap;
+}
+.lafadz-saw,.lafadz-swt {
+  line-height: 1;
+  margin-left: 2px;
+  font-family: &quot;UthmanThaha&quot;, &quot;Scheherazade&quot;, serif;
+  white-space: nowrap;
+}
+.lafadz-saw{font-size: 1.5em;vertical-align: middle;}
+.lafadz-swt {font-size: 1.6em;vertical-align: sub;}
+p {
+  line-height: 1.6;
+}
+.arabic-inline {
+  font-family:"UthmanThaha", "Scheherazade", "Noto Naskh Arabic", serif;
+  direction: rtl;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  font-size: 1.2em;
+  line-height: 1.2;
+}
+</style>
+
+<body>
+<h1>SWT, SAW, AS</h1>
+<div class="post-body">
+  <p>Nabi Muhammad SAW adalah nabi terakhir utusan Allah SWT</p>
+  <p>Nabi Adam (as) adalah nabi pertama. Khalifah pertama adalah Sayyidina Abu Bakar (ra) dan jumlah khalifah ada 4 yaitu, Khalifah Abu Bakar, Umar, Utsman dan Ali (radhiyallahu anhum).</p>
+  <p>Istri pertama Rasulullah SAW adalah Siti Khadijah (radhiyallahu anha). Cucu Rasulullah SAW adalah Sayid Hasan dan Husein (radhiyallahu anhuma).</p>
+ <p>Contoh penulisan ulama: Imam Syafii (rahimahullah).</p>
+</div>
+</body>
+
+<script>
+(function () {
+  const SELECTOR = '.post-body p, .post-body li, .post-body span, .comments p';
+  const rules = [
+    {
+      regex: /\b(Muhammad|Nabi Muhammad|Rasulullah)\s*(?:\((SAW|saw)\)|\b(SAW|saw)\b)/g,
+      replace: '$1 <span class="lafadz-saw" aria-label="Shallallahu alaihi wasallam">ﷺ</span>'
+    },
+    {
+      regex: /\b(Allah)\s*(?:\((swt|SWT)\)|(swt|SWT))\b/g,
+      replace: '$1 <span class="lafadz-swt" aria-label="Subhanahu wa ta\'ala">ﷻ</span>'
+    },
+    {
+      regex: /سُبْحَانَهُ وَتَعَالَى/g,
+      replace: '<span class="lafadz-swt" aria-label="Subhanahu wa ta\'ala">ﷻ</span>'
+    },
+    {
+      regex: /\((as)\)/gi,
+      replace: '<span class="arabic-inline" aria-label="Alaihis salam">عَلَيْهِ السَّلَامُ</span>'
+    },
+    {
+      regex: /\((ra)\)/gi,
+      replace: '<span class="arabic-inline" aria-label="Radhiyallahu anhu">رَضِيَ اللهُ عَنْهُ</span>'
+    },
+    {
+      regex: /\((radhiyallahu\s+anha)\)/gi,
+      replace: '<span class="arabic-inline" aria-label="Radhiyallahu anha">رَضِيَ اللهُ عَنْهَا</span>'
+    },
+    {
+      regex: /\((radhiyallahu\s+anhuma)\)/gi,
+      replace: '<span class="arabic-inline" aria-label="Radhiyallahu anhuma">رَضِيَ اللهُ عَنْهُمَا</span>'
+    },
+    {
+      regex: /\((radhiyallahu\s+anhum)\)/gi,
+      replace: '<span class="arabic-inline" aria-label="Radhiyallahu anhum">رَضِيَ اللهُ عَنْهُمْ</span>'
+    },
+    {
+      regex: /\((rahimahullah)\)/gi,
+      replace: '<span class="arabic-inline" aria-label="Rahimahullah">رَحِمَهُ اللهُ</span>'
+    }
+  ];
+  document.querySelectorAll(SELECTOR).forEach(el => {
+    if (el.closest('pre, code')) return;
+    let html = el.innerHTML;
+    rules.forEach(rule => {
+      html = html.replace(rule.regex, rule.replace);
+    });
+    el.innerHTML = html;
+  });
+})();
+</script>
