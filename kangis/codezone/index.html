@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>CodeZone</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<title>CodeZone HTML Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
 
 <!-- CodeMirror -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
@@ -16,200 +17,174 @@ body{
   font-family:system-ui,sans-serif;
   background:#0f172a;
   color:#e5e7eb;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 header{
-  padding:12px 16px;
-  background:#020617;
+  padding:15px;
+  background:#090f24;
   font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
-main{
+header h1{
+  font-size:1.5rem;
+  margin:0;
+}
+a{color:#bfed50;text-decoration:none}
+a:hover{color:#fff}
+
+.logo{
+  width:40px;
+  margin-right:12px;
+}
+
+.main{
+  flex:1;
   display:grid;
-  grid-template-columns:1fr 1fr;
-  height:calc(100vh - 48px);
+  grid-template-columns:minmax(0,420px) 1fr;
+  background:#020617;
+  overflow:hidden;
 }
+
 .editor{
   display:grid;
   grid-template-rows:1fr 1fr 1fr;
   border-right:1px solid #1e293b;
 }
-.editor section{
+
+.panel{
   display:flex;
   flex-direction:column;
+  min-height:0;
 }
-.editor h3{
+
+.panel h3{
   margin:0;
   padding:6px 10px;
+  font-size:14px;
   background:#020617;
-  font-size:13px;
+  border-bottom:1px solid #1e293b;
 }
+
+.cm-wrapper{flex:1;min-height:0}
+
 .CodeMirror{
-  flex:1;
-  font-size:13px;
+  height:100%;
+  font-size:14px;
 }
-.preview{
+
+.result-panel{
   display:flex;
   flex-direction:column;
 }
-.preview header{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-.preview iframe{
+
+.result-wrapper{
   flex:1;
-  border:0;
-  background:white;
+  overflow:hidden;
 }
-button{
-  padding:6px 10px;
-  border:0;
-  background:#2563eb;
-  color:white;
+
+#result{
+  width:100%;
+  height:100%;
+  border:none;
+  background:#fff;
+}
+
+footer{
+  padding:6px 12px;
+  font-size:12px;
+  background:#020617;
+  border-top:1px solid #1e293b;
+  color:#94a3b8;
+}
+
+#saveBtn{
   cursor:pointer;
+  padding:4px 10px;
 }
-button:hover{opacity:.9}
+
+@media(max-width:900px){
+  .main{
+    grid-template-columns:1fr;
+    grid-template-rows:60vh 1fr;
+  }
+  .editor{
+    border-right:none;
+    border-bottom:1px solid #1e293b;
+  }
+}
 </style>
 </head>
 
+
 <body>
 
-<header>⚡ CodeZone</header>
+<header>
+  <a href="https://kangis.my.id" target="_blank" style="display:flex;align-items:center;">
+    <img class="logo" src="https://lh3.googleusercontent.com/d/1xn3j8JZjqISl0NrlTMKrmf26L-CFQjb7=w30" loading="lazy">
+    <h1>CodeZone</h1>
+  </a>
 
-<main>
+  <button id="saveBtn">Save</button>
+</header>
 
+
+<div class="main">
+
+  <!-- EDITOR -->
   <div class="editor">
-    <section>
+
+    <div class="panel">
       <h3>HTML</h3>
-      <textarea id="html"></textarea>
-    </section>
-    <section>
+      <div class="cm-wrapper">
+        <textarea id="html"></textarea>
+      </div>
+    </div>
+
+    <div class="panel">
       <h3>CSS</h3>
-      <textarea id="css"></textarea>
-    </section>
-    <section>
-      <h3>JS</h3>
-      <textarea id="js"></textarea>
-    </section>
+      <div class="cm-wrapper">
+        <textarea id="css"></textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>JavaScript</h3>
+      <div class="cm-wrapper">
+        <textarea id="js"></textarea>
+      </div>
+    </div>
+
   </div>
 
-  <div class="preview">
-    <header>
-      <span>Result</span>
-      <button id="saveBtn">Save</button>
-    </header>
-    <iframe id="result" sandbox="allow-scripts"></iframe>
+  <!-- RESULT -->
+  <div class="panel result-panel">
+    <h3>Result</h3>
+    <div class="result-wrapper">
+      <iframe id="result"></iframe>
+    </div>
   </div>
 
-</main>
+</div>
 
-<!-- CodeMirror -->
+
+<footer>
+  © <span id="year"></span> • 
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a> • CodeZone
+</footer>
+
+
+<!-- CodeMirror JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 
-<script>
-/* ===============================
-   CodeZone by Kang Ismet
-================================ */
-
-const FILE_ID =
-  new URLSearchParams(location.search).get('file') || 'demo-001';
-
-/* ===============================
-   CODEMIRROR
-================================ */
-const htmlEditor = CodeMirror.fromTextArea(
-  document.getElementById('html'),
-  {mode:'htmlmixed',theme:'material-darker',lineNumbers:true}
-);
-const cssEditor = CodeMirror.fromTextArea(
-  document.getElementById('css'),
-  {mode:'css',theme:'material-darker',lineNumbers:true}
-);
-const jsEditor = CodeMirror.fromTextArea(
-  document.getElementById('js'),
-  {mode:'javascript',theme:'material-darker',lineNumbers:true}
-);
-
-const result = document.getElementById('result');
-
-/* ===============================
-   RENDER RESULT
-================================ */
-function run(){
-  result.srcdoc = `
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<style>
-html,body{margin:0;padding:0}
-${cssEditor.getValue()}
-</style>
-</head>
-<body>
-${htmlEditor.getValue()}
-<script>
-${jsEditor.getValue()}
-<\/script>
-</body>
-</html>`;
-}
-
-[htmlEditor,cssEditor,jsEditor].forEach(ed=>{
-  ed.on('change',run);
-});
-
-/* ===============================
-   LOAD DEMO (FRAGMENT ONLY)
-================================ */
-async function loadDemo(id){
-  try{
-    const res = await fetch(`demo/${id}.html`);
-    if(!res.ok) return;
-
-    const text = await res.text();
-
-    const css = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
-    const js  = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
-
-    // ✅ AMBIL ISI BODY JIKA ADA
-    let html = '';
-    const bodyMatch = text.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-    if(bodyMatch){
-      html = bodyMatch[1];
-    }else{
-      html = text
-        .replace(/<style[\s\S]*?<\/style>/ig,'')
-        .replace(/<script[\s\S]*?<\/script>/ig,'');
-    }
-
-    htmlEditor.setValue(html.trim());
-    cssEditor.setValue(css.trim());
-    jsEditor.setValue(js.trim());
-
-    run();
-  }catch(e){
-    console.error(e);
-  }
-}
-
-loadDemo(FILE_ID);
-
-/* ===============================
-   SAVE RESULT
-================================ */
-document.getElementById('saveBtn').onclick = ()=>{
-  const blob = new Blob([result.srcdoc],{type:'text/html'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'result.html';
-  a.click();
-};
-</script>
+<script src="js/theme.js"></script>
 
 </body>
 </html>
-
