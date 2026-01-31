@@ -1,10 +1,16 @@
-year.textContent = new Date().getFullYear();
+/* ===============================
+   YEAR
+================================ */
+document.getElementById('year').textContent =
+  new Date().getFullYear();
+
 
 /* ===============================
-   CodeZone by Kang Ismet (FIXED)
+   CONFIG
 ================================ */
 const FILE_ID =
   new URLSearchParams(location.search).get('file') || 'demo-001';
+
 
 /* ===============================
    CODEMIRROR INIT
@@ -26,11 +32,13 @@ const jsEditor = CodeMirror.fromTextArea(
 
 const result = document.getElementById('result');
 
+
 /* ===============================
-   RUN RESULT (SAFE RENDER)
+   RUN RESULT (SAFE IFRAME RENDER)
 ================================ */
 function run(){
-  const doc = result.contentDocument || result.contentWindow.document;
+  const doc = result.contentDocument;
+
   doc.open();
   doc.write(`<!DOCTYPE html>
 <html>
@@ -51,41 +59,53 @@ ${jsEditor.getValue()}
   doc.close();
 }
 
-[htmlEditor,cssEditor,jsEditor].forEach(ed=>{
-  ed.on('change', run);
-});
+[htmlEditor, cssEditor, jsEditor].forEach(ed =>
+  ed.on('change', run)
+);
+
 
 /* ===============================
-   LOAD DEMO FILE → EDITOR (IMPROVED)
+   LOAD DEMO
+   (gunakan .txt biar tidak kena inject)
 ================================ */
 async function loadFileByID(id){
-  const res = await fetch(`demo/${id}.html`);
-  if(!res.ok){
-    console.error('Demo file tidak ditemukan:', id);
-    return;
+  try{
+    const res = await fetch(`demo/${id}.txt`);
+    if(!res.ok) return;
+
+    const text = await res.text();
+
+    const css = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/gi)||[])
+      .map(s => s.replace(/<\/?style[^>]*>/gi,''))
+      .join('\n');
+
+    const js = (text.match(/<script(?![^>]*src)[^>]*>([\s\S]*?)<\/script>/gi)||[])
+      .map(s => s.replace(/<\/?script[^>]*>/gi,''))
+      .join('\n');
+
+    const bodyMatch = text.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+
+    let html = bodyMatch
+      ? bodyMatch[1]
+      : text
+        .replace(/<style[\s\S]*?<\/style>/ig,'')
+        .replace(/<script[\s\S]*?<\/script>/ig,'');
+
+    htmlEditor.setValue(html.trim());
+    cssEditor.setValue(css.trim());
+    jsEditor.setValue(js.trim());
+
+    run();
+
+  }catch(e){
+    console.error(e);
   }
-
-  const text = await res.text();
-
-  const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/gi)||[])
-    .map(s => s.replace(/<\/?style[^>]*>/gi,''))
-    .join('\n');
-
-  const html = (text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||[])[1] || '';
-
-  const js   = (text.match(/<script(?![^>]*src)[^>]*>([\s\S]*?)<\/script>/gi)||[])
-    .map(s => s.replace(/<\/?script[^>]*>/gi,''))
-    .join('\n');
-
-  htmlEditor.setValue(html.trim());
-  cssEditor.setValue(css.trim());
-  jsEditor.setValue(js.trim());
-
-  run();
 }
+
 
 /* AUTO LOAD */
 loadFileByID(FILE_ID);
+
 
 /* ===============================
    SAVE RESULT
@@ -95,6 +115,7 @@ document.getElementById('saveBtn').onclick = () => {
   const html = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
 
   const blob = new Blob([html], { type:'text/html' });
+
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'result.html';
