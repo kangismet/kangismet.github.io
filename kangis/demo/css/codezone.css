@@ -1,0 +1,146 @@
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+	a{
+	color:#fff;
+	text-decoration:none;
+	}
+	a:hover{
+	color:yellow
+	}
+    header {
+      padding: 15px;
+      background: #090f24;
+      font-weight: 600;
+    }
+	header h1{
+	font-size:1.5rem;
+	margin:0;
+	padding:0;
+	display:inline-block;
+	}
+	.logo {
+    width: 50px;
+    height: 50px;
+    display: inline;
+    align-items: center;
+	margin-right:15px
+}
+    /* ===== LAYOUT ===== */
+    .main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 420px) 1fr;
+      background: #020617;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* ===== EDITOR ===== */
+    .editor {
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+      min-height: 0;
+      min-width: 0;
+      border-right: 1px solid #1e293b;
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .panel h3 {
+      margin: 0;
+      padding: 6px 10px;
+      font-size: 14px;
+      background: #020617;
+      border-bottom: 1px solid #1e293b;
+      flex-shrink: 0;
+    }
+
+    .cm-wrapper {
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    /* ===== CodeMirror (STABIL, TANPA HACK BERLEBIH) ===== */
+    .cm-wrapper .CodeMirror {
+      height: 100%;
+      width: 100%;
+      font-size: 14px;
+      overflow: hidden; /* biarkan CodeMirror mengatur scroll sendiri */
+    }
+
+    /* FIX sederhana: cegah baris panjang mendorong layout */
+    .CodeMirror-scroll {
+      max-width: 450px;
+    }
+
+    /* HAPUS semua override scroll internal CodeMirror */
+
+    /* ===== RESULT ===== */
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .result-wrapper {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+      overflow: auto; /* scroll hanya di dalam result */
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+        grid-template-rows: 60vh 1fr;
+      }
+      .editor {
+        border-right: none;
+        border-bottom: 1px solid #1e293b;
+      }
+    }
+
+    footer {
+      padding: 6px 12px;
+      font-size: 12px;
+      background: #020617;
+      border-top: 1px solid #1e293b;
+      color: #94a3b8;
+    }
+	.lg {
+    margin:0 5px 0 0;
+	}
+	::-webkit-scrollbar {
+    width: 6px;height:6px;
+}
+ 
+::-webkit-scrollbar-track {    
+    background: #111;    
+}
+ 
+::-webkit-scrollbar-thumb {
+    background: #444;
+}
