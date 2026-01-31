@@ -4,183 +4,33 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CodeZone</title>
-
+<link rel="icon" href="https://kangis.my.id/icon/htm-cln.ico">
 <!-- CodeMirror -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="css/style.css">
 
-<style>
-
-/* ===============================
-   RESET
-================================ */
-*{
-  box-sizing:border-box;
-  min-width:0;
-  min-height:0;
-}
-
-/* ===============================
-   BASE
-================================ */
-body{
-  margin:0;
-  font-family:system-ui,sans-serif;
-  background:#0f172a;
-  color:#e5e7eb;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-/* ===============================
-   HEADER
-================================ */
-header{
-  padding:15px;
-  background:#090f24;
-  font-weight:600;
-  display:flex;
-  align-items:center;
-}
-
-header h1{
-  margin:0;
-  font-size:1.5rem;
-}
-
-#saveBtn{
-  margin-left:auto;
-  padding:4px 10px;
-  cursor:pointer;
-}
-
-/* ===============================
-   LAYOUT
-================================ */
-.main{
-  flex:1;
-  display:grid;
-  grid-template-columns:minmax(0,420px) 1fr;
-  background:#020617;
-  overflow:hidden;
-}
-
-/* ===============================
-   EDITOR
-================================ */
-.editor{
-  display:grid;
-  grid-template-rows:1fr 1fr 1fr;
-  border-right:1px solid #1e293b;
-  overflow:hidden;
-}
-
-.panel{
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.panel h3{
-  margin:0;
-  padding:6px 10px;
-  font-size:14px;
-  background:#020617;
-  border-bottom:1px solid #1e293b;
-}
-
-.cm-wrapper{
-  flex:1;
-  min-height:0;
-  min-width:0;
-  overflow:hidden;
-}
-
-/* ⭐ FINAL FIX */
-.CodeMirror{
-  height:100%;
-  width:100%;
-  font-size:14px;
-}
-
-.CodeMirror-scroll{
-  overflow:auto;
-}
-
-/* optional: wrap line panjang biar tidak dorong layout */
-.CodeMirror pre{
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-
-
-/* ===============================
-   RESULT
-================================ */
-.result-panel{
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.result-wrapper{
-  flex:1;
-  overflow:hidden;
-}
-
-iframe{
-  width:100%;
-  height:100%;
-  border:none;
-  background:#fff;
-}
-textarea#html,textarea#css,textarea#js{background:#212121;border:0;outline:0} 
-   	::-webkit-scrollbar {
-    width: 6px;height:6px;
-}
- 
-::-webkit-scrollbar-track {    
-    background: #111;    
-}
- 
-::-webkit-scrollbar-thumb {
-    background: #444;
-}
-/* ===============================
-   FOOTER
-================================ */
-footer{
-  padding:6px 12px;
-  font-size:12px;
-  background:#020617;
-  border-top:1px solid #1e293b;
-  color:#94a3b8;
-  text-align:center;
-}
-
-/* ===============================
-   MOBILE
-================================ */
-@media(max-width:900px){
-  .main{
-    grid-template-columns:1fr;
-    grid-template-rows:60vh 1fr;
-  }
-  .editor{
-    border-right:none;
-    border-bottom:1px solid #1e293b;
-  }
-}
-
-</style>
 </head>
 
 <body>
 
 <header>
+<svg xmlns="http://www.w3.org/2000/svg" class="logo" width="42" height="42" viewBox="0 0 48 48">
+  <title>code</title>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="invisible_box" data-name="invisible box">
+      <rect width="48" height="48" fill="none"/>
+    </g>
+    <g id="icons_Q2" data-name="icons Q2">
+      <path d="M20,40h-.5a2,2,0,0,1-1.4-2.5l8-27.9a2,2,0,0,1,3.8,1l-8,28A1.9,1.9,0,0,1,20,40Z"/>
+      <path d="M14,35a2,2,0,0,0,1.3-3.5L7,24l8.3-7.5a2,2,0,0,0-2.6-3l-10,9a2,2,0,0,0,0,3l10,9A1.9,1.9,0,0,0,14,35Z"/>
+      <path d="M34,35a2,2,0,0,1-1.3-3.5L41,24l-8.3-7.5a2,2,0,1,1,2.6-3l10,9a2,2,0,0,1,0,3l-10,9A1.9,1.9,0,0,1,34,35Z"/>
+    </g>
+  </g>
+</svg>
+<a href="https://kangis.my.id">
   <h1>CodeZone</h1>
+</a>
   <button id="saveBtn">Save</button>
 </header>
 
@@ -235,117 +85,7 @@ footer{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
-
-<script>
-/* ===============================
-   YEAR
-================================ */
-document.getElementById('year').textContent =
-  new Date().getFullYear();
-
-
-/* ===============================
-   FILE ID (AUTO DEFAULT)
-================================ */
-const params = new URLSearchParams(location.search);
-const FILE_ID = params.get('file') || 'demo-001';
-
-
-/* ===============================
-   CODEMIRROR
-================================ */
-const htmlEditor = CodeMirror.fromTextArea(html, {
-  mode:'htmlmixed',
-  theme:'material-darker',
-  lineNumbers:true
-});
-
-const cssEditor = CodeMirror.fromTextArea(css, {
-  mode:'css',
-  theme:'material-darker',
-  lineNumbers:true
-});
-
-const jsEditor = CodeMirror.fromTextArea(js, {
-  mode:'javascript',
-  theme:'material-darker',
-  lineNumbers:true
-});
-
-const result = document.getElementById('result');
-
-
-/* ===============================
-   RUN RESULT
-================================ */
-function run(){
-  const doc = result.contentDocument;
-
-  doc.open();
-  doc.write(`<!DOCTYPE html>
-<html>
-<head>
-<style>
-html,body{margin:0}
-${cssEditor.getValue()}
-</style>
-</head>
-<body>
-${htmlEditor.getValue()}
-<script>
-${jsEditor.getValue()}
-<\/script>
-</body>
-</html>`);
-  doc.close();
-}
-
-[htmlEditor, cssEditor, jsEditor].forEach(e =>
-  e.on('change', run)
-);
-
-
-/* ===============================
-   LOAD DEMO (.txt)
-================================ */
-async function loadDemo(id){
-  const res = await fetch(`demo/${id}.txt`);
-  const text = await res.text();
-
-  const css  = (text.match(/<style[^>]*>([\s\S]*?)<\/style>/i)||[])[1] || '';
-  const js   = (text.match(/<script[^>]*>([\s\S]*?)<\/script>/i)||[])[1] || '';
-  const html = (text.match(/<body[^>]*>([\s\S]*?)<\/body>/i)||[])[1] || text;
-
-  htmlEditor.setValue(html.trim());
-  cssEditor.setValue(css.trim());
-  jsEditor.setValue(js.trim());
-
-  run();
-}
-
-/* AUTO LOAD */
-loadDemo(FILE_ID);
-
-
-/* ===============================
-   SAVE BUTTON
-================================ */
-saveBtn.onclick = () => {
-  const doc = result.contentDocument;
-
-  const blob = new Blob(
-    ['<!DOCTYPE html>\n' + doc.documentElement.outerHTML],
-    { type:'text/html' }
-  );
-
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'result.html';
-  a.click();
-};
-</script>
+<script src="js/theme.js.js"></script>
 
 </body>
 </html>
-
-
