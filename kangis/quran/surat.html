@@ -6,21 +6,75 @@
 
 <title>Quran</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
+
 
 <style>
+:root{
+  --bg:#f6f6f6;
+  --card:#fff;
+  --text:#222;
+  --accent:#0ea5a4;
+}
+@font-face {
+  font-family: 'Omar';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://quran.nu.or.id/_next/static/media/73d57502c4611079-s.p.woff2) format('woff2');
+}
+body.dark{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --text:#e5e7eb;
+}
+
 body{
   margin:0;
   font-family:system-ui;
-  background:#f4f6f8;
+  background:var(--bg);
+  color:var(--text);
+  transition:.25s;
 }
 
 /* HEADER */
 header{
-  background:#0ea5a4;
+  background:var(--accent);
   color:#fff;
   text-align:center;
-  padding:14px;
+  padding:16px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+header h2{
+  margin:0;
+  font-size:20px;
+}
+
+header .arab-title{
+  display:block;
+  font-family:'Omar';
+  font-size:26px;
+  margin-top:4px;
+}
+
+header .info{
+  font-size:12px;
+  opacity:.9;
+  margin-top:4px;
+}
+
+.toggle{
+  position:absolute;
+  right:12px;
+  top:12px;
+  background:#fff2;
+  border:none;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
 /* CONTAINER */
@@ -28,79 +82,53 @@ header{
   max-width:850px;
   margin:auto;
   padding:16px;
+  padding-bottom:110px;
 }
 
 /* AYAT */
 .ayat{
-  position:relative;
-  background:#fff;
-  padding:22px 18px 16px 18px;
+  background:var(--card);
+  padding:18px;
   border-radius:12px;
-  margin-bottom:14px;
-  box-shadow:0 2px 4px rgba(0,0,0,.06);
-  transition:.2s;
+  margin-bottom:12px;
+  box-shadow:0 2px 5px rgba(0,0,0,.08);
+  transition:.25s;
 }
 
 .ayat.active{
-  background:#e0f7f6;
-  border-left:5px solid #0ea5a4;
-}
-
-/* NOMOR LINGKARAN */
-.nomor{
-  position:absolute;
-  right:10px;
-  top:10px;
-  width:34px;
-  height:34px;
-  border:2px solid #0ea5a4;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'Amiri Quran';
-  font-size:14px;
-  background:#fff;
+  background:#0ea5a415;
 }
 
 /* ARAB */
 .arab{
-  font-family:'Amiri Quran';
-  font-size:30px;
+  font-family:'Omar','Scheherazade New';
+  font-size:40px;
   text-align:right;
-  line-height:2.2;
-  padding-right:44px;
+  line-height:1.6;
 }
 
 /* TERJEMAH */
 .arti{
-  margin-top:8px;
-  font-size:14px;
+  font-size:16px;
   opacity:.85;
+  margin-top:8px;
 }
 
-/* BUTTONS */
-.tools{
-  position:absolute;
-  left:10px;
-  top:10px;
-  display:flex;
-  gap:6px;
-}
-
-.tools button{
+/* PLAY */
+.play{
+  background:var(--accent);
+  color:#fff;
   border:none;
-  padding:6px 8px;
+  padding:6px 10px;
   border-radius:6px;
   cursor:pointer;
+  margin-bottom:10px;
 }
 
-.play{background:#0ea5a4;color:#fff;}
-.book{background:#ffd54f;}
-
+/* NAV */
 .nav{
   display:flex;
-  gap:8px;
+  gap:10px;
   margin-top:20px;
 }
 
@@ -109,8 +137,28 @@ header{
   padding:10px;
   border:none;
   border-radius:8px;
-  background:#0ea5a4;
+  background:var(--accent);
   color:#fff;
+}
+
+/* PLAYER FIXED */
+.player-wrap{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:-120px;
+  background:var(--card);
+  box-shadow:0 -4px 16px rgba(0,0,0,.25);
+  padding:12px;
+  transition:.3s;
+}
+
+.player-wrap.show{
+  bottom:0;
+}
+
+audio{
+  width:100%;
 }
 </style>
 </head>
@@ -118,7 +166,11 @@ header{
 <body>
 
 <header>
-  <h3 id="title">Loading...</h3>
+  <button class="toggle" onclick="toggleDark()">🌙</button>
+
+  <h2 id="titleLatin"></h2>
+  <span id="titleArab" class="arab-title"></span>
+  <div id="info" class="info"></div>
 </header>
 
 <div class="container">
@@ -130,42 +182,59 @@ header{
   </div>
 </div>
 
+<!-- PLAYER -->
+<div class="player-wrap" id="playerWrap">
+  <audio id="player" controls></audio>
+</div>
+
 
 <script>
 const id = parseInt(new URLSearchParams(location.search).get('id')) || 1;
 
 const content = document.getElementById('content');
-const titleEl = document.getElementById('title');
+const audio = document.getElementById('player');
+const wrap = document.getElementById('playerWrap');
 
-let audio = new Audio();
+let ayatEls=[];
+let currentIndex=-1;
 
-/* angka arab */
+/* arab number */
 function toArabic(n){
   return n.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 }
 
-/* bookmark */
-function toggle(key,btn){
-  let b=JSON.parse(localStorage.getItem('bookmark')||'[]');
-  if(b.includes(key)){
-    b=b.filter(x=>x!==key);
-    btn.innerText='☆';
-  }else{
-    b.push(key);
-    btn.innerText='★';
-  }
-  localStorage.setItem('bookmark',JSON.stringify(b));
-}
-
-function isBook(key){
-  return (JSON.parse(localStorage.getItem('bookmark')||'[]')).includes(key);
-}
-
 /* highlight */
-function highlight(el){
-  document.querySelectorAll('.ayat').forEach(x=>x.classList.remove('active'));
-  el.classList.add('active');
+function highlight(i){
+  ayatEls.forEach(e=>e.classList.remove('active'));
+  ayatEls[i].classList.add('active');
+  ayatEls[i].scrollIntoView({behavior:'smooth',block:'center'});
 }
+
+/* play */
+function playAyat(i){
+
+  currentIndex=i;
+
+  const file =
+  `${String(id).padStart(3,'0')}${String(i+1).padStart(3,'0')}`;
+
+  audio.src =
+  `https://everyayah.com/data/Alafasy_128kbps/${file}.mp3`;
+
+  wrap.classList.add('show');
+
+  highlight(i);
+
+  audio.load();
+  audio.play();
+}
+
+/* auto next */
+audio.addEventListener('ended',()=>{
+  if(currentIndex < ayatEls.length-1){
+    playAyat(currentIndex+1);
+  }
+});
 
 /* load */
 async function load(){
@@ -173,48 +242,43 @@ async function load(){
   const res = await fetch(`https://equran.id/api/surat/${id}`);
   const data = await res.json();
 
-  titleEl.innerText = `${data.nomor}. ${data.nama_latin}`;
+  titleLatin.textContent = `${data.nomor}. ${data.nama_latin}`;
+  titleArab.textContent = data.nama;
+  info.textContent = `${data.jumlah_ayat} Ayat • ${data.tempat_turun}`;
 
-  content.innerHTML="";
-
-  /* AUDIO FULL SURAT (FIX PASTI BUNYI) */
-  audio.src =
-  `https://equran.nos.wjv-1.neo.id/audio-full/misyari/${String(id).padStart(3,'0')}.mp3`;
-
-  data.ayat.forEach(a=>{
-
-    const key = `${id}:${a.nomor}`;
+  data.ayat.forEach((a,i)=>{
 
     const el=document.createElement('div');
     el.className='ayat';
 
     el.innerHTML=`
-      <div class="tools">
-        <button class="play">▶</button>
-        <button class="book">${isBook(key)?'★':'☆'}</button>
-      </div>
-
-      <div class="nomor">${toArabic(a.nomor)}</div>
-      <div class="arab">${a.ar}</div>
+      <button class="play">▶</button>
+      <div class="arab">${a.ar} ۝${toArabic(a.nomor)}</div>
       <div class="arti">${a.idn}</div>
     `;
 
-    /* play = highlight + play full surat */
-    el.querySelector('.play').onclick=()=>{
-      audio.play();
-      highlight(el);
-    }
-
-    el.querySelector('.book').onclick=(e)=>toggle(key,e.target);
+    el.querySelector('.play').onclick=()=>playAyat(i);
 
     content.appendChild(el);
+    ayatEls.push(el);
   });
 }
 
+/* nav */
 function go(n){
   const next=id+n;
-  if(next>=1 && next<=114) location.href=`surat.html?id=${next}`;
+  if(next>=1 && next<=114)
+    location.href=`surat.html?id=${next}`;
 }
+
+/* dark mode */
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('dark',document.body.classList.contains('dark'));
+}
+
+if(localStorage.getItem('dark')==='true')
+  document.body.classList.add('dark');
 
 load();
 </script>
