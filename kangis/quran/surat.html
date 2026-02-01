@@ -12,7 +12,7 @@
 body{
   margin:0;
   font-family:system-ui;
-  background:#f5f6f8;
+  background:#f4f6f8;
 }
 
 /* HEADER */
@@ -20,57 +20,41 @@ header{
   background:#0ea5a4;
   color:#fff;
   padding:14px;
-}
-
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-}
-
-.topbar button{
-  background:#fff;
-  border:none;
-  padding:6px 10px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-/* TITLE */
-.title{
   text-align:center;
 }
 
-.title h2{
-  margin:0;
-}
-
-.title small{
-  opacity:.9;
-}
-
-/* AYAT */
+/* CONTAINER */
 .container{
   max-width:850px;
   margin:auto;
   padding:16px;
 }
 
+/* AYAT CARD */
 .ayat{
   background:#fff;
   padding:18px;
   border-radius:12px;
   margin-bottom:12px;
-  box-shadow:0 2px 4px rgba(0,0,0,.05);
+  box-shadow:0 2px 4px rgba(0,0,0,.06);
+  position:relative;
+  transition:.2s;
 }
 
+.ayat.active{
+  background:#e0f7f6;
+  border-left:5px solid #0ea5a4;
+}
+
+/* nomor mushaf */
 .nomor{
-  font-size:12px;
-  opacity:.5;
-  margin-bottom:6px;
+  font-family:'Amiri Quran';
+  font-size:22px;
+  text-align:right;
+  opacity:.7;
 }
 
+/* arab */
 .arab{
   font-family:'Amiri Quran';
   font-size:30px;
@@ -78,28 +62,47 @@ header{
   line-height:2.2;
 }
 
+/* arti */
 .arti{
   margin-top:8px;
   font-size:14px;
   opacity:.85;
 }
 
-/* NAV BOTTOM */
-.bottom-nav{
+/* tombol kecil */
+.tools{
+  position:absolute;
+  left:10px;
+  top:10px;
   display:flex;
-  justify-content:space-between;
-  gap:10px;
-  margin:18px 0;
+  gap:6px;
 }
 
-.bottom-nav button{
+.tools button{
+  border:none;
+  padding:4px 8px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.play{ background:#0ea5a4; color:#fff; }
+.book{ background:#ffd54f; }
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  margin:20px 0;
+}
+
+.nav button{
   flex:1;
+  margin:0 5px;
   padding:10px;
   border:none;
   border-radius:8px;
   background:#0ea5a4;
   color:#fff;
-  cursor:pointer;
 }
 </style>
 </head>
@@ -107,83 +110,117 @@ header{
 <body>
 
 <header>
-
-  <div class="topbar">
-    <button onclick="history.back()">⬅</button>
-    <div id="suratNo">Surat</div>
-    <div></div>
-  </div>
-
-  <div class="title">
-    <h2 id="namaLatin"></h2>
-    <small id="info"></small>
-  </div>
-
+  <h3 id="title">Loading...</h3>
+  <small id="info"></small>
 </header>
 
 <div class="container">
 
   <div id="content"></div>
 
-  <div class="bottom-nav">
-    <button id="prevBtn">⬅ Surat Sebelumnya</button>
-    <button id="nextBtn">Surat Selanjutnya ➡</button>
+  <div class="nav">
+    <button id="prev">⬅ Sebelumnya</button>
+    <button id="next">Selanjutnya ➡</button>
   </div>
 
 </div>
 
-
 <script>
-const TOTAL_SURAT = 114;
 const id = parseInt(new URLSearchParams(location.search).get('id')) || 1;
+const TOTAL = 114;
 
 const content = document.getElementById('content');
-const namaLatin = document.getElementById('namaLatin');
-const info = document.getElementById('info');
-const suratNo = document.getElementById('suratNo');
+const titleEl = document.getElementById('title');
+const infoEl = document.getElementById('info');
 
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+let audio = new Audio();
 
+/* angka arab */
+function toArabic(num){
+  return num.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+}
 
+/* bookmark */
+function toggleBookmark(key, btn){
+  let list = JSON.parse(localStorage.getItem('bookmark')||'[]');
+
+  if(list.includes(key)){
+    list = list.filter(x=>x!==key);
+    btn.innerText='☆';
+  }else{
+    list.push(key);
+    btn.innerText='★';
+  }
+
+  localStorage.setItem('bookmark',JSON.stringify(list));
+}
+
+function isBookmarked(key){
+  const list = JSON.parse(localStorage.getItem('bookmark')||'[]');
+  return list.includes(key);
+}
+
+/* highlight */
+function highlight(el){
+  document.querySelectorAll('.ayat').forEach(a=>a.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* load surat */
 async function load(){
 
   const res = await fetch(`https://equran.id/api/surat/${id}`);
   const data = await res.json();
 
-  /* HEADER INFO */
-  suratNo.innerText = `Surat ${data.nomor}`;
-  namaLatin.innerText = `${data.nama_latin} (${data.nama})`;
-  info.innerText = `${data.jumlah_ayat} Ayat • ${data.tempat_turun} • ${data.arti}`;
+  titleEl.innerText = `${data.nomor}. ${data.nama_latin} (${data.nama})`;
+  infoEl.innerText = `${data.jumlah_ayat} Ayat • ${data.tempat_turun}`;
 
-  content.innerHTML = "";
+  content.innerHTML="";
 
-  /* AYAT */
   data.ayat.forEach(a=>{
-    const el=document.createElement('div');
+
+    const el = document.createElement('div');
     el.className='ayat';
 
+    const key = `${id}:${a.nomor}`;
+
     el.innerHTML=`
-      <div class="nomor">Ayat ${a.nomor}</div>
+      <div class="tools">
+        <button class="play">▶</button>
+        <button class="book">${isBookmarked(key)?'★':'☆'}</button>
+      </div>
+
+      <div class="nomor">۝ ${toArabic(a.nomor)}</div>
       <div class="arab">${a.ar}</div>
       <div class="arti">${a.idn}</div>
     `;
 
+    /* murottal (mishary) */
+    const audioUrl =
+      `https://everyayah.com/data/Mishary_Rashid_Alafasy_128kbps/${String(id).padStart(3,'0')}${String(a.nomor).padStart(3,'0')}.mp3`;
+
+    el.querySelector('.play').onclick=()=>{
+      audio.src = audioUrl;
+      audio.play();
+      highlight(el);
+    }
+
+    el.querySelector('.book').onclick=(e)=>{
+      toggleBookmark(key,e.target);
+    }
+
     content.appendChild(el);
   });
 
-  /* NAVIGASI */
-  prevBtn.onclick = ()=>{
-    if(id>1) location.href=`surat.html?id=${id-1}`;
-  }
+}
 
-  nextBtn.onclick = ()=>{
-    if(id<TOTAL_SURAT) location.href=`surat.html?id=${id+1}`;
-  }
+/* nav */
+document.getElementById('prev').onclick=()=>{
+  if(id>1) location.href=`surat.html?id=${id-1}`;
+}
 
-  if(id===1) prevBtn.style.opacity=.4;
-  if(id===114) nextBtn.style.opacity=.4;
-
+document.getElementById('next').onclick=()=>{
+  if(id<TOTAL) location.href=`surat.html?id=${id+1}`;
 }
 
 load();
