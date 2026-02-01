@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Al-Qur'an</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#0ea5a4;
+  --bg:#fafafa;
+  --card:#fff;
+  --text:#222;
+}
+
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#eee;
+}
+
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+  background:var(--primary);
+  color:#fff;
+  padding:12px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+header button, select{
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.darkToggle{ margin-left:auto }
+
+/* CONTAINER */
+.container{
+  max-width:820px;
+  margin:auto;
+  padding:18px;
+}
+
+/* AYAT */
+.ayat{
+  background:var(--card);
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+.arab{
+  font-family:'Amiri Quran', serif;
+  font-size:30px;
+  text-align:right;
+  line-height:2;
+}
+
+.arti{
+  margin-top:10px;
+  font-size:14px;
+  opacity:.85;
+}
+
+.tools{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+}
+
+.play{
+  background:var(--primary);
+  color:#fff;
+  font-size:12px;
+}
+
+.bookmark{
+  background:#facc15;
+  font-size:12px;
+}
+
+.saved{
+  background:#16a34a;
+  color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <button onclick="history.back()">⬅</button>
+  <div id="title">Loading...</div>
+
+  <select id="qari">
+    <option value="7">Mishary</option>
+    <option value="2">Sudais</option>
+    <option value="5">Maher</option>
+  </select>
+
+  <button id="playAll">▶ All</button>
+  <button id="showBookmark">⭐</button>
+  <button id="darkBtn" class="darkToggle">🌙</button>
+</header>
+
+<div id="content" class="container"></div>
+<audio id="player"></audio>
+
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get('id') || 1;
+
+const content = document.getElementById('content');
+const player = document.getElementById('player');
+const qariSelect = document.getElementById('qari');
+const titleEl = document.getElementById('title');
+
+let playlist = [];
+let bookmarks = JSON.parse(localStorage.bookmarks || "[]");
+
+/* ================= DARK MODE ================= */
+if(localStorage.dark==="1") document.body.classList.add('dark');
+darkBtn.onclick=()=>{
+  document.body.classList.toggle('dark');
+  localStorage.dark=document.body.classList.contains('dark')?"1":"0";
+};
+
+/* ================= BOOKMARK ================= */
+function saveBookmarks(){
+  localStorage.bookmarks = JSON.stringify(bookmarks);
+}
+
+function toggleBookmark(data, btn){
+  const exist = bookmarks.find(b=>b.key===data.key);
+
+  if(exist){
+    bookmarks = bookmarks.filter(b=>b.key!==data.key);
+    btn.classList.remove('saved');
+    btn.innerText="⭐";
+  }else{
+    bookmarks.push(data);
+    btn.classList.add('saved');
+    btn.innerText="✓";
+  }
+
+  saveBookmarks();
+}
+
+function showBookmarks(){
+  titleEl.innerText = "Bookmark Ayat ⭐";
+  content.innerHTML="";
+
+  if(bookmarks.length===0){
+    content.innerHTML="<p>Belum ada bookmark</p>";
+    return;
+  }
+
+  bookmarks.forEach(b=>{
+    const el=document.createElement('div');
+    el.className="ayat";
+    el.innerHTML=`
+      <div><b>Surat ${b.surah}:${b.ayat}</b></div>
+      <div class="arab">${b.arab}</div>
+      <div class="arti">${b.arti}</div>
+    `;
+    content.appendChild(el);
+  });
+}
+
+showBookmark.onclick=showBookmarks;
+
+/* ================= LOAD SURAT ================= */
+async function load(){
+
+  const qari = qariSelect.value;
+
+  const [arabRes, artiRes, audioRes] = await Promise.all([
+    fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${id}`),
+    fetch(`https://api.quran.com/api/v4/quran/translations/33?chapter_number=${id}`),
+    fetch(`https://api.quran.com/api/v4/chapter_recitations/${qari}/${id}`)
+  ]);
+
+  const arab = await arabRes.json();
+  const arti = await artiRes.json();
+  const audio = await audioRes.json();
+
+  titleEl.innerText = "Surat " + id;
+
+  playlist = audio.audio_files.map(a=>a.audio_url);
+  content.innerHTML="";
+
+  arab.verses.forEach((v,i)=>{
+
+    const key = `${id}-${i+1}`;
+    const saved = bookmarks.find(b=>b.key===key);
+
+    const el=document.createElement('div');
+    el.className="ayat";
+
+    el.innerHTML=`
+      <div class="arab">${v.text_uthmani} ﴿${i+1}﴾</div>
+      <div class="arti">${arti.translations[i].text}</div>
+      <div class="tools">
+        <button class="play" data-i="${i}">▶</button>
+        <button class="bookmark ${saved?'saved':''}">
+          ${saved?'✓':'⭐'}
+        </button>
+      </div>
+    `;
+
+    const playBtn=el.querySelector('.play');
+    playBtn.onclick=()=>{ player.src=playlist[i]; player.play(); };
+
+    const bmBtn=el.querySelector('.bookmark');
+    bmBtn.onclick=()=>toggleBookmark({
+      key,
+      surah:id,
+      ayat:i+1,
+      arab:v.text_uthmani,
+      arti:arti.translations[i].text
+    }, bmBtn);
+
+    content.appendChild(el);
+  });
+}
+
+/* ================= PLAY ALL ================= */
+let current=0;
+
+playAll.onclick=()=>{
+  current=0;
+  playNext();
+};
+
+function playNext(){
+  if(current>=playlist.length) return;
+  player.src=playlist[current++];
+  player.play();
+}
+player.onended=playNext;
+
+/* ================= START ================= */
+qariSelect.value = localStorage.qari || "7";
+qariSelect.onchange=()=>{
+  localStorage.qari=qariSelect.value;
+  load();
+};
+
+load();
+</script>
+
+</body>
+</html>
