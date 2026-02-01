@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Quran</title>
 
@@ -19,8 +19,8 @@ body{
 header{
   background:#0ea5a4;
   color:#fff;
-  padding:14px;
   text-align:center;
+  padding:14px;
 }
 
 /* CONTAINER */
@@ -30,14 +30,14 @@ header{
   padding:16px;
 }
 
-/* AYAT CARD */
+/* AYAT */
 .ayat{
-  background:#fff;
-  padding:18px;
-  border-radius:12px;
-  margin-bottom:12px;
-  box-shadow:0 2px 4px rgba(0,0,0,.06);
   position:relative;
+  background:#fff;
+  padding:22px 18px 16px 18px;
+  border-radius:12px;
+  margin-bottom:14px;
+  box-shadow:0 2px 4px rgba(0,0,0,.06);
   transition:.2s;
 }
 
@@ -46,30 +46,40 @@ header{
   border-left:5px solid #0ea5a4;
 }
 
-/* nomor mushaf */
+/* NOMOR LINGKARAN */
 .nomor{
+  position:absolute;
+  right:10px;
+  top:10px;
+  width:34px;
+  height:34px;
+  border:2px solid #0ea5a4;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-family:'Amiri Quran';
-  font-size:22px;
-  text-align:right;
-  opacity:.7;
+  font-size:14px;
+  background:#fff;
 }
 
-/* arab */
+/* ARAB */
 .arab{
   font-family:'Amiri Quran';
   font-size:30px;
   text-align:right;
   line-height:2.2;
+  padding-right:44px;
 }
 
-/* arti */
+/* TERJEMAH */
 .arti{
   margin-top:8px;
   font-size:14px;
   opacity:.85;
 }
 
-/* tombol kecil */
+/* BUTTONS */
 .tools{
   position:absolute;
   left:10px;
@@ -80,24 +90,22 @@ header{
 
 .tools button{
   border:none;
-  padding:4px 8px;
+  padding:6px 8px;
   border-radius:6px;
   cursor:pointer;
-  font-size:12px;
 }
 
-.play{ background:#0ea5a4; color:#fff; }
-.book{ background:#ffd54f; }
+.play{background:#0ea5a4;color:#fff;}
+.book{background:#ffd54f;}
 
 .nav{
   display:flex;
-  justify-content:space-between;
-  margin:20px 0;
+  gap:8px;
+  margin-top:20px;
 }
 
 .nav button{
   flex:1;
-  margin:0 5px;
   padding:10px;
   border:none;
   border-radius:8px;
@@ -111,116 +119,101 @@ header{
 
 <header>
   <h3 id="title">Loading...</h3>
-  <small id="info"></small>
 </header>
 
 <div class="container">
-
   <div id="content"></div>
 
   <div class="nav">
-    <button id="prev">⬅ Sebelumnya</button>
-    <button id="next">Selanjutnya ➡</button>
+    <button onclick="go(-1)">⬅ Sebelumnya</button>
+    <button onclick="go(1)">Selanjutnya ➡</button>
   </div>
-
 </div>
+
 
 <script>
 const id = parseInt(new URLSearchParams(location.search).get('id')) || 1;
-const TOTAL = 114;
 
 const content = document.getElementById('content');
 const titleEl = document.getElementById('title');
-const infoEl = document.getElementById('info');
 
 let audio = new Audio();
 
 /* angka arab */
-function toArabic(num){
-  return num.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+function toArabic(n){
+  return n.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 }
 
 /* bookmark */
-function toggleBookmark(key, btn){
-  let list = JSON.parse(localStorage.getItem('bookmark')||'[]');
-
-  if(list.includes(key)){
-    list = list.filter(x=>x!==key);
+function toggle(key,btn){
+  let b=JSON.parse(localStorage.getItem('bookmark')||'[]');
+  if(b.includes(key)){
+    b=b.filter(x=>x!==key);
     btn.innerText='☆';
   }else{
-    list.push(key);
+    b.push(key);
     btn.innerText='★';
   }
-
-  localStorage.setItem('bookmark',JSON.stringify(list));
+  localStorage.setItem('bookmark',JSON.stringify(b));
 }
 
-function isBookmarked(key){
-  const list = JSON.parse(localStorage.getItem('bookmark')||'[]');
-  return list.includes(key);
+function isBook(key){
+  return (JSON.parse(localStorage.getItem('bookmark')||'[]')).includes(key);
 }
 
 /* highlight */
 function highlight(el){
-  document.querySelectorAll('.ayat').forEach(a=>a.classList.remove('active'));
+  document.querySelectorAll('.ayat').forEach(x=>x.classList.remove('active'));
   el.classList.add('active');
 }
 
-/* load surat */
+/* load */
 async function load(){
 
   const res = await fetch(`https://equran.id/api/surat/${id}`);
   const data = await res.json();
 
-  titleEl.innerText = `${data.nomor}. ${data.nama_latin} (${data.nama})`;
-  infoEl.innerText = `${data.jumlah_ayat} Ayat • ${data.tempat_turun}`;
+  titleEl.innerText = `${data.nomor}. ${data.nama_latin}`;
 
   content.innerHTML="";
 
+  /* AUDIO FULL SURAT (FIX PASTI BUNYI) */
+  audio.src =
+  `https://equran.nos.wjv-1.neo.id/audio-full/misyari/${String(id).padStart(3,'0')}.mp3`;
+
   data.ayat.forEach(a=>{
 
-    const el = document.createElement('div');
-    el.className='ayat';
-
     const key = `${id}:${a.nomor}`;
+
+    const el=document.createElement('div');
+    el.className='ayat';
 
     el.innerHTML=`
       <div class="tools">
         <button class="play">▶</button>
-        <button class="book">${isBookmarked(key)?'★':'☆'}</button>
+        <button class="book">${isBook(key)?'★':'☆'}</button>
       </div>
 
-      <div class="nomor">۝ ${toArabic(a.nomor)}</div>
+      <div class="nomor">${toArabic(a.nomor)}</div>
       <div class="arab">${a.ar}</div>
       <div class="arti">${a.idn}</div>
     `;
 
-    /* murottal (mishary) */
-    const audioUrl =
-      `https://everyayah.com/data/Mishary_Rashid_Alafasy_128kbps/${String(id).padStart(3,'0')}${String(a.nomor).padStart(3,'0')}.mp3`;
-
+    /* play = highlight + play full surat */
     el.querySelector('.play').onclick=()=>{
-      audio.src = audioUrl;
       audio.play();
       highlight(el);
     }
 
-    el.querySelector('.book').onclick=(e)=>{
-      toggleBookmark(key,e.target);
-    }
+    el.querySelector('.book').onclick=(e)=>toggle(key,e.target);
 
     content.appendChild(el);
   });
-
 }
 
-/* nav */
-document.getElementById('prev').onclick=()=>{
-  if(id>1) location.href=`surat.html?id=${id-1}`;
-}
-
-document.getElementById('next').onclick=()=>{
-  if(id<TOTAL) location.href=`surat.html?id=${id+1}`;
+function go(n){
+  const next=id+n;
+  if(next>=1 && next<=114) location.href=`surat.html?id=${next}`;
 }
 
 load();
