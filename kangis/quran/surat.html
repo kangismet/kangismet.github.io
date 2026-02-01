@@ -1,56 +1,105 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 
-<title>Al-Qur'an</title>
+<title>Quran</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
-  font-family:system-ui,sans-serif;
-  background:#fafafa;
+  font-family:system-ui;
+  background:#f5f6f8;
 }
 
+/* HEADER */
 header{
   background:#0ea5a4;
   color:#fff;
-  padding:12px;
-  display:flex;
-  gap:10px;
-  align-items:center;
+  padding:14px;
 }
 
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+}
+
+.topbar button{
+  background:#fff;
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* TITLE */
+.title{
+  text-align:center;
+}
+
+.title h2{
+  margin:0;
+}
+
+.title small{
+  opacity:.9;
+}
+
+/* AYAT */
 .container{
-  max-width:820px;
+  max-width:850px;
   margin:auto;
-  padding:18px;
+  padding:16px;
 }
 
 .ayat{
   background:#fff;
   padding:18px;
   border-radius:12px;
-  margin-bottom:14px;
+  margin-bottom:12px;
+  box-shadow:0 2px 4px rgba(0,0,0,.05);
+}
+
+.nomor{
+  font-size:12px;
+  opacity:.5;
+  margin-bottom:6px;
 }
 
 .arab{
-  font-family:'Amiri Quran', serif;
-  font-size:28px;
+  font-family:'Amiri Quran';
+  font-size:30px;
   text-align:right;
-  line-height:2;
+  line-height:2.2;
 }
 
 .arti{
   margin-top:8px;
   font-size:14px;
-  opacity:.8;
+  opacity:.85;
 }
 
-button{
-  margin-top:8px;
+/* NAV BOTTOM */
+.bottom-nav{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin:18px 0;
+}
+
+.bottom-nav button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#0ea5a4;
+  color:#fff;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -58,82 +107,84 @@ button{
 <body>
 
 <header>
-  <button onclick="history.back()">⬅</button>
-  <div id="title">Loading...</div>
-  <button id="playAll">▶ All</button>
+
+  <div class="topbar">
+    <button onclick="history.back()">⬅</button>
+    <div id="suratNo">Surat</div>
+    <div></div>
+  </div>
+
+  <div class="title">
+    <h2 id="namaLatin"></h2>
+    <small id="info"></small>
+  </div>
+
 </header>
 
-<div id="content" class="container">
-  Memuat ayat...
+<div class="container">
+
+  <div id="content"></div>
+
+  <div class="bottom-nav">
+    <button id="prevBtn">⬅ Surat Sebelumnya</button>
+    <button id="nextBtn">Surat Selanjutnya ➡</button>
+  </div>
+
 </div>
 
-<audio id="player"></audio>
 
 <script>
-const id = new URLSearchParams(location.search).get('id') || 1;
+const TOTAL_SURAT = 114;
+const id = parseInt(new URLSearchParams(location.search).get('id')) || 1;
 
 const content = document.getElementById('content');
-const player = document.getElementById('player');
-const titleEl = document.getElementById('title');
+const namaLatin = document.getElementById('namaLatin');
+const info = document.getElementById('info');
+const suratNo = document.getElementById('suratNo');
 
-let playlist = [];
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
 
 async function load(){
 
-  try{
+  const res = await fetch(`https://equran.id/api/surat/${id}`);
+  const data = await res.json();
 
-    const res = await fetch(
-      `https://api.quran.com/api/v4/verses/by_chapter/${id}?language=id&translations=33&audio=7&words=false&per_page=300`
-    );
+  /* HEADER INFO */
+  suratNo.innerText = `Surat ${data.nomor}`;
+  namaLatin.innerText = `${data.nama_latin} (${data.nama})`;
+  info.innerText = `${data.jumlah_ayat} Ayat • ${data.tempat_turun} • ${data.arti}`;
 
-    const data = await res.json();
+  content.innerHTML = "";
 
-    titleEl.innerText = "Surat " + id;
+  /* AYAT */
+  data.ayat.forEach(a=>{
+    const el=document.createElement('div');
+    el.className='ayat';
 
-    content.innerHTML="";
-    playlist=[];
+    el.innerHTML=`
+      <div class="nomor">Ayat ${a.nomor}</div>
+      <div class="arab">${a.ar}</div>
+      <div class="arti">${a.idn}</div>
+    `;
 
-    data.verses.forEach((v,i)=>{
+    content.appendChild(el);
+  });
 
-      playlist.push(v.audio?.url);
-
-      const el=document.createElement('div');
-      el.className='ayat';
-
-      el.innerHTML=`
-        <div class="arab">${v.text_uthmani} ﴿${i+1}﴾</div>
-        <div class="arti">${v.translations[0]?.text || ''}</div>
-        <button onclick="play(${i})">▶ Ayat</button>
-      `;
-
-      content.appendChild(el);
-    });
-
-  }catch(err){
-    content.innerHTML="❌ Gagal load data. Cek koneksi / refresh.";
-    console.error(err);
+  /* NAVIGASI */
+  prevBtn.onclick = ()=>{
+    if(id>1) location.href=`surat.html?id=${id-1}`;
   }
+
+  nextBtn.onclick = ()=>{
+    if(id<TOTAL_SURAT) location.href=`surat.html?id=${id+1}`;
+  }
+
+  if(id===1) prevBtn.style.opacity=.4;
+  if(id===114) nextBtn.style.opacity=.4;
+
 }
-
-function play(i){
-  if(!playlist[i]) return;
-  player.src = playlist[i];
-  player.play();
-}
-
-let current=0;
-
-playAll.onclick=()=>{
-  current=0;
-  playNext();
-};
-
-function playNext(){
-  if(current>=playlist.length) return;
-  player.src=playlist[current++];
-  player.play();
-}
-player.onended=playNext;
 
 load();
 </script>
