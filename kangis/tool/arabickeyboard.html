@@ -18,11 +18,12 @@
 <meta property="twitter:image" content="https://tutorial.kangis.my.id/arabickeyboard/img/arabic-keyboard-image.png"/>
 
 <link rel="stylesheet" type="text/css" href="https://tutorial.kangis.my.id/arabickeyboard/css/style.css">
-  
+ 
 <style>
 body{background:#f1f2f4}
 .sample{font-size:30px}
 textarea{border-radius:8px}
+.cl, .cl:hover{margin-left:5em} 
   </style>
 <script>
 /*!
@@ -52,7 +53,7 @@ You must enable JavaScript in your web browser: see the <a class="ext" href="htt
 </noscript>
 <br>
 <form name="conversion" id="convert">
-<input type="button" class="bcl" title="clear" onclick="reset();conversion.arkeyboard.focus()" value="">
+<input type="button" class="bsm cl" title="Clear Text" value="Clear" onclick="clearText();conversion.arkeyboard.focus()">
 <input type="button" class="bsm" data-clipboard-action="copy" data-clipboard-target="#arblock" value="copy" onclick="document.getElementById('alert').style.display='block'">
 <script>
 var clipboard = new Clipboard('.bsm');
@@ -78,6 +79,8 @@ console.log(e);
 <br>
 <div id="kb-container">
 <div id="keyboard" class="rtl">
+ <input type="button" class="btk" value="Undo" onclick="undoText()">
+<input type="button" class="btk" value="Redo" onclick="redoText()">
    <div class="key"><td><input type="button" class="btk" onclick="backspace()" value="Backspace"></td></div>
  <div class="key" data-text="0"><input type="button" class="btkey" onclick="change(&#39;٠&#39;)" value="٠"></div>
  <div class="key" data-text="1"><input type="button" class="btkey" onclick="change(&#39;١&#39;)" value="١"></div>
@@ -181,184 +184,6 @@ console.log(e);
  <span class="light">Light Mode</span> <svg class='line svg-2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><circle cx='12' cy='12' r='5'/><line x1='12' x2='12' y1='1' y2='3'/><line x1='12' x2='12' y1='21' y2='23'/><line x1='4.22' x2='5.64' y1='4.22' y2='5.64'/><line x1='18.36' x2='19.78' y1='18.36' y2='19.78'/><line x1='1' x2='3' y1='12' y2='12'/><line x1='21' x2='23' y1='12' y2='12'/><line x1='4.22' x2='5.64' y1='19.78' y2='18.36'/><line x1='18.36' x2='19.78' y1='5.64' y2='4.22'/></svg>
 </div>
   
-<script type='text/javascript'>
-//<![CDATA[
-function change(item) {
-    var input = document.conversion.arkeyboard;
-    if (document.selection) {
-        input.focus();
-        range = document.selection.createRange();
-        range.text = item;
-        range.select();
-    }
-    else if (input.selectionStart || input.selectionStart === '0') {
-        var startPos = input.selectionStart;
-        var endPos = input.selectionEnd;
-        var cursorPos = startPos;
-        var scrollTop = input.scrollTop;
-        var baselength = 0;
-        input.value = input.value.substring(0, startPos)
-            + item
-            + input.value.substring(endPos, input.value.length);
-        cursorPos += item.length;
-        input.focus();
-        input.selectionStart = cursorPos;
-        input.selectionEnd = cursorPos;
-        input.scrollTop = scrollTop;
-    }
-    else {
-        input.value += item;
-        input.focus();
-    }
-}
+<script src="js/arabickeyboard.js"></script>
 
-//function copy() {
-//    textRange = document.conversion.arkeyboard.createTextRange();
-//    textRange.execCommand("Copy");
-//    textRange = "";
-//}
-
-var ark;
-function cncl() {
-    ark = document.conversion.arkeyboard.value;
-    ark = ark.replace(/\u200b/g, "");
-    document.conversion.arkeyboard.value = ark;
-}
-var ark;
-function arconvert() {
-ark = document.conversion.arkeyboard.value;
-ark = ark.replace(/==a/g, "ً");
-ark = ark.replace(/==i/g, "ٍ");
-ark = ark.replace(/==u/g, "ٌ");
-ark = ark.replace(/=a/g, "َ");
-ark = ark.replace(/=i/g, "ِ");
-ark = ark.replace(/=u/g, "ُ");
-ark = ark.replace(/=w/g, "ّ");
-ark = ark.replace(/=o/g, "ْ");
-
-
-ark = ark.replace(/’/g, "\'");
-ark = ark.replace(/[aâàāiu]/g, "ا");
-ark = ark.replace(/اا/g, "آ");
-ark = ark.replace(/b/g, "ب");
-ark = ark.replace(/ب'/g, "پ");
-ark = ark.replace(/p/g, "پ");
-ark = ark.replace(/پ'/g, "ب");
-ark = ark.replace(/t/g, "ت");
-ark = ark.replace(/ت'/g, "ث");
-ark = ark.replace(/ث'/g, "ت");
-ark = ark.replace(/ṯ/g, "ث");
-ark = ark.replace(/[jǧ]/g, "ج");
-ark = ark.replace(/ج'/g, "چ");
-ark = ark.replace(/c/g, "چ");
-ark = ark.replace(/چ'/g, "ح");
-ark = ark.replace(/h/g, "ح");
-ark = ark.replace(/[xẖK]/g, "خ");
-ark = ark.replace(/خ'/g, "ج");
-ark = ark.replace(/d/g, "د");
-ark = ark.replace(/د'/g, "ذ");
-ark = ark.replace(/ذ'/g, "د");
-ark = ark.replace(/ḏ/g, "ذ");
-ark = ark.replace(/r/g, "ر");
-ark = ark.replace(/ر'/g, "ز");
-ark = ark.replace(/ز'/g, "ر");
-ark = ark.replace(/z/g, "ز");
-ark = ark.replace(/s/g, "س");
-ark = ark.replace(/ش'/g, "س");
-ark = ark.replace(/š/g, "ش");
-ark = ark.replace(/[Sṣ]/g, "ص");
-ark = ark.replace(/ص'/g, "ض");
-ark = ark.replace(/ض'/g, "ص");
-ark = ark.replace(/[Dḍ]/g, "ض");
-ark = ark.replace(/[Tṭ]/g, "ط");
-ark = ark.replace(/ط'/g, "ظ");
-ark = ark.replace(/ظ'/g, "ط");
-ark = ark.replace(/[Zẓ]/g, "ظ");
-ark = ark.replace(/ا'/g, "ع");
-ark = ark.replace(/ع'/g, "غ");
-ark = ark.replace(/غ'/g, "ع");
-ark = ark.replace(/[gʿ]/g, "غ");
-ark = ark.replace(/f/g, "ف");
-ark = ark.replace(/ف'/g, "ڤ");
-ark = ark.replace(/ڤ'/g, "ف");
-ark = ark.replace(/v/g, "ڢ");
-ark = ark.replace(/q/g, "ق");
-ark = ark.replace(/ق'/g, "ڨ");
-ark = ark.replace(/ڨ'/g, "ق");
-ark = ark.replace(/k/g, "ك");
-ark = ark.replace(/ك'/g, "ڭ");
-ark = ark.replace(/ڭ'/g, "ك");
-ark = ark.replace(/l/g, "ل");
-ark = ark.replace(/m/g, "م");
-ark = ark.replace(/n/g, "ن");
-ark = ark.replace(/[HḥḤ]/g, "ه");
-ark = ark.replace(/ه'/g, "ة");
-ark = ark.replace(/ه:/g, "ة");
-ark = ark.replace(/ة'/g, "ه");
-ark = ark.replace(/[woôûōū]/g, "و");
-ark = ark.replace(/[yeîī]/g, "ي");
-ark = ark.replace(/ي-/g, "ى");
-ark = ark.replace(/ى'/g, "ي");
-ark = ark.replace(/ي'/g, "ى");
-ark = ark.replace(/ى:/g, "ي");
-ark = ark.replace(/-/g, "ء");
-ark = ark.replace(/ʾ/g, "ء");
-ark = ark.replace(/وءء/g, "ؤ");
-ark = ark.replace(/يءء/g, "ئ");
-ark = ark.replace(/ىءء/g, "ئ");
-ark = ark.replace(/اءء/g, "إ");
-ark = ark.replace(/I/g, "إ");
-ark = ark.replace(/A/g, "اللّٰه");
-ark = ark.replace(/ءا/g, "أ");
-ark = ark.replace(/_/g, "ـ");
-ark = ark.replace(/\?/g, "؟");
-ark = ark.replace(/\;/g, "؛");
-ark = ark.replace(/\,/g, "،");
-ark = ark.replace(/0/g, "٠");
-ark = ark.replace(/1/g, "١");
-ark = ark.replace(/2/g, "٢");
-ark = ark.replace(/3/g, "٣");
-ark = ark.replace(/4/g, "٤");
-ark = ark.replace(/5/g, "٥");
-ark = ark.replace(/6/g, "٦");
-ark = ark.replace(/7/g, "٧");
-ark = ark.replace(/8/g, "٨");
-ark = ark.replace(/9/g, "٩");
-ark = ark.replace(/و:/g, "ٗ");
-ark = ark.replace(/ا:/g, "ٰ");
-ark = ark.replace(/ٰ:/g, "ٖ");
-
-startPos = document.conversion.arkeyboard.selectionStart;
-endPos = document.conversion.arkeyboard.selectionEnd;
-
-beforeLen = document.conversion.arkeyboard.value.length;
-afterLen = ark.length;
-adjustment = afterLen - beforeLen;
-
-document.conversion.arkeyboard.value = ark;
-
-document.conversion.arkeyboard.selectionStart = startPos + adjustment;
-document.conversion.arkeyboard.selectionEnd = endPos + adjustment;
-
-var obj = document.conversion.arkeyboard;
-obj.focus();
-obj.scrollTop = obj.scrollHeight;
-}
-
-var backspace = function() {
- var math  = document.getElementById('arblock').value;
-  document.getElementById('arblock').value=math.substring(0,math.length -1);
-}
-
-//]]>
-</script>
-<script>
-//<![CDATA[
-function darkMode(){localStorage.setItem("mode","darkmode"===localStorage.getItem("mode")?"light":"darkmode"),"darkmode"===localStorage.getItem("mode")?document.querySelector("#mainContent").classList.add("dark-mode"):document.querySelector("#mainContent").classList.remove("dark-mode")};
-(localStorage.getItem('mode')) === 'darkmode' ? document.querySelector('#mainContent').classList.add('dark-mode') : document.querySelector('#mainContent').classList.remove('dark-mode') 
-//]]>
-</script>   
-
-
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"202f20319463426a8241557cd7eda3b8","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body></html>
