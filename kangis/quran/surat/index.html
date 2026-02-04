@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quran</title>
+
+
+<link id="canonicalLink" rel="canonical" href="">
+<meta name="description" content="Baca Al-Qur'an lengkap dengan teks Arab, terjemah Indonesia, dan murottal audio.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#2e7d32">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/surat.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css">
+
+
+</head>
+
+<body>
+
+<header id="header-js">
+<a href="index.html" class="back-btn">
+  <svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg> 
+</a>
+<button class="toggle" onclick="toggleDark()">🌙</button>
+<h1><img src="https://lh3.googleusercontent.com/d/1-Ufwu2QXVkDiVmHp0wr0tq4GUVUrEpH-=w100"
+     width="100"
+     height="43"
+     alt="Al-Quranul Karim"
+     loading="eager"
+     decoding="async"></h1>
+</header>
+
+<div class="top-container">
+  
+  <h2 id="titleLatin"></h2>
+  <div id="titleArab" class="arab-title"></div>
+  <div id="titleArti"></div>
+  <div id="info" class="info"></div>
+</div>
+
+
+<div class="container">
+   
+   <div class="navcon">
+<div class="nav">
+    <button onclick="go(-1)"></button>
+    <button onclick="go(1)"></button>
+  </div>
+</div>
+
+<div class="surat-select-wrap">
+  <select id="suratSelect"></select>
+</div>
+
+  <div id="bismillah" class="bismillah"></div>
+  <div id="content"></div>
+<script>
+/* ==========================================
+   QURAN SIGN SPLITTER + HIZB LOGIC (FIX)
+   ========================================== */
+
+/* WAQAF & RUB VALID (LPMQ / Mushaf Madinah) */
+const WAQAF_SET = new Set([
+  '\u06D6', // ۖ
+  '\u06D7', // ۗ
+  '\u06D8', // ۘ
+  '\u06D9', // ۙ
+  '\u06DA', // ۚ
+  '\u06DB', // ۛ
+  '\u06DC'  // ۜ
+]);
+
+/* RUB EL HIZB */
+const RUB_SIGN = '\u06DE'; // ۞
+
+/* NUN WIQOYAH */
+const NUN_WIQOYAH = '\u06E7';
+
+/* IQLAB MIM */
+const IQLAB_MIM = '\u06E2';
+
+/* IGNORE */
+const IGNORE_SET = new Set([
+  '\u06DF' // small high rounded zero
+]);
+
+/* SCAN AREA */
+const QURAN_SCAN_REGEX = /([\u06D6-\u06ED])/g;
+
+/* ==========================================
+   SPLITTER
+   ========================================== */
+function splitQuranSigns(root = document) {
+  root.querySelectorAll('.ayah-text').forEach(el => {
+    if (el.dataset.signSplit) return;
+
+    el.innerHTML = el.innerHTML.replace(QURAN_SCAN_REGEX, ch => {
+      if (IGNORE_SET.has(ch)) return ch;
+
+      if (ch === NUN_WIQOYAH) {
+        return `<span class="nun-wiqoyah">${ch}</span>`;
+      }
+
+      if (ch === IQLAB_MIM) {
+        return `<span class="iqlab-mim">${ch}</span>`;
+      }
+
+      if (ch === RUB_SIGN) {
+        return `<span class="rub-wrap"><span class="rub-sign">${ch}</span></span>`;
+      }
+
+      if (WAQAF_SET.has(ch)) {
+        return `<span class="waqaf">${ch}</span>`;
+      }
+
+      return ch;
+    });
+
+    el.dataset.signSplit = '1';
+  });
+}
+
+/* ==========================================
+   HIZB LABEL LOGIC (RUB = END, NOT START)
+   ========================================== */
+function applyHizbLabels() {
+  document.querySelectorAll('.rub-wrap').forEach((rub, i) => {
+    let label = '';
+
+    /* urutan rub dalam hizb (relatif) */
+    const rubIndex = (i + 1) % 4;
+
+    switch (rubIndex) {
+      case 1:
+        label = '¼ حزب';
+        break;
+      case 2:
+        label = '½ حزب';
+        break;
+      case 3:
+        label = '¾ حزب';
+        break;
+      case 0:
+        label = 'حزب';
+        break;
+    }
+
+    rub.dataset.hizbLabel = label;
+  });
+}
+
+/* ==========================================
+   CSS HELPER (optional inject)
+   ========================================== */
+function injectStyles() {
+  if (document.getElementById('quran-hizb-style')) return;
+
+  const style = document.createElement('style');
+  style.id = 'quran-hizb-style';
+  style.textContent = `
+    .rub-wrap {
+      position: relative;
+      display: inline-block;
+      margin-inline-start: .1em;
+    }
+    .rub-wrap::after {
+      content: attr(data-hizb-label);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-.9em);
+      font-size: .45em;
+      white-space: nowrap;
+      line-height: 1;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+/* ==========================================
+   OBSERVER
+   ========================================== */
+const observer = new MutationObserver(mutations => {
+  mutations.forEach(m => {
+    m.addedNodes.forEach(node => {
+      if (node.nodeType !== 1) return;
+
+      if (node.classList.contains('ayat')) {
+        splitQuranSigns(node);
+        applyHizbLabels();
+      }
+
+      node.querySelectorAll?.('.ayat').forEach(el => {
+        splitQuranSigns(el);
+        applyHizbLabels();
+      });
+    });
+  });
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
+/* INIT */
+splitQuranSigns();
+applyHizbLabels();
+injectStyles();
+
+</script>
+
+  <div class="nav" id="navBottom">
+    <button onclick="go(-1)"></button>
+    <button onclick="go(1)"></button>
+  </div>
+
+ <div class="footer">
+  <span>© <span id="year"></span></span>
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a> • Smart Media
+</div>
+
+</div>
+
+<div class="player-wrap" id="playerWrap">
+  <button class="close" onclick="closePlayer()" aria-label="Tutup player">
+    <svg viewBox="0 0 24 24" width="20" height="20">
+      <line x1="6" y1="6" x2="18" y2="18"/>
+      <line x1="18" y1="6" x2="6" y2="18"/>
+    </svg>
+  </button>
+
+  <audio id="player"></audio>
+</div>
+
+
+<button class="top" onclick="scrollToTop()">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+     <path d="M6 15l6-6 6 6"></path>
+    </svg>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
+<script src="/js/theme.js"></script>
+<script src="/js/surat.js"></script>
+<script>
+let lastScroll = 0;
+const header = document.getElementById("header-js");
+
+window.addEventListener("scroll", () => {
+  const currentScroll = window.pageYOffset;
+
+  if (currentScroll > lastScroll && currentScroll > 80) {
+    header.classList.add("hide");
+  } else {
+    header.classList.remove("hide");
+  }
+
+  lastScroll = currentScroll;
+});
+</script>
+
+<script>
+/* =========================
+   DROPDOWN SURAT SELECTOR
+========================= */
+
+const suratList = [
+"Al-Fatihah","Al-Baqarah","Ali 'Imran","An-Nisa","Al-Ma'idah","Al-An'am","Al-A'raf","Al-Anfal","At-Taubah","Yunus",
+"Hud","Yusuf","Ar-Ra'd","Ibrahim","Al-Hijr","An-Nahl","Al-Isra","Al-Kahf","Maryam","Ta-Ha",
+"Al-Anbiya","Al-Hajj","Al-Mu'minun","An-Nur","Al-Furqan","Asy-Syu'ara","An-Naml","Al-Qasas","Al-Ankabut","Ar-Rum",
+"Luqman","As-Sajdah","Al-Ahzab","Saba","Fatir","Ya-Sin","As-Saffat","Sad","Az-Zumar","Ghafir",
+"Fussilat","Asy-Syura","Az-Zukhruf","Ad-Dukhan","Al-Jatsiyah","Al-Ahqaf","Muhammad","Al-Fath","Al-Hujurat","Qaf",
+"Az-Zariyat","At-Tur","An-Najm","Al-Qamar","Ar-Rahman","Al-Waqi'ah","Al-Hadid","Al-Mujadilah","Al-Hasyr","Al-Mumtahanah",
+"As-Saff","Al-Jumu'ah","Al-Munafiqun","At-Taghabun","At-Talaq","At-Tahrim","Al-Mulk","Al-Qalam","Al-Haqqah","Al-Ma'arij",
+"Nuh","Al-Jinn","Al-Muzzammil","Al-Muddaththir","Al-Qiyamah","Al-Insan","Al-Mursalat","An-Naba","An-Nazi'at","'Abasa",
+"At-Takwir","Al-Infitar","Al-Mutaffifin","Al-Insyiqaq","Al-Buruj","At-Tariq","Al-A'la","Al-Ghasyiyah","Al-Fajr","Al-Balad",
+"Asy-Syams","Al-Lail","Ad-Duha","Asy-Syarh","At-Tin","Al-'Alaq","Al-Qadr","Al-Bayyinah","Az-Zalzalah","Al-'Adiyat",
+"Al-Qari'ah","At-Takatsur","Al-'Asr","Al-Humazah","Al-Fil","Quraisy","Al-Ma'un","Al-Kautsar","Al-Kafirun","An-Nasr",
+"Al-Lahab","Al-Ikhlas","Al-Falaq","An-Nas"
+];
+
+const select = document.getElementById("suratSelect");
+const currentId = +new URLSearchParams(location.search).get('id') || 1;
+
+suratList.forEach((name,i)=>{
+  const opt = document.createElement("option");
+  opt.value = i+1;
+  opt.textContent = `${i+1}. ${name}`;
+  if(i+1 === currentId) opt.selected = true;
+  select.appendChild(opt);
+});
+
+select.onchange = e=>{
+  location.href = `surat.html?id=${e.target.value}`;
+};
+</script>
+
+</body>
+</html>
