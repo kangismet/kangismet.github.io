@@ -39,7 +39,7 @@ function render(arr) {
     // URL: /surat/2-al-baqarah
     const slug = `${s.nomor}-${slugify(s.nama_latin)}`;
     el.onclick = () => {
-      location.href = `/surat/${slug}`;
+      location.href = `surat/${slug}`;
     };
 
     listEl.appendChild(el);
@@ -68,3 +68,4 @@ if (year) year.textContent = new Date().getFullYear();
    Init
 ================================ */
 load();
+
