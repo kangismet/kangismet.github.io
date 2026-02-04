@@ -1,189 +1,113 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Al-Qur'an Digital</title>
 
-<!-- font arab biar konsisten -->
-<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
+<!-- ===== BASIC META ===== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-:root{
-  --primary:#0ea5a4;
-  --bg:#f6f7f9;
-  --card:#fff;
-  --text:#222;
-}
+<title>Al-Qur'an Digital Murottal dan Terjemah | Kang Ismet</title>
+<meta name="description" content="Baca Al-Qur'an digital lengkap 114 surat dengan teks Arab, terjemah Indonesia, dan murottal audio. Ringan, cepat, gratis, tanpa aplikasi.">
+<meta name="keywords" content="alquran, quran digital, alquran online, murottal, terjemah indonesia, 114 surat, kang ismet">
+<meta name="author" content="Kang Ismet">
 
-body.dark{
-  --bg:#121212;
-  --card:#1e1e1e;
-  --text:#eee;
-}
+<!-- ===== CANONICAL ===== -->
+<link rel="canonical" href="https://quran.kangis.my.id/">
 
-body{
-  margin:0;
-  font-family:system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
+<!-- ===== ROBOTS ===== -->
+<meta name="robots" content="index, follow">
 
-/* HEADER */
-header{
-  background:var(--primary);
-  color:#fff;
-  padding:16px;
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
-}
+<!-- ===== OPEN GRAPH (Facebook/WA) ===== -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Al-Qur'an Digital Lengkap 114 Surat">
+<meta property="og:description" content="Baca Quran + terjemah + murottal online dengan tampilan ringan dan cepat.">
+<meta property="og:url" content="https://quran.kangis.my.id/">
+<meta property="og:image" content="https://quran.kangis.my.id/cover.jpg">
 
-header input{
-  flex:1;
-  min-width:140px;
-  border:none;
-  padding:7px 10px;
-  border-radius:6px;
-}
+<!-- ===== TWITTER CARD ===== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Al-Qur'an Digital Lengkap 114 Surat">
+<meta name="twitter:description" content="Quran online dengan audio murottal & terjemah Indonesia.">
+<meta name="twitter:image" content="https://quran.kangis.my.id/cover.jpg">
 
-header button{
-  border:none;
-  padding:6px 10px;
-  border-radius:6px;
-  cursor:pointer;
-}
+<!-- ===== THEME COLOR (mobile address bar) ===== -->
+<meta name="theme-color" content="#2e7d32">
 
-/* GRID */
-.grid{
-  padding:16px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
-  gap:14px;
-}
-
-/* CARD */
-.card{
-  background:var(--card);
-  border-radius:12px;
-  padding:14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  cursor:pointer;
-  transition:.15s;
-}
-
-.card:hover{
-  transform:translateY(-3px);
-}
-
-.info{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
-.num{
-  background:var(--primary);
-  color:#fff;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
-  font-weight:600;
-}
-
-.name{
-  font-weight:600;
-}
-
-.arti{
-  font-size:12px;
-  opacity:.7;
-}
-
-.arab{
-  font-family:'Amiri Quran', serif;
-  font-size:22px;
-}
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="icon" href="img/favicon.ico">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
 
 <header>
-  <b>📖 Al-Qur'an</b>
-  <input id="search" placeholder="Cari surat..." />
-  <button id="darkBtn">🌙</button>
+  <button class="toggle" onclick="toggleDark()">🌙</button>
+  <h1><img src="https://lh3.googleusercontent.com/d/1-Ufwu2QXVkDiVmHp0wr0tq4GUVUrEpH-=w200"
+     width="200"
+     height="85"
+     alt="Al-Quranul Karim"
+     loading="eager"
+     decoding="async"></h1>
 </header>
+<nav class="navsurah" id="toc">
+  <a href="surat.html?id=36">Yasin</a>
+  <a href="surat.html?id=56">Al-Waqi'ah</a>
+  <a href="surat.html?id=67">Al-Mulk</a>
+  <a href="surat.html?id=18">Al-Kahfi</a>
+  <a href="surat.html?id=55">Ar-Rahman</a>
+  <a href="surat.html?id=78">Juz 30</a>
+</nav>
 
-<div id="list" class="grid"></div>
+<div class="container">
+  <div class="card2">
+    <div class="doa">
+	<a href="#"><img src="https://lh3.googleusercontent.com/d/1h7kpmnQA4A497xmfXo6nza2ARtOB1KWb=w50"
+     width="50"
+     height="50"
+     alt="Sholat"
+     loading="lazy"
+     decoding="async"/>
+	 <p>Bacaan Shalat</p></a>
+	</div>
+	<div class="doa">
+	<a href="#"><img src="https://lh3.googleusercontent.com/d/1O-65eMhw0SglY5d1rRLXnqFhlayrtby5=w50"
+     width="50"
+     height="50"
+     alt="Wirid"
+     loading="lazy"
+     decoding="async">
+	 <p>Wirid</p></a>
+	</div>
+	<div class="doa">
+	<a href="#"><img src="https://lh3.googleusercontent.com/d/1KRrOdWR0iljX4dCfqx3mWCql6WFYdv9l=w50"
+     width="50"
+     height="50"
+     alt="Doa harian"
+     loading="lazy"
+     decoding="async">
+	 <p>Do'a Harian</p></a>
+	</div>
+  </div>
+  <div id="list" class="grid"></div>
+  
+ <div class="footer">
+  <span>© <span id="year"></span></span>
+  <a href="https://kangis.my.id" target="_blank">Kang Ismet</a> • Smart Media
+</div> 
+  
+</div>
 
-<script>
-const list = document.getElementById('list');
-const searchInput = document.getElementById('search');
 
-/* ================= DARK MODE ================= */
-if(localStorage.dark === "1") document.body.classList.add('dark');
 
-darkBtn.onclick = ()=>{
-  document.body.classList.toggle('dark');
-  localStorage.dark = document.body.classList.contains('dark') ? "1":"0";
-};
+<button class="top" onclick="scrollToTop()">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+     <path d="M6 15l6-6 6 6"></path>
+    </svg>
+</button>
 
-/* ================= LOAD ================= */
-let all = [];
-
-async function load(){
-  const res = await fetch('https://api.quran.com/api/v4/chapters?language=id');
-  const data = await res.json();
-  all = data.chapters;
-  render(all);
-}
-
-function render(arr){
-  list.innerHTML = "";
-
-  arr.forEach(s=>{
-    const el = document.createElement('div');
-    el.className='card';
-
-    el.innerHTML = `
-      <div class="info">
-        <div class="num">${s.id}</div>
-        <div>
-          <div class="name">${s.name_simple}</div>
-          <div class="arti">${s.translated_name.name} • ${s.verses_count} ayat</div>
-        </div>
-      </div>
-      <div class="arab">${s.name_arabic}</div>
-    `;
-
-    el.onclick = ()=> location.href = `surat.html?id=${s.id}`;
-    list.appendChild(el);
-  });
-}
-
-/* ================= SEARCH ================= */
-searchInput.oninput = ()=>{
-  const q = searchInput.value.toLowerCase();
-
-  const filtered = all.filter(s =>
-    s.name_simple.toLowerCase().includes(q) ||
-    s.translated_name.name.toLowerCase().includes(q) ||
-    String(s.id).includes(q)
-  );
-
-  render(filtered);
-};
-
-load();
-</script>
+<script src="js/theme.js"></script>
+<script src="js/index.js"></script>
 
 </body>
 </html>

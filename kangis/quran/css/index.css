@@ -1,0 +1,106 @@
+
+/* HEADER */
+header{
+  background:var(--accent);
+  color:#fff;
+  text-align:center;
+  padding:18px;
+  position:relative;
+}
+.logo {max-width:180px;height:auto}
+@media (max-width: 600px) {
+  header{padding:10px}
+  header img {
+    max-width: 140px;
+	height:auto;
+  }
+}
+
+.navsurah {
+  padding: 12px;
+  text-align:center;
+  font-size:.8rem;
+  margin-top:10px;
+}
+.navsurah a {
+display:inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-decoration: none;
+  color: #fff;
+  background:var(--accent);
+  border-radius:5px;
+  padding:5px 8px;
+  text-align: center;
+}
+.navsurah a:hover{background:var(--dark-accent);}
+/* CONTAINER */
+.container{
+  max-width:850px;
+  margin:auto;
+  padding:16px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+@media(max-width:900px){
+  .grid{ grid-template-columns:repeat(2,1fr); }
+}
+
+@media(max-width:600px){
+  .grid{ grid-template-columns:1fr; }
+}
+.card2{
+  background:var(--card2);
+  padding:14px;
+  border-radius:12px;
+  position:sticky;
+  top:0;
+  z-index:2;
+  margin-bottom:20px;
+  border:1px solid var(--border-accent);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  display:flex;
+  justify-content:space-around;
+  flex-direction:row;
+}
+.doa{text-align:center;font-size:14px;font-weight:600}
+.doa p{margin:0}
+.doa a{color:var(--text);text-decoration:none}
+/* CARD SURAT */
+.card{
+  background:var(--card);
+  padding:14px;
+  border-radius:12px;
+  box-shadow:0 2px 5px rgba(0,0,0,.08);
+  cursor:pointer;
+  border:1px solid var(--border-accent);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.card:hover{
+  background:var(--light-accent);
+  border:1px solid var(--bd-accent);
+}
+.arab{
+  font-family:'surah','AbuFaqih', 'Traditional Arabic', system-ui;
+  font-size:30px;
+  text-align:right;
+}
+.meta{
+  font-size:12px;
+  opacity:.7;
+  text-transform: capitalize;
+}
+
+/* BACK TOP BUTTON */
+.top{
+  bottom:25px;
+  right:25px;
+}
+
+

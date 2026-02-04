@@ -1,0 +1,308 @@
+/* HEADER */
+header h1{margin:0}
+#header-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  padding:14px 0 10px;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
+
+#header-js.hide {
+  transform: translateY(-100%);
+}
+
+/* TITLE */
+.top-container{max-width:850px;margin:auto;text-align:center;padding:95px 0 5px;position:relative}
+.top-container h2{font-size:1.1em;margin:0}
+.navcon{max-width:350px;margin:0 auto}
+.arab-title{font-family:AbuFaqih; font-size:clamp(30px, 4.5vw, 44px);line-height:1.8}
+.info{font-size:.8em;text-transform:capitalize;margin-top:10px}
+.bismillah{text-align:center;font-family:AbuFaqih;font-size:clamp(26px, 4.5vw, 30px);margin-bottom:20px}
+/* CONTAINER */
+.container{max-width:850px;margin:auto;padding:16px 16px 90px}
+
+/* NAV */
+.navcon{margin-bottom:8px}
+.nav{display:flex;gap:10px;margin-bottom:10px}
+.nav button{
+  flex:1;
+  padding:10px;
+  border:1px solid var(--border-accent);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav button:disabled{opacity:.5;pointer:disabled}
+
+/* AYAT */
+.ayat{
+  background:var(--card);
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:12px;
+  border:1px solid var(--border-accent);
+  box-shadow:0 2px 5px rgba(0,0,0,.08); 
+}
+.ayat.active{background:#0ea5a415}
+.arab{
+font-family:AbuFaqih,system-ui;
+font-size: clamp(30px, 4.5vw, 40px);
+direction: rtl;
+  unicode-bidi: isolate;
+  text-align: right;
+  line-height: 1.8;
+
+  font-feature-settings:
+    "mark" 1,
+    "mkmk" 1,
+    "liga" 1,
+    "kern" 1;
+}
+.arti{opacity:.85;margin-top:8px;line-height:1.6}
+.play{
+  background:var(--btn-play);
+  color:#fff;
+  border:none;
+  padding:2px 8px;
+  border-radius:4px;
+  cursor:pointer;
+  margin-bottom:6px;
+}
+.waqaf {
+  font-family: "AbuFaqih";
+  display: inline-block; 
+  vertical-align: baseline;
+  margin-inline-start: -3px;
+  margin-inline-end: 3px;
+  unicode-bidi: isolate; 
+  color:#0ea5a4;
+}  
+  .waqaf {
+  position: relative;
+  vertical-align: text-top;
+  transform: translateY(-0.62em);  
+}
+.nun-wiqoyah {
+  display: inline-block;
+  vertical-align: text-bottom; /* geser ke bawah */
+  font-size: 1em;
+  transform: translateY(0.4em);
+}
+.nun-wiqoyah::after {
+  content: "\0650"; /* kasrah/harakat kecil */
+  display: inline-block;
+  font-size: 0.8em; /* lebih kecil dari huruf utama */
+  vertical-align: bottom; /* taruh di bawah */
+  margin-left: 0.05em; /* jarak tipis */
+  transform: translateY(-0.07em);
+}
+.arabic-dot {
+  display: inline-block;
+  width: 1em;              /* sesuaikan ukuran */
+  color: transparent;       /* sembunyikan karakter asli */
+  position: relative;
+  text-align: center;
+  font-size: 0.7em;         /* ukuran tulisan kecil */
+}
+
+.arabic-dot::after {
+  content: "الجزء";         /* tulisan yang muncul */
+  color: #80b229;              /* bisa ganti warna */
+  position: absolute;
+  top: 0;                   /* bisa diubah untuk posisi vertikal */
+  left: 70%;
+  transform: translateX(-70%); /* center horizontal */
+  font-size: 0.7em;
+}
+.small-meem {
+  display: inline-block;
+  font-size: 0.8em;
+  vertical-align: text-top; /* muncul di atas huruf */
+  color: #b33;
+  margin-left: 0.05em;
+  transform: translateY(-0.07em)
+}
+body.dark .small-meem {
+  color: yellow;
+}
+/* PLAYER (HIDE TOTAL) */
+.player-wrap {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 12px 48px 12px 12px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  transform: translateY(120%);
+  transition: transform .35s ease, background .3s;
+  z-index: 999;
+}
+
+.player-wrap.show {
+  transform: translateY(0);
+}
+
+/* DARK */
+body.dark .player-wrap {
+  background: #363d4e;
+  box-shadow: 0 10px 30px rgba(0,0,0,.6);
+}
+
+/* audio full */
+.player-wrap audio {
+  width: 100%;
+}
+
+/* CLOSE BUTTON */
+.player-wrap .close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(10,15,25,.06);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+
+body.dark .player-wrap .close {
+  background: rgba(255,255,255,.3);
+}
+
+/* SVG stroke */
+.player-wrap .close svg {
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+/* hover & active */
+.player-wrap .close:hover {
+  background: rgba(0,0,0,.12);
+}
+
+body.dark .player-wrap .close:hover {
+  background: rgba(255,255,255,.15);
+}
+
+.player-wrap .close:active {
+  transform: scale(.9);
+}
+
+/* BACK TO INDEX */
+.back-btn{
+  position:absolute;
+  top:20px;
+  left:20px;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:rgba(68,139,131,.5);
+  color:#fff;
+  text-decoration:none;
+  font-size:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.2s;
+}
+
+.back-btn:hover{
+  background:rgba(0,0,0,.65);
+}
+/* BACK TOP BUTTON */
+.top{
+  bottom:100px;
+  right:25px;
+}
+
+/* === PLYR DARK MODE === */
+body.dark .plyr {
+  --plyr-color-main: #16a34a;                /* accent */
+  --plyr-audio-controls-background: #171e2d;
+  --plyr-audio-control-color: #e5e7eb;
+  --plyr-audio-control-color-hover: #ffffff;
+  --plyr-progress-loading-background: #333;
+  --plyr-progress-buffered-background: #444;
+}
+body:not(.dark) .plyr {
+  --plyr-color-main: #16a34a;
+  --plyr-audio-controls-background: #e8e7e7;
+  --plyr-audio-control-color: #111;
+}
+body.dark .plyr--full-ui input[type=range]::-webkit-slider-runnable-track {
+  background-color: #232a3a;
+}
+
+body.dark .plyr--full-ui input[type=range]::-moz-range-track {
+  background-color: #232a3a;
+}
+
+
+.ayat {
+  scroll-margin-bottom: 140px; /* tinggi player + jarak */
+}
+
+.surat-select-wrap{
+  position:relative;;
+  z-index:5;
+  margin-top:0;
+  margin-bottom:15px;
+}
+
+.surat-select-wrap select{
+  width:100%;
+  max-width:200px;
+  display:block;
+  margin:0 auto;
+  padding:10px 40px 10px 14px;
+  border:1px solid var(--border-accent);
+  border-radius:8px;
+  background-color:var(--card);
+  color:var(--text);
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+
+  background:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23666' stroke-width='2' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg>")
+    no-repeat right 12px center,
+    var(--card);
+}
+.surat-select-wrap select:focus{outline:0;border:1px solid #0ea5a4;}
+option{cursor:pointer}
+
+
+.rub-sign {
+  font-size: .95em;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+
+
+
+
+

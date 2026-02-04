@@ -1,0 +1,172 @@
+:root{
+  --bg:#f6f6f6;
+  --card:#fff;
+  --card2:#eeecec;
+  --text:#222;
+  --accent:#0ea5a4;
+  --dark-accent:#078281;
+  --light-accent:#e3fcf0;
+  --bd-accent:#30c0a5;
+  --border-accent:#eceaea;
+}
+
+body.dark{
+  --bg:#1d2332;
+  --card:#111827;
+  --card2:#111827;
+  --text:#e5e7eb;
+  --accent:#111827;
+  --light-accent:#023b32;
+  --border-accent:#2b3444;
+}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui;
+  background:var(--bg);
+  color:var(--text);
+}
+@font-face {
+  font-family: 'AbuFaqih', 'Traditional Arabic', system-ui;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://cdn.jsdelivr.net/gh/kangismet/kangismet.github.io@8daa63f/fonts/abufaqih.woff2) format('woff2');
+}
+/* HEADER */
+header{
+  background:var(--accent);
+  color:#fff;
+  text-align:center;
+  padding:18px;
+  position:relative;
+}
+.logo {max-width:180px;height:auto}
+/* DARK MODE TOGGLE */
+.toggle{
+  position:absolute;
+  right:12px;
+  top:12px;
+  background:#fff2;
+  border:none;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+.navsurah {
+  padding: 12px;
+  text-align:center;
+  font-size:.8rem;
+  margin-top:10px;
+}
+.navsurah a {
+display:inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-decoration: none;
+  color: #fff;
+  background:var(--accent);
+  border-radius:5px;
+  padding:5px 8px;
+  text-align: center;
+}
+.navsurah a:hover{background:var(--dark-accent);}
+/* CONTAINER */
+.container{
+  max-width:850px;
+  margin:auto;
+  padding:16px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+@media(max-width:900px){
+  .grid{ grid-template-columns:repeat(2,1fr); }
+}
+
+@media(max-width:600px){
+  .grid{ grid-template-columns:1fr; }
+}
+.card2{
+  background:var(--card2);
+  padding:14px;
+  border-radius:12px;
+  position:sticky;
+  top:0;
+  z-index:2;
+  margin-bottom:20px;
+  border:1px solid var(--border-accent);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  display:flex;
+  justify-content:space-around;
+  flex-direction:row;
+}
+.doa{text-align:center;font-size:14px;font-weight:600}
+.doa p{margin:0}
+.doa a{color:var(--text);text-decoration:none}
+/* CARD SURAT */
+.card{
+  background:var(--card);
+  padding:14px;
+  border-radius:12px;
+  box-shadow:0 2px 5px rgba(0,0,0,.08);
+  cursor:pointer;
+  border:1px solid var(--border-accent);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.card:hover{
+  background:var(--light-accent);
+  border:1px solid var(--bd-accent);
+}
+.arab{
+  font-family:'AbuFaqih', 'Traditional Arabic', system-ui;
+  font-size:30px;
+  text-align:right;
+}
+.meta{
+  font-size:12px;
+  opacity:.7;
+  text-transform: capitalize;
+}
+
+/* BACK TOP BUTTON */
+.top{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:none;
+  cursor:pointer;
+}
+.top svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+svg:not(:root) {
+    overflow: hidden;
+}
+
+.footer{
+  padding:20px 12px;
+  font-size:12px;
+  color:var(--text);
+  text-align:center;
+}
+.footer a{color:var(--text);text-decoration:none;font-weight:600;transition: background-color 0.3s ease, transform 0.2s ease;}
+.footer a:hover{color:var(--dark-eccent)}
