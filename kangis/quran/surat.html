@@ -62,10 +62,10 @@
   <div id="content"></div>
 <script>
 /* ==========================================
-   QURAN SIGN SPLITTER + HIZB LOGIC (FIX)
+   QURAN SIGN SPLITTER + HIZB LOGIC (FINAL)
    ========================================== */
 
-/* WAQAF & RUB VALID (LPMQ / Mushaf Madinah) */
+/* WAQAF VALID (LPMQ / Mushaf Madinah) */
 const WAQAF_SET = new Set([
   '\u06D6', // ۖ
   '\u06D7', // ۗ
@@ -79,19 +79,17 @@ const WAQAF_SET = new Set([
 /* RUB EL HIZB */
 const RUB_SIGN = '\u06DE'; // ۞
 
-/* NUN WIQOYAH */
-const NUN_WIQOYAH = '\u06E7';
+/* NUN WIQOYAH  */
+const NUN_WIQOYAH = '\u06E8';
 
 /* IQLAB MIM */
 const IQLAB_MIM = '\u06E2';
 
-/* IGNORE */
-const IGNORE_SET = new Set([
-  '\u06DF' // small high rounded zero
-]);
+/* ARABIC DOT (FULL STOP) */
+const ARABIC_DOT = '\u06D4'; // ۔
 
-/* SCAN AREA */
-const QURAN_SCAN_REGEX = /([\u06D6-\u06ED])/g;
+/* SCAN QURANIC MARKS AREA */
+const QURAN_SCAN_REGEX = /([\u06D4\u06D6-\u06ED])/g;
 
 /* ==========================================
    SPLITTER
@@ -101,20 +99,28 @@ function splitQuranSigns(root = document) {
     if (el.dataset.signSplit) return;
 
     el.innerHTML = el.innerHTML.replace(QURAN_SCAN_REGEX, ch => {
-      if (IGNORE_SET.has(ch)) return ch;
 
+      /* ARABIC DOT → JUZ MARK */
+      if (ch === ARABIC_DOT) {
+        return `<span class="arabic-dot">${ch}</span>`;
+      }
+
+      /* NUN WIQOYAH */
       if (ch === NUN_WIQOYAH) {
         return `<span class="nun-wiqoyah">${ch}</span>`;
       }
 
+      /* IQLAB MIM */
       if (ch === IQLAB_MIM) {
         return `<span class="iqlab-mim">${ch}</span>`;
       }
 
+      /* RUB EL HIZB */
       if (ch === RUB_SIGN) {
         return `<span class="rub-wrap"><span class="rub-sign">${ch}</span></span>`;
       }
 
+      /* WAQAF */
       if (WAQAF_SET.has(ch)) {
         return `<span class="waqaf">${ch}</span>`;
       }
@@ -132,23 +138,13 @@ function splitQuranSigns(root = document) {
 function applyHizbLabels() {
   document.querySelectorAll('.rub-wrap').forEach((rub, i) => {
     let label = '';
-
-    /* urutan rub dalam hizb (relatif) */
     const rubIndex = (i + 1) % 4;
 
     switch (rubIndex) {
-      case 1:
-        label = '¼ حزب';
-        break;
-      case 2:
-        label = '½ حزب';
-        break;
-      case 3:
-        label = '¾ حزب';
-        break;
-      case 0:
-        label = 'حزب';
-        break;
+      case 1: label = '¼ حزب'; break;
+      case 2: label = '½ حزب'; break;
+      case 3: label = '¾ حزب'; break;
+      case 0: label = 'حزب'; break;
     }
 
     rub.dataset.hizbLabel = label;
@@ -156,27 +152,54 @@ function applyHizbLabels() {
 }
 
 /* ==========================================
-   CSS HELPER (optional inject)
+   CSS INJECT (WAQAF + HIZB + JUZ)
    ========================================== */
 function injectStyles() {
-  if (document.getElementById('quran-hizb-style')) return;
+  if (document.getElementById('quran-sign-style')) return;
 
   const style = document.createElement('style');
-  style.id = 'quran-hizb-style';
+  style.id = 'quran-sign-style';
   style.textContent = `
+
+    .iqlab-mim {
+      font-size: .7em;
+      vertical-align: super;
+      margin-inline-start: 1px;
+    }
+
     .rub-wrap {
       position: relative;
       display: inline-block;
-      margin-inline-start: .1em;
+      margin-inline-start: .15em;
     }
+
     .rub-wrap::after {
       content: attr(data-hizb-label);
       position: absolute;
       left: 50%;
-      transform: translateX(-50%) translateY(-.9em);
-      font-size: .45em;
+      transform: translateX(-50%) translateY(-.6em);
+      font-size: .4em;
       white-space: nowrap;
       line-height: 1;
+    }
+
+    /* ARABIC DOT → JUZ LABEL */
+    .arabic-dot {
+      position: relative;
+      color: transparent;
+      display: inline-block;
+      margin-inline-start: -.15em;
+    }
+
+    .arabic-dot::after {
+      content: 'الجزء';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-.2em);
+      font-size: .6em;
+      white-space: nowrap;
+      line-height: 1;
+      color: #e1bf05;
     }
   `;
   document.head.appendChild(style);
@@ -266,10 +289,6 @@ window.addEventListener("scroll", () => {
 </script>
 
 <script>
-/* =========================
-   DROPDOWN SURAT SELECTOR
-========================= */
-
 const suratList = [
 "Al-Fatihah","Al-Baqarah","Ali 'Imran","An-Nisa","Al-Ma'idah","Al-An'am","Al-A'raf","Al-Anfal","At-Taubah","Yunus",
 "Hud","Yusuf","Ar-Ra'd","Ibrahim","Al-Hijr","An-Nahl","Al-Isra","Al-Kahf","Maryam","Ta-Ha",
@@ -286,20 +305,56 @@ const suratList = [
 ];
 
 const select = document.getElementById("suratSelect");
-const currentId = +new URLSearchParams(location.search).get('id') || 1;
 
-suratList.forEach((name,i)=>{
+
+/* ================= SLUG ================= */
+function slugify(text){
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[^a-z0-9\s-]/g,'')
+    .replace(/\s+/g,'-')
+    .replace(/-+/g,'-');
+}
+
+
+/* ================= GET CURRENT ID (support slug) ================= */
+function resolveId(){
+  const raw = new URLSearchParams(location.search).get('id') || '1';
+  return parseInt(raw.split('-')[0], 10);
+}
+
+const currentId = resolveId();
+
+
+/* ================= BUILD OPTION ================= */
+suratList.forEach((name, i) => {
+
+  const nomor = i + 1;
+
   const opt = document.createElement("option");
-  opt.value = i+1;
-  opt.textContent = `${i+1}. ${name}`;
-  if(i+1 === currentId) opt.selected = true;
+  opt.value = nomor;
+  opt.textContent = `${nomor}. ${name}`;
+
+  if (nomor === currentId)
+    opt.selected = true;
+
   select.appendChild(opt);
 });
 
-select.onchange = e=>{
-  location.href = `surat.html?id=${e.target.value}`;
+
+/* ================= CHANGE SURAT ================= */
+select.onchange = e => {
+
+  const nomor = e.target.value;
+  const name  = suratList[nomor - 1];
+
+  // ✅ pakai slug
+  location.href =
+    `surat.html?id=${nomor}-${slugify(name)}`;
 };
 </script>
+
 
 </body>
 </html>

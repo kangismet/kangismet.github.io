@@ -1,71 +1,101 @@
+/* ======================================================
+   ELEMENT
+====================================================== */
 const listEl = document.getElementById('list');
 let data = [];
 
-/* ===============================
-   Utils
-================================ */
-function slugify(nama) {
-  return nama
+
+/* ======================================================
+   SLUG (SEO friendly)
+====================================================== */
+function slugify(text){
+  return text
     .toLowerCase()
-    .replace(/['’]/g, '')
-    .replace(/\s+/g, '-');
+    .normalize('NFD')
+    .replace(/[^a-z0-9\s-]/g,'')
+    .replace(/\s+/g,'-')
+    .replace(/-+/g,'-');
 }
 
-/* ===============================
-   Load data surat
-================================ */
-async function load() {
+
+/* ======================================================
+   LOAD DATA
+====================================================== */
+async function load(){
   const r = await fetch('https://equran.id/api/surat');
   data = await r.json();
   render(data);
 }
 
-/* ===============================
-   Render grid card
-================================ */
-function render(arr) {
+
+/* ======================================================
+   RENDER CARD GRID
+====================================================== */
+function render(arr){
+
   listEl.innerHTML = '';
 
   arr.forEach(s => {
+
     const el = document.createElement('div');
     el.className = 'card';
 
     el.innerHTML = `
       <b>${s.nomor}. ${s.nama_latin}</b>
       <div class="arab">${s.nama}</div>
-      <div class="meta">${s.jumlah_ayat} ayat • ${s.tempat_turun}</div>
+      <div class="meta">
+        ${s.jumlah_ayat} ayat • ${s.tempat_turun}
+      </div>
     `;
 
-    // URL: /surat/2-al-baqarah
-    const slug = `${s.nomor}-${slugify(s.nama_latin)}`;
-    el.onclick = () => {
-      location.href = `surat/${slug}`;
-    };
+    /* ==============================
+       TANPA WORKER → pakai query
+       hasil:
+       surat.html?id=2-al-baqarah
+    ============================== */
+    el.onclick = () =>
+      location.href =
+        `surat.html?id=${s.nomor}-${slugify(s.nama_latin)}`;
 
     listEl.appendChild(el);
   });
 }
 
-/* ===============================
-   Back to top
-================================ */
-const btn = document.querySelector('.top');
-window.addEventListener('scroll', () => {
-  btn.style.display = window.scrollY > 400 ? 'block' : 'none';
-});
 
-function scrollToTop() {
-  scrollTo({ top: 0, behavior: 'smooth' });
+/* ======================================================
+   DARK MODE
+====================================================== */
+function toggleDark(){
+
+  const dark = document.body.classList.toggle('dark');
+
+  localStorage.setItem('dark', dark);
+
+  document.querySelector('.toggle').textContent =
+    dark ? '☀' : '🌙';
 }
 
-/* ===============================
-   Footer year
-================================ */
-const year = document.getElementById('year');
-if (year) year.textContent = new Date().getFullYear();
+if(localStorage.getItem('dark') === 'true'){
+  document.body.classList.add('dark');
+}
 
-/* ===============================
-   Init
-================================ */
+
+/* ======================================================
+   BACK TO TOP
+====================================================== */
+const btn = document.querySelector('.top');
+
+window.addEventListener('scroll', () => {
+  btn.style.display =
+    window.scrollY > 400 ? 'block' : 'none';
+});
+
+function scrollToTop(){
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+
+/* ======================================================
+   START
+====================================================== */
 load();
-

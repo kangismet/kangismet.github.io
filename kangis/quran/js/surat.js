@@ -1,27 +1,28 @@
-/* ================= INIT ================= */
-function resolveSurahId() {
-  // 1. dari query (?id=2)
-  const qid = new URLSearchParams(location.search).get('id');
-  if (qid) return +qid;
+/* ======================================================
+   ROUTER + SLUG
+====================================================== */
 
-  // 2. dari path (/surat/2-al-baqarah)
-  const parts = location.pathname.split('/').filter(Boolean);
-  const last = parts[parts.length - 1] || '';
-  const id = parseInt(last.split('-')[0], 10);
-
-  return isNaN(id) ? 1 : id;
+function slugify(text){
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[^a-z0-9\s-]/g,'')
+    .replace(/\s+/g,'-')
+    .replace(/-+/g,'-');
 }
 
-function slugify(nama) {
-  return nama
-    .toLowerCase()
-    .replace(/['’]/g, '')
-    .replace(/\s+/g, '-');
+function resolveSurahId(){
+  const raw = new URLSearchParams(location.search).get('id') || '1';
+  return parseInt(raw.split('-')[0], 10);
 }
 
 const id = resolveSurahId();
 
-/* ================= ELEMENTS ================= */
+
+/* ======================================================
+   ELEMENTS
+====================================================== */
+
 const titleLatin = document.getElementById('titleLatin');
 const titleArab  = document.getElementById('titleArab');
 const titleArti  = document.getElementById('titleArti');
@@ -36,177 +37,230 @@ const topBtn = document.querySelector('.top');
 const navBtns  = document.querySelectorAll('.nav:first-of-type button');
 const navBtnsB = document.querySelectorAll('#navBottom button');
 
-/* ================= STATE ================= */
+
+/* ======================================================
+   STATE
+====================================================== */
+
 let ayatEls = [];
 let currentIndex = -1;
+
 let prevSurah = null;
 let nextSurah = null;
 let allSurah  = [];
 
 const AUTO_NEXT_SURAH = true;
 
-/* ================= PLYR ================= */
+
+/* ======================================================
+   PLAYER
+====================================================== */
+
 const player = new Plyr(audio, {
-  controls: ['play', 'progress', 'current-time', 'mute', 'volume'],
-  resetOnEnd: true
+  controls:['play','progress','current-time','mute','volume'],
+  resetOnEnd:true
 });
 
-/* ================= MAPPING ================= */
-const namaArab = {
-  2:"ٱلْبَقَرَة",
-  55:"ٱلرَّحْمَٰن",
-  67:"ٱلْمُلْك",
-  112:"ٱلْإِخْلَاص"
-};
 
-const artiSurat = {
-  2:"Sapi Betina",
-  8:"Harta Rampasan Perang",
-  15:"Negeri Kaum Tsamud",
-  17:"Perjalanan Malam",
-  30:"Bangsa Romawi",
-  32:"Sujud",
-  34:"Negeri Saba",
-  45:"Yang Berlutut",
-  47:"Nabi Muhammad SAW",
-  55:"Yang Maha Pengasih",
-  60:"Perempuan yang Diuji",
-  62:"Hari Jum'at",
-  81:"Menggulung",
-  87:"Yang Maha Tinggi",
-  88:"Hari Pembalasan",
-  93:"Waktu Dhuha",
-  103:"Masa",
-  106:"Suku Quraisy",
-  108:"Nikmat yang Banyak",
-  112:"Kemurnian Keesaan Allah",
-  113:"Waktu Subuh"
-};
+/* ======================================================
+   BACK TO TOP
+====================================================== */
 
-/* ================= BACK TO TOP ================= */
-window.addEventListener('scroll', () => {
-  if (!topBtn) return;
-  topBtn.style.display = scrollY > 500 ? 'block' : 'none';
+window.addEventListener('scroll',()=>{
+  if(!topBtn) return;
+  topBtn.style.display = scrollY>500?'block':'none';
 });
 
-function scrollToTop() {
-  scrollTo({ top: 0, behavior: 'smooth' });
+function scrollToTop(){
+  scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ================= AUDIO ================= */
-function playAyat(i) {
-  if (i < 0 || i >= ayatEls.length) return;
+
+/* ======================================================
+   AUDIO CONTROL
+====================================================== */
+
+function playAyat(i){
+
+  if(i<0 || i>=ayatEls.length) return;
 
   currentIndex = i;
 
   const file =
     `${String(id).padStart(3,'0')}${String(i+1).padStart(3,'0')}`;
 
-  audio.src = `https://everyayah.com/data/Alafasy_64kbps/${file}.mp3`;
+  audio.src =
+    `https://everyayah.com/data/Alafasy_64kbps/${file}.mp3`;
+
   wrap.classList.add('show');
 
   player.play();
+
   highlight(i);
 
   localStorage.setItem(`lastAyatSurah${id}`, i);
 }
 
-audio.addEventListener('ended', () => {
-  if (currentIndex < ayatEls.length - 1) {
-    playAyat(currentIndex + 1);
-  } else if (AUTO_NEXT_SURAH && nextSurah) {
-    const s = allSurah[nextSurah - 1];
-    location.href = `/surat/${nextSurah}-${slugify(s.nama_latin)}`;
+
+/* ===== autoplay ===== */
+
+audio.addEventListener('ended',()=>{
+
+  // lanjut ayat
+  if(currentIndex < ayatEls.length-1){
+    playAyat(currentIndex+1);
+    return;
+  }
+
+  // lanjut surat (FIX TANPA /surat/)
+  if(AUTO_NEXT_SURAH && nextSurah){
+    const s = allSurah[nextSurah-1];
+
+    location.href =
+      `surat.html?id=${nextSurah}-${slugify(s.nama_latin)}`;
   }
 });
 
-function closePlayer() {
+function closePlayer(){
   player.pause();
-  audio.src = '';
+  audio.src='';
   wrap.classList.remove('show');
 }
 
-/* ================= AYAT STATE ================= */
-function setActiveAyat(i) {
-  if (i < 0 || i >= ayatEls.length) return;
-  currentIndex = i;
+
+/* ======================================================
+   AYAT STATE
+====================================================== */
+
+function setActiveAyat(i){
+  if(i<0 || i>=ayatEls.length) return;
+  currentIndex=i;
   highlight(i);
 }
 
-function highlight(i) {
-  ayatEls.forEach(e => e.classList.remove('active'));
+function highlight(i){
+
+  ayatEls.forEach(e=>e.classList.remove('active'));
+
   const el = ayatEls[i];
-  if (!el) return;
+  if(!el) return;
 
   el.classList.add('active');
-  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  el.scrollIntoView({
+    behavior:'smooth',
+    block:'nearest'
+  });
 }
 
-/* ================= NAV ================= */
-function go(n) {
-  if (n === -1 && prevSurah) {
-    const s = allSurah[prevSurah - 1];
-    location.href = `/surat/${prevSurah}-${slugify(s.nama_latin)}`;
+
+/* ======================================================
+   NAVIGATION
+====================================================== */
+
+function go(n){
+
+  // prev
+  if(n===-1 && prevSurah){
+    const s = allSurah[prevSurah-1];
+
+    location.href =
+      `surat.html?id=${prevSurah}-${slugify(s.nama_latin)}`;
   }
-  if (n === 1 && nextSurah) {
-    const s = allSurah[nextSurah - 1];
-    location.href = `/surat/${nextSurah}-${slugify(s.nama_latin)}`;
+
+  // next
+  if(n===1 && nextSurah){
+    const s = allSurah[nextSurah-1];
+
+    location.href =
+      `surat.html?id=${nextSurah}-${slugify(s.nama_latin)}`;
   }
 }
 
-function setNav(btns) {
+
+function setNav(btns){
+
+  if(!btns.length) return;
+
   const prevSVG =
-    `<svg width="16" viewBox="0 0 24 24">
-      <polyline points="15 18 9 12 15 6"
-        fill="none" stroke="currentColor" stroke-width="2"/>
-    </svg>`;
+  `<svg width="16" viewBox="0 0 24 24">
+    <polyline points="15 18 9 12 15 6"
+      fill="none" stroke="currentColor" stroke-width="2"/>
+  </svg>`;
 
   const nextSVG =
-    `<svg width="16" viewBox="0 0 24 24">
-      <polyline points="9 18 15 12 9 6"
-        fill="none" stroke="currentColor" stroke-width="2"/>
-    </svg>`;
+  `<svg width="16" viewBox="0 0 24 24">
+    <polyline points="9 18 15 12 9 6"
+      fill="none" stroke="currentColor" stroke-width="2"/>
+  </svg>`;
 
-  if (prevSurah) {
+  if(prevSurah)
     btns[0].innerHTML =
-      prevSVG + allSurah[prevSurah - 1].nama_latin;
-  }
+      prevSVG + allSurah[prevSurah-1].nama_latin;
 
-  if (nextSurah) {
+  if(nextSurah)
     btns[1].innerHTML =
-      allSurah[nextSurah - 1].nama_latin + nextSVG;
-  }
+      allSurah[nextSurah-1].nama_latin + nextSVG;
 }
 
-/* ================= LOAD ================= */
-async function load() {
-  allSurah = await (await fetch('https://equran.id/api/surat')).json();
 
-  prevSurah = id > 1 ? id - 1 : null;
-  nextSurah = id < 114 ? id + 1 : null;
+/* ======================================================
+   LOAD DATA
+====================================================== */
+
+async function load(){
+
+  allSurah =
+    await (await fetch('https://equran.id/api/surat')).json();
+
+  prevSurah = id>1 ? id-1 : null;
+  nextSurah = id<114 ? id+1 : null;
 
   setNav(navBtns);
   setNav(navBtnsB);
 
-  const s = await (await fetch(`https://equran.id/api/surat/${id}`)).json();
+  const s =
+    await (await fetch(`https://equran.id/api/surat/${id}`)).json();
+
+
+  /* ===== HEADER ===== */
 
   titleLatin.textContent = `${s.nomor}. ${s.nama_latin}`;
-  titleArab.textContent  = namaArab[s.nomor] || s.nama;
-  titleArti.textContent  = `(${artiSurat[s.nomor] || s.arti})`;
-  info.textContent       = `${s.jumlah_ayat} Ayat • ${s.tempat_turun}`;
+  titleArab.textContent  = s.nama;
+  titleArti.textContent  = `(${s.arti})`;
+  info.textContent       =
+    `${s.jumlah_ayat} Ayat • ${s.tempat_turun}`;
+
+
+  /* ===== SEO ===== */
+
+  document.title =
+    `${s.nama_latin} (${s.nama}) - Al Quran Digital 30 Juz`;
+
+  const canonical =
+    document.querySelector("link[rel='canonical']");
+  if(canonical) canonical.href = location.href;
+
+
+  /* ===== BISMILLAH ===== */
 
   bismillah.textContent =
-    (id !== 1 && id !== 9)
+    (id!==1 && id!==9)
       ? 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'
       : '';
 
-  content.innerHTML = '';
-  ayatEls = [];
 
-  s.ayat.forEach((a, i) => {
-    const el = document.createElement('div');
-    el.className = 'ayat';
-    el.innerHTML = `
+  /* ===== AYAT ===== */
+
+  content.innerHTML='';
+  ayatEls=[];
+
+  s.ayat.forEach((a,i)=>{
+
+    const el=document.createElement('div');
+    el.className='ayat';
+
+    el.innerHTML=`
       <button class="play">▶</button>
       <div class="arab">
         <span class="ayah-text">${a.ar}</span>
@@ -214,17 +268,35 @@ async function load() {
       </div>
       <div class="arti">${a.idn}</div>
     `;
-    el.querySelector('.play').onclick = () => playAyat(i);
+
+    el.querySelector('.play').onclick=()=>playAyat(i);
+
     content.appendChild(el);
     ayatEls.push(el);
   });
 
-  const last = localStorage.getItem(`lastAyatSurah${id}`);
-  if (last !== null) setActiveAyat(+last);
+
+  /* ===== restore last ===== */
+
+  const last =
+    localStorage.getItem(`lastAyatSurah${id}`);
+
+  if(last!==null) setActiveAyat(+last);
 }
 
-function toArabic(n) {
-  return n.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+/* ======================================================
+   UTILS
+====================================================== */
+
+function toArabic(n){
+  return n.toString()
+    .replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 }
+
+
+/* ======================================================
+   START
+====================================================== */
 
 load();
